@@ -1,32 +1,56 @@
 package logico;
 
+import java.util.ArrayList;
+
 public class Enfermedad {
 
-	private String nombre;
-	private String estado;
 	
-	public Enfermedad(String nombre, String estado) {
+	private String codigo;
+	private String nombre;
+	private String descripcion;
+	private ArrayList<String> sintomas;
+	/**
+	 * @param codigo
+	 * @param nombre
+	 * @param descripcion
+	 * @param sintomas
+	 */
+	public Enfermedad(String codigo, String nombre, String descripcion, ArrayList<String> sintomas) {
 		super();
+		this.codigo = codigo;
 		this.nombre = nombre;
-		this.estado = estado;
+		this.descripcion = descripcion;
+		this.sintomas = sintomas;
 	}
-
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
 	public String getNombre() {
 		return nombre;
 	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public String getEstado() {
-		return estado;
+	public String getDescripcion() {
+		return descripcion;
 	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
-
+	public ArrayList<String> getSintomas() {
+		return sintomas;
+	}
+	public void setSintomas(ArrayList<String> sintomas) {
+		this.sintomas = sintomas;
+	}
+	
+	
+	
+	
+	
 	
 	
 	

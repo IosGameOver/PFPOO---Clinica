@@ -1,42 +1,31 @@
 package logico;
 
-import java.util.Date;
 
 public class Vacuna {
 
 	
-	private String loteCodigo;
+	private String codigo;
 	private String nombre;
 	private String laboratorio;
-	private String dosis;
 	private String descripcion;
-	private Date fecha;
-	private String firma;
 	/**
-	 * @param loteCodigo
+	 * @param codigo
 	 * @param nombre
 	 * @param laboratorio
-	 * @param dosis
 	 * @param descripcion
-	 * @param fecha
-	 * @param firma
 	 */
-	public Vacuna(String loteCodigo, String nombre, String laboratorio, String dosis, String descripcion, 
-			String firma) {
+	public Vacuna(String codigo, String nombre, String laboratorio, String descripcion) {
 		super();
-		this.loteCodigo = loteCodigo;
+		this.codigo = codigo;
 		this.nombre = nombre;
 		this.laboratorio = laboratorio;
-		this.dosis = dosis;
 		this.descripcion = descripcion;
-		this.fecha = new Date();
-		this.firma = firma;
 	}
-	public String getLoteCodigo() {
-		return loteCodigo;
+	public String getCodigo() {
+		return codigo;
 	}
-	public void setLoteCodigo(String loteCodigo) {
-		this.loteCodigo = loteCodigo;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 	public String getNombre() {
 		return nombre;
@@ -50,34 +39,13 @@ public class Vacuna {
 	public void setLaboratorio(String laboratorio) {
 		this.laboratorio = laboratorio;
 	}
-	public String getDosis() {
-		return dosis;
-	}
-	public void setDosis(String dosis) {
-		this.dosis = dosis;
-	}
 	public String getDescripcion() {
 		return descripcion;
 	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public Date getFecha() {
-		return fecha;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	public String getFirma() {
-		return firma;
-	}
-	public void setFirma(String firma) {
-		this.firma = firma;
-	}
-	
-	
-	
-	
+
 	
 	
 	

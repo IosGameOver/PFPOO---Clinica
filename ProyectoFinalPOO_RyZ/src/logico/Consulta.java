@@ -6,72 +6,77 @@ import java.util.Date;
 public class Consulta {
 
 	
-	private Paciente paciente;
-	private String sintomas;
-	private String diagnostico;
-	private String indicacionesAnalisis;
-	private String indicacionesReceta;
-	private Date fecha; 
-	private ArrayList<Enfermedad> misEnfermades;
-
-	//Creo que el paciente va en el constructor porque se crea para la consulta, o ¿ya existe?
-	
-	public Consulta(Paciente paciente, String sintomas, String diagnostico, String indicacionesAnalisis,
-			String indicacionesReceta) {
+	private String motivo;
+	private float ta;
+	private float fr;
+	private float temp;
+	private float peso;
+	private String diagnostcio;
+	private ArrayList<Enfermedad> misEnfermedades;
+	/**
+	 * @param motivo
+	 * @param ta
+	 * @param fr
+	 * @param temp
+	 * @param peso
+	 * @param diagnostcio
+	 * @param listaEnfermedades
+	 */
+	public Consulta(String motivo, float ta, float fr, float temp, float peso, String diagnostcio) {
 		super();
-		this.paciente = paciente;
-		this.sintomas = sintomas;
-		this.diagnostico = diagnostico;
-		this.indicacionesAnalisis = indicacionesAnalisis;
-		this.indicacionesReceta = indicacionesReceta;
-		this.fecha = new Date();
-		this.misEnfermades= new ArrayList<Enfermedad>();
+		this.motivo = motivo;
+		this.ta = ta;
+		this.fr = fr;
+		this.temp = temp;
+		this.peso = peso;
+		this.diagnostcio = diagnostcio;
+		this.misEnfermedades = new ArrayList<Enfermedad>();
 	}
-	public Paciente getPaciente() {
-		return paciente;
-	}
-	public void setPaciente(Paciente paciente) {
-		this.paciente = paciente;
-	}
-	public String getSintomas() {
-		return sintomas;
-	}
-	public void setSintomas(String sintomas) {
-		this.sintomas = sintomas;
-	}
-	public String getDiagnostico() {
-		return diagnostico;
-	}
-	public void setDiagnostico(String diagnostico) {
-		this.diagnostico = diagnostico;
-	}
-	public String getIndicacionesAnalisis() {
-		return indicacionesAnalisis;
-	}
-	public void setIndicacionesAnalisis(String indicacionesAnalisis) {
-		this.indicacionesAnalisis = indicacionesAnalisis;
-	}
-	public String getIndicacionesReceta() {
-		return indicacionesReceta;
-	}
-	public void setIndicacionesReceta(String indicacionesReceta) {
-		this.indicacionesReceta = indicacionesReceta;
-	}
-	public Date getFecha() {
-		return fecha;
-	}
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	public ArrayList<Enfermedad> getMisEnfermades() {
-		return misEnfermades;
-	}
-	public void setMisEnfermades(ArrayList<Enfermedad> misEnfermades) {
-		this.misEnfermades = misEnfermades;
-	} 
 	
-	
-	
+	public String getMotivo() {
+		return motivo;
+	}
+	public void setMotivo(String motivo) {
+		this.motivo = motivo;
+	}
+	public float getTa() {
+		return ta;
+	}
+	public void setTa(float ta) {
+		this.ta = ta;
+	}
+	public float getFr() {
+		return fr;
+	}
+	public void setFr(float fr) {
+		this.fr = fr;
+	}
+	public float getTemp() {
+		return temp;
+	}
+	public void setTemp(float temp) {
+		this.temp = temp;
+	}
+	public float getPeso() {
+		return peso;
+	}
+	public void setPeso(float peso) {
+		this.peso = peso;
+	}
+	public String getDiagnostcio() {
+		return diagnostcio;
+	}
+	public void setDiagnostcio(String diagnostcio) {
+		this.diagnostcio = diagnostcio;
+	}
+
+	public ArrayList<Enfermedad> getMisEnfermedades() {
+		return misEnfermedades;
+	}
+
+	public void setMisEnfermedades(ArrayList<Enfermedad> misEnfermedades) {
+		this.misEnfermedades = misEnfermedades;
+	}
 	
 	
 	
