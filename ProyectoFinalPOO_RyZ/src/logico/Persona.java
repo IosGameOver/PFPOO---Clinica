@@ -3,7 +3,8 @@ package logico;
 import java.util.Date;
 
 public class Persona {
-
+	
+	protected String cod;
 	protected String cedula;
 	protected String nombre;
 	protected String apellido;
@@ -24,9 +25,10 @@ public class Persona {
 	 * @param direccion
 	 * @param tipoSangre
 	 */
-	public Persona(String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
+	public Persona(String cod, String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre) {
 		super();
+		this.cod = cod;
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.apellido = apellido;
@@ -36,6 +38,13 @@ public class Persona {
 		this.fechaNacimiento = fechaNacimiento;
 		this.direccion = direccion;
 		this.tipoSangre = tipoSangre;
+	}
+	
+	public String getCod() {
+		return cod;
+	}
+	public void setCod(String cod) {
+		this.cod = cod;
 	}
 	public String getCedula() {
 		return cedula;

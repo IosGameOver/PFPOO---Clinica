@@ -10,6 +10,7 @@ public class ClinicaSONS {
 	private ArrayList<Vacuna> misVacunas;
 	private ArrayList<Historial> misHistoriales;
 	private ArrayList<Persona> misPersonas;
+	private static ClinicaSONS clinica = null;
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -18,7 +19,7 @@ public class ClinicaSONS {
 	 * @param misHistoriales
 	 * @param misPersonas
 	 */
-	public ClinicaSONS() {
+	private ClinicaSONS() {
 		super();
 		this.misEnfermedades = new ArrayList<Enfermedad>();
 		this.misCitas = new ArrayList<Cita>();
@@ -26,6 +27,12 @@ public class ClinicaSONS {
 		this.misVacunas = new ArrayList<Vacuna>();
 		this.misHistoriales = new ArrayList<Historial>();
 		this.misPersonas = new ArrayList<Persona>();
+	}
+	
+	public static ClinicaSONS getInstance() {
+		if(clinica == null)
+			clinica = new ClinicaSONS();
+		return clinica;
 	}
 	public ArrayList<Enfermedad> getMisEnfermedades() {
 		return misEnfermedades;

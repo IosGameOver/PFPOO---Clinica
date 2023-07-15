@@ -14,10 +14,10 @@ public class Doctor extends Persona {
 
 	
 	
-	public Doctor(String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
+	public Doctor(String cod, String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre, String exeQuartur, String almaMater,
 			String especialidad) {
-		super(cedula, nombre, apellido, sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
+		super(cod, cedula, nombre, apellido, sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
 		this.exeQuartur = exeQuartur;
 		this.almaMater = almaMater;
 		this.especialidad = especialidad;
