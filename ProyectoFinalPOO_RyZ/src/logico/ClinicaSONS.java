@@ -71,13 +71,38 @@ public class ClinicaSONS {
 		this.misPersonas = misPersonas;
 	}
 	
+	public void insertarVacuna(Vacuna vacuna) {
+		
+		misVacunas.add(vacuna);
+		
+		
+	}
+
+	public void insertarEnfermedad(Enfermedad enfermedad) {
+		misEnfermedades.add(enfermedad);
+	}
 	
+	public void insertarDoctor(Doctor doctor) {
+		misPersonas.add(doctor);
+		
+	}
 	
-	
-	
-	
+	public void insertarPersona(Persona persona) {
+		misPersonas.add(persona);
+		
+	}
 	
 	
 	
 	
 }
+
+	
+	
+	
+	
+	
+	
+	
+	
+

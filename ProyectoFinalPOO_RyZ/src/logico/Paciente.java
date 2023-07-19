@@ -21,7 +21,7 @@ public class Paciente extends Persona {
 	private ArrayList<Vacuna> misVacunas;
 	private Historial miHistorial;
 
-	public Paciente(String cod, String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
+	public Paciente(String cod, String cedula, String nombre, String apellido, String sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre, String[] habitosToxicos, String tieneAlergias,
 			String alergias, String tieneCirugias, String cirugias, String tieneTransfusion, String transfusiones,
 			String tieneTraumatismo, String traumatismo, String antecedentesPersonales,
