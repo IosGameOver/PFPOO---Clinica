@@ -1,5 +1,5 @@
 package visual;
-import java.util.ArrayList;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
@@ -8,39 +8,27 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
-
-import logico.ClinicaSONS;
-import logico.Doctor;
-import logico.Vacuna;
-
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
-import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.awt.event.ActionEvent;
 
 public class RegDoctor extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtExequartur;
-	private JTextField txtNombre;
-	private JTextField txtTelefono;
-	private JTextField TxtAlmaMater;
-	private JTextField txtDireccion;
-	private JDateChooser dtCalendario;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JDateChooser dateChooser;
 	private JComboBox cmbSexo;
 	private JComboBox cmbEstCivil;
 	private JComboBox cmbTipoSangre;
-	private JTextField txtCodigo;
-	private JTextField txtCedula;
+	private JTextField textField_5;
+	private JTextField textField_6;
 
 	/**
 	 * Launch the application.
@@ -89,27 +77,27 @@ public class RegDoctor extends JDialog {
 			contentPanel.add(lblNewLabel_2);
 		}
 		{
-			txtExequartur = new JTextField();
-			txtExequartur.setBounds(95, 61, 234, 22);
-			contentPanel.add(txtExequartur);
-			txtExequartur.setColumns(10);
+			textField = new JTextField();
+			textField.setBounds(95, 61, 234, 22);
+			contentPanel.add(textField);
+			textField.setColumns(10);
 		}
 		{
-			txtNombre = new JTextField();
-			txtNombre.setColumns(10);
-			txtNombre.setBounds(447, 61, 230, 22);
-			contentPanel.add(txtNombre);
+			textField_1 = new JTextField();
+			textField_1.setColumns(10);
+			textField_1.setBounds(447, 61, 230, 22);
+			contentPanel.add(textField_1);
 		}
 		{
 			cmbEstCivil = new JComboBox();
-			cmbEstCivil.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "Soltero/a", "Casado/a", "Separado/a", "Divorciado/a", "Viudo/a", "Uni\u00F3n Libre"}));
+			cmbEstCivil.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "Soltero/a", "Casado/a", "Separado/a", "Divorciado/a", "Viudo/a", "Uni\u00F3n Libre"}));
 			cmbEstCivil.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 			cmbEstCivil.setBounds(95, 105, 120, 22);
 			contentPanel.add(cmbEstCivil);
 		}
 		{
 			cmbTipoSangre = new JComboBox();
-			cmbTipoSangre.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"}));
+			cmbTipoSangre.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"}));
 			cmbTipoSangre.setBounds(557, 105, 120, 22);
 			cmbTipoSangre.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 			contentPanel.add(cmbTipoSangre);
@@ -122,7 +110,7 @@ public class RegDoctor extends JDialog {
 		}
 		{
 			cmbSexo = new JComboBox();
-			cmbSexo.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "F", "M"}));
+			cmbSexo.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "F", "M"}));
 			cmbSexo.setBounds(297, 105, 120, 22);
 			cmbSexo.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 			contentPanel.add(cmbSexo);
@@ -139,10 +127,10 @@ public class RegDoctor extends JDialog {
 		lblTelfono.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblTelfono);
 		
-		txtTelefono = new JTextField();
-		txtTelefono.setColumns(10);
-		txtTelefono.setBounds(95, 146, 234, 22);
-		contentPanel.add(txtTelefono);
+		textField_2 = new JTextField();
+		textField_2.setColumns(10);
+		textField_2.setBounds(95, 146, 234, 22);
+		contentPanel.add(textField_2);
 		
 		JLabel lblEspecialidad = new JLabel("Especialidad:");
 		lblEspecialidad.setBounds(371, 150, 77, 16);
@@ -150,8 +138,6 @@ public class RegDoctor extends JDialog {
 		contentPanel.add(lblEspecialidad);
 		
 		JComboBox cmbEspecialidad = new JComboBox();
-		cmbEspecialidad.setModel(new DefaultComboBoxModel(new String[] {"                  <Seleccione>", "Anestesiolog\u00EDa", "Anatom\u00EDa Patol\u00F3gica", "Cardiolog\u00EDa Cl\u00EDnica", "Cardiolog\u00EDa Intervencionista", " Cirug\u00EDa Pedi\u00E1trica", "Cirug\u00EDa General", "Cirug\u00EDa Pl\u00E1stica y Reconstructiva", "Gastroenterolog\u00EDa", "Ginegolog\u00EDa y Obstetricia", "Dermatolog\u00EDa", "Endoscopia del Aparato Digestivo", "Hematolog\u00EDa", "Infectolog\u00EDa de Adulto", "Medicina Cr\u00EDtica", "Medicina de Rehabilitaci\u00F3n", "Nefrolog\u00EDa", "Neurolog\u00EDa de Adultos", "Neumolog\u00EDa", "Oftalmolog\u00EDa", "Otorrinolaringolog\u00EDa", "Ortopedia", "Patolog\u00EDa", "Pediatr\u00EDa", "Psiquiatr\u00EDa General", "Radiolog\u00EDa e Imagen", "Neumolog\u00EDa", "Hematolog\u00EDa", "Cirug\u00EDa Oncol\u00F3gica", "Oncolog\u00EDa M\u00E9dica", "Oncolog\u00EDa Pedi\u00E1trica", "Radio-Oncolog\u00EDa", "Urolog\u00EDa"}));
-		cmbEspecialidad.setToolTipText("asd\r\nasdas\r\nasdasd\r\nasd");
 		cmbEspecialidad.setBounds(447, 146, 230, 22);
 		cmbEspecialidad.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(cmbEspecialidad);
@@ -162,9 +148,9 @@ public class RegDoctor extends JDialog {
 			contentPanel.add(lblNewLabel_3);
 		}
 		
-		dtCalendario = new JDateChooser();
-		dtCalendario.setBounds(95, 190, 234, 22);
-		contentPanel.add(dtCalendario);
+		dateChooser = new JDateChooser();
+		dateChooser.setBounds(95, 190, 234, 22);
+		contentPanel.add(dateChooser);
 		{
 			JLabel lblNewLabel_4 = new JLabel("Alma Mater:");
 			lblNewLabel_4.setBounds(371, 193, 77, 16);
@@ -172,33 +158,34 @@ public class RegDoctor extends JDialog {
 			contentPanel.add(lblNewLabel_4);
 		}
 		{
-			TxtAlmaMater = new JTextField();
-			TxtAlmaMater.setColumns(10);
-			TxtAlmaMater.setBounds(447, 190, 230, 22);
-			contentPanel.add(TxtAlmaMater);
+			textField_3 = new JTextField();
+			textField_3.setColumns(10);
+			textField_3.setBounds(447, 190, 230, 22);
+			contentPanel.add(textField_3);
 		}
 		
-		JLabel lblNewLabel_5 = new JLabel("Direccion");
+		JLabel lblNewLabel_5 = new JLabel("Descripci\u00F3n:");
 		lblNewLabel_5.setBounds(17, 230, 104, 16);
 		lblNewLabel_5.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel_5);
 		{
-			txtDireccion = new JTextField();
-			txtDireccion.setColumns(10);
-			txtDireccion.setBounds(17, 253, 660, 99);
-			contentPanel.add(txtDireccion);
+			textField_4 = new JTextField();
+			textField_4.setColumns(10);
+			textField_4.setBounds(17, 253, 660, 99);
+			contentPanel.add(textField_4);
 		}
 		{
-			txtCodigo = new JTextField();
-			txtCodigo.setColumns(10);
-			txtCodigo.setBounds(95, 17, 234, 22);
-			contentPanel.add(txtCodigo);
+			textField_5 = new JTextField();
+			textField_5.setEditable(false);
+			textField_5.setColumns(10);
+			textField_5.setBounds(95, 17, 234, 22);
+			contentPanel.add(textField_5);
 		}
 		{
-			txtCedula = new JTextField();
-			txtCedula.setColumns(10);
-			txtCedula.setBounds(447, 17, 230, 22);
-			contentPanel.add(txtCedula);
+			textField_6 = new JTextField();
+			textField_6.setColumns(10);
+			textField_6.setBounds(447, 17, 230, 22);
+			contentPanel.add(textField_6);
 		}
 		{
 			JLabel lblCdigo = new JLabel("C\u00F3digo:");
@@ -218,86 +205,16 @@ public class RegDoctor extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton BtnRegistrar = new JButton("Registrar");
-				BtnRegistrar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					
-						Doctor doctor = null;
-						String codigo = txtCodigo.getText();
-						String exequartur = txtExequartur.getText();
-						String cedula = txtCedula.getText();			
-						String nombre = txtNombre.getText();
-						String telefono = txtTelefono.getText();
-						String direccion = txtDireccion.getText();			
-						String especialidad = cmbEspecialidad.getSelectedItem().toString();
-						String sexo =cmbSexo.getSelectedItem().toString();					
-						String estadoCvl = cmbEstCivil.getSelectedItem().toString();
-						String tpSangre = cmbTipoSangre.getSelectedItem().toString();
-						String universidad = TxtAlmaMater.getText();
-			//			Date fechaNacimiento = dtCalendario.getDate();
-				
-						if(especialidad.isEmpty()||sexo.isEmpty()||estadoCvl.isEmpty()||tpSangre.isEmpty()||universidad.isEmpty()||telefono.isEmpty()||cedula.isEmpty()||codigo.isEmpty()||nombre.isEmpty()||exequartur.isEmpty()||direccion.isEmpty()) {
-							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
-						}
-						else {
-							
-							doctor = new Doctor(codigo, cedula, nombre, null, sexo, estadoCvl, telefono, null/*fechaNacimiento*/, direccion, tpSangre, exequartur, universidad, especialidad);
-							ClinicaSONS.getInstance().insertarDoctor(doctor);
-							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							clean();
-												
-						
-						}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					}
-
-					
-				});
-				
-				BtnRegistrar.setActionCommand("OK");
-				buttonPane.add(BtnRegistrar);
-				getRootPane().setDefaultButton(BtnRegistrar);
+				JButton okButton = new JButton("OK");
+				okButton.setActionCommand("OK");
+				buttonPane.add(okButton);
+				getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
-				cancelButton.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					
-					dispose();
-					
-					}
-				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
-	
-	private void clean() {
-		txtCedula.setText("");
-		txtCodigo.setText("");
-		txtDireccion.setText("");
-		txtExequartur.setText("");
-		txtNombre.setText("");
-		txtTelefono.setText("");
-		TxtAlmaMater.setText("");
-		cmbEstCivil.setSelectedIndex(0);
-		cmbSexo.setSelectedIndex(0);
-		cmbTipoSangre.setSelectedIndex(0);
-	    dtCalendario.cleanup();
-	
-	}
-	
-	
 }

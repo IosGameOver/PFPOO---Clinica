@@ -1,7 +1,6 @@
 package logico;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 public class Doctor extends Persona {
@@ -14,9 +13,10 @@ public class Doctor extends Persona {
 	private ArrayList<Consulta> misConsultas;
 
 	
-	public Doctor(String cod, String cedula, String nombre, String apellido, String sexo, String estadoCivil,
-			String telefono, Date fechaNacimiento, String direccion, String tipoSangre, String exeQuartur,
-			String almaMater, String especialidad) {
+	
+	public Doctor(String cod, String cedula, String nombre, String apellido, char sexo, String estadoCivil, String telefono,
+			Date fechaNacimiento, String direccion, String tipoSangre, String exeQuartur, String almaMater,
+			String especialidad) {
 		super(cod, cedula, nombre, apellido, sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
 		this.exeQuartur = exeQuartur;
 		this.almaMater = almaMater;
@@ -24,7 +24,6 @@ public class Doctor extends Persona {
 		this.misCitas = new ArrayList<Cita>();
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misPacientes = new ArrayList<Paciente>();
-		
 	}
 
 
@@ -99,8 +98,8 @@ public class Doctor extends Persona {
 		this.misConsultas = misConsultas;
 	}
 
-
-
+	
+	
 	
 	
 	

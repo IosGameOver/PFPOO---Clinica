@@ -9,24 +9,19 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logico.ClinicaSONS;
 import logico.Enfermedad;
-import logico.Vacuna;
 
 import java.awt.event.ActionListener;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.awt.event.ActionEvent;
 
 public class RegEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtCodigo;
+	private JTextField txtCod;
 	private JTextField txtNombre;
 	private JTextField txtDescripcion;
 	private JTextField txtSin1;
@@ -77,10 +72,10 @@ public class RegEnfermedad extends JDialog {
 		lblCdigo.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblCdigo);
 		
-		txtCodigo = new JTextField();
-		txtCodigo.setBounds(66, 20, 190, 22);
-		contentPanel.add(txtCodigo);
-		txtCodigo.setColumns(10);
+		txtCod = new JTextField();
+		txtCod.setBounds(66, 20, 190, 22);
+		contentPanel.add(txtCod);
+		txtCod.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Nombre: ");
 		lblNewLabel.setBounds(273, 23, 56, 16);
@@ -158,73 +153,17 @@ public class RegEnfermedad extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnRegistrar = new JButton("Registrar");
-				btnRegistrar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						Enfermedad enfermedad = null;
-						String codigo = txtCodigo.getText();
-						String nombre = txtNombre.getText();
-						String descripcion = txtDescripcion.getText();
-						String sin1 = txtSin1.getText();
-						String sin2 =txtSin2.getText();
-						String sin3 =txtSin3.getText();
-						String sin4 =txtSin4.getText();
-						String sin5 =txtSin5.getText();
-						String sin6 =txtSin6.getText();
-						String sin7 =txtSin7.getText();
-						String sin8 =txtSin8.getText();
-						String sin9 =txtSin9.getText();
-						ArrayList <String> sintomas = new ArrayList<>(Arrays.asList(sin1,sin2,sin3,sin4,sin5,sin6,sin7,sin8,sin9));
-						
-						
-					if (codigo.isEmpty()||nombre.isEmpty()||descripcion.isEmpty()||(sin1.isEmpty()&&sin2.isEmpty()&&sin3.isEmpty()&&sin4.isEmpty()&&sin5.isEmpty()&&sin6.isEmpty()&&sin7.isEmpty()&&sin8.isEmpty()&&sin9.isEmpty())) {
-						
-						JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
-						
-						}else {
-							enfermedad = new Enfermedad(codigo, nombre, descripcion, sintomas);
-							ClinicaSONS.getInstance().insertarEnfermedad(enfermedad);
-							JOptionPane.showMessageDialog(null, "Enfermedad registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							
-							clean();
-							
-						}
-					
-					}
-
-				});
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
 				btnCancelar = new JButton("Cancelar");
-				btnCancelar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dispose();
-					}
-				});
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
 		}
 	}
-
-	private void clean() {
-		txtCodigo.setText("");
-		txtDescripcion.setText("");
-		txtNombre.setText("");
-		txtSin1.setText("");
-		txtSin2.setText("");
-		txtSin3.setText("");
-		txtSin4.setText("");
-		txtSin5.setText("");
-		txtSin6.setText("");
-		txtSin7.setText("");
-		txtSin8.setText("");
-		txtSin9.setText("");
-		
-	}
-	
 }
 
 
