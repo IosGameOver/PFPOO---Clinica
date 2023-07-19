@@ -3,14 +3,24 @@ package visual;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.TextComponent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import org.omg.PortableInterceptor.SUCCESSFUL;
+
+import logico.ClinicaSONS;
+import logico.Vacuna;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RegVacuna extends JDialog {
 
@@ -18,7 +28,7 @@ public class RegVacuna extends JDialog {
 	private JTextField txtNombre;
 	private JTextField txtLab;
 	private JTextField txtDescripcion;
-	private JTextField txtVacuna;
+	private JTextField txtCodigo;
 
 	/**
 	 * Launch the application.
@@ -84,11 +94,10 @@ public class RegVacuna extends JDialog {
 		contentPanel.add(txtDescripcion);
 		txtDescripcion.setColumns(10);
 		
-		txtVacuna = new JTextField();
-		txtVacuna.setEditable(false);
-		txtVacuna.setColumns(10);
-		txtVacuna.setBounds(72, 19, 175, 22);
-		contentPanel.add(txtVacuna);
+		txtCodigo = new JTextField();
+		txtCodigo.setColumns(10);
+		txtCodigo.setBounds(72, 19, 175, 22);
+		contentPanel.add(txtCodigo);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -96,15 +105,63 @@ public class RegVacuna extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
+				btnRegistrar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+				
+					Vacuna vacuna = null;
+					
+					String codigo = txtCodigo.getText();
+					String nombre = txtNombre.getText();
+					String laboratorio = txtLab.getText();
+					String descripcion = txtDescripcion.getText();
+					
+					if ((codigo.isEmpty()||nombre.isEmpty()||laboratorio.isEmpty()||descripcion.isEmpty())) {
+						JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						
+							vacuna = new Vacuna(codigo, nombre, laboratorio, descripcion);
+							
+							ClinicaSONS.getInstance().insertarVacuna(vacuna);
+							JOptionPane.showMessageDialog(null, "Vacuna registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
+							clean();
+												
+						
+						}
+					
+										
+					
+					
+					
+					}
+
+					
+				});
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
 				JButton btnCancelar = new JButton("Cancelar");
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+						}
+				});
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
 		}
 	}
+	
+	private void clean() {
+		txtCodigo.setText("");
+		txtDescripcion.setText("");
+		txtLab.setText("");
+		txtNombre.setText("");
+		
+	}
+	
+	
+	
 }
