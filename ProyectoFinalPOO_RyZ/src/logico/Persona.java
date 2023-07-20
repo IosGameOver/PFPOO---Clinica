@@ -7,8 +7,7 @@ public class Persona {
 	protected String cod;
 	protected String cedula;
 	protected String nombre;
-	protected String apellido;
-	protected String   sexo;
+	protected String sexo;
 	protected String estadoCivil;
 	protected String telefono;
 	protected Date fechaNacimiento;
@@ -25,13 +24,12 @@ public class Persona {
 	 * @param direccion
 	 * @param tipoSangre
 	 */
-	public Persona(String cod, String cedula, String nombre, String apellido, String sexo, String estadoCivil, String telefono,
+	public Persona(String cod, String cedula, String nombre,  String sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre) {
 		super();
 		this.cod = cod;
 		this.cedula = cedula;
 		this.nombre = nombre;
-		this.apellido = apellido;
 		this.sexo = sexo;
 		this.estadoCivil = estadoCivil;
 		this.telefono = telefono;
@@ -58,12 +56,7 @@ public class Persona {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getApellido() {
-		return apellido;
-	}
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
-	}
+	
 	public String getSexo() {
 		return sexo;
 	}

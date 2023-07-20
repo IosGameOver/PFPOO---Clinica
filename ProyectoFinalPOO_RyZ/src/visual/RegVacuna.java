@@ -47,6 +47,7 @@ public class RegVacuna extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegVacuna() {
+		setTitle("Registro de Vacuna");
 		setBounds(100, 100, 550, 336);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -129,7 +130,6 @@ public class RegVacuna extends JDialog {
 						
 						}
 					
-										
 					
 					
 					

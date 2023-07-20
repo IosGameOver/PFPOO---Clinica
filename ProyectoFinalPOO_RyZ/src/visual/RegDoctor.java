@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JDayChooser;
 
 import logico.ClinicaSONS;
 import logico.Doctor;
@@ -21,7 +22,8 @@ import logico.Vacuna;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +61,7 @@ public class RegDoctor extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegDoctor() {
+		setTitle("Registro de Doctor");
 		setBounds(100, 100, 700, 440);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -234,36 +237,42 @@ public class RegDoctor extends JDialog {
 						String estadoCvl = cmbEstCivil.getSelectedItem().toString();
 						String tpSangre = cmbTipoSangre.getSelectedItem().toString();
 						String universidad = TxtAlmaMater.getText();
-			//			Date fechaNacimiento = dtCalendario.getDate();
-				
+						Date fechaNacimiento = dtCalendario.getDate();
+					//	DateFormat fechaFormato=new SimpleDateFormat("dd/MM/yyyy");  
+					//	String fechaVacia = fechaFormato.format(fechaNacimiento);
+						
 						if(especialidad.isEmpty()||sexo.isEmpty()||estadoCvl.isEmpty()||tpSangre.isEmpty()||universidad.isEmpty()||telefono.isEmpty()||cedula.isEmpty()||codigo.isEmpty()||nombre.isEmpty()||exequartur.isEmpty()||direccion.isEmpty()) {
 							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
 						}
 						else {
 							
-							doctor = new Doctor(codigo, cedula, nombre, null, sexo, estadoCvl, telefono, null/*fechaNacimiento*/, direccion, tpSangre, exequartur, universidad, especialidad);
+							doctor = new Doctor(codigo, cedula, nombre, sexo, estadoCvl, telefono, fechaNacimiento, direccion, tpSangre, exequartur, universidad, especialidad);
 							ClinicaSONS.getInstance().insertarDoctor(doctor);
 							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
 							clean();
 												
 						
 						}
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
+						
 					
 					}
 
 					
 				});
+				{
+					JButton btnListaAccess = new JButton("Lista");
+					btnListaAccess.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							ListarDoctores listillaLaGordilla = new ListarDoctores();
+							listillaLaGordilla.setModal(true);
+							listillaLaGordilla.setLocationRelativeTo(null);
+							listillaLaGordilla.setVisible(true);
+						
+						
+						}
+					});
+					buttonPane.add(btnListaAccess);
+				}
 				
 				BtnRegistrar.setActionCommand("OK");
 				buttonPane.add(BtnRegistrar);
@@ -295,8 +304,7 @@ public class RegDoctor extends JDialog {
 		cmbEstCivil.setSelectedIndex(0);
 		cmbSexo.setSelectedIndex(0);
 		cmbTipoSangre.setSelectedIndex(0);
-	    dtCalendario.cleanup();
-	
+	    dtCalendario.setDateFormatString("");
 	}
 	
 	

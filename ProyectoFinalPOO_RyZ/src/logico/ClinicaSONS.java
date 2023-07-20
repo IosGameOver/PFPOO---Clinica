@@ -92,6 +92,108 @@ public class ClinicaSONS {
 		
 	}
 	
+	public Cita buscarCitaPorCodigo(String codigoCita) {
+		
+		Cita cita = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misCitas.size()) { 
+			if (misCitas.get(i).getCodigo().equalsIgnoreCase(codigoCita)) {
+				cita= misCitas.get(i); 
+				encontrado = true;
+			}
+			i++;
+		}
+		return cita;
+	}	
+	
+	public Vacuna buscarVacunaPorCodigo(String codigoVacuna) {
+		
+		Vacuna vacuna = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misVacunas.size()) { 
+			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
+				vacuna= misVacunas.get(i); 
+				encontrado = true;
+			}
+			i++;
+		}
+		return vacuna;
+	}	
+	
+	
+	public Doctor buscarDoctorPorCodigo(String codigoDoctor) {
+		
+		Doctor doctor = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misPersonas.size()) { 
+			if (misPersonas.get(i).getCod().equalsIgnoreCase(codigoDoctor)&&misPersonas.get(i)instanceof Doctor) {
+				doctor = (Doctor) misPersonas.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return doctor;
+	}	
+	
+	public Paciente buscarPacientePorCodigo(String codigoPaciente) {
+		
+		Paciente paciente = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misPersonas.size()) { 
+			if (misPersonas.get(i).getCod().equalsIgnoreCase(codigoPaciente)&&misPersonas.get(i)instanceof Paciente) {
+				paciente = (Paciente) misPersonas.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return paciente;
+	}	
+	
+	public Enfermedad buscarEnfermedadPorCodigo(String codigoEnfermedad) {
+		
+		Enfermedad enfermedad = null;
+		boolean  encontrado = false;
+		int i=0;
+		
+		while (!encontrado&&i<misEnfermedades.size()) {
+			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
+				enfermedad=misEnfermedades.get(i);
+				encontrado=true;
+			}
+			i++;
+		}
+		return enfermedad;
+	}
+			
+	
+	
+	public int cantidadDePacientesPorVacuna(String vacuna) {
+		
+		int cant = 0;
+		Persona paciente = null;
+		
+		for (Persona aux : misPersonas) {
+			if (aux instanceof Paciente) {
+				if (((Paciente) aux).getMisVacunas().equals(vacuna)) {
+					cant++;
+				}
+			}
+		
+		}
+		return cant;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

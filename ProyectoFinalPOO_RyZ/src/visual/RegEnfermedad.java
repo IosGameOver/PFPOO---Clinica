@@ -59,6 +59,7 @@ public class RegEnfermedad extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegEnfermedad() {
+		setTitle("Registro de enfermedad");
 		setBounds(100, 100, 550, 410);
 		setLocationRelativeTo(null);
 		setResizable(false);

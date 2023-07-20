@@ -21,12 +21,12 @@ public class Paciente extends Persona {
 	private ArrayList<Vacuna> misVacunas;
 	private Historial miHistorial;
 
-	public Paciente(String cod, String cedula, String nombre, String apellido, String sexo, String estadoCivil, String telefono,
+	public Paciente(String cod, String cedula, String nombre,  String sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre, String[] habitosToxicos, String tieneAlergias,
 			String alergias, String tieneCirugias, String cirugias, String tieneTransfusion, String transfusiones,
 			String tieneTraumatismo, String traumatismo, String antecedentesPersonales,
 			String antecedentesFamiliares, Historial miHistorial, String   antecedentesFisiologicos) {
-		super(cod, cedula, nombre, apellido, sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
+		super(cod, cedula, nombre,  sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
 		this.habitosToxicos = habitosToxicos;
 		this.tieneAlergias = tieneAlergias;
 		this.alergias = alergias;
