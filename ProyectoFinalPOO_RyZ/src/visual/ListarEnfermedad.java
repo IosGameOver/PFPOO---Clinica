@@ -58,7 +58,7 @@ public class ListarEnfermedad extends JDialog {
 		{
 			JPanel panel = new JPanel();
 			panel.setBorder(null);
-			panel.setBounds(12, 13, 810, 262);
+			panel.setBounds(12, 13, 813, 262);
 			contentPanel.add(panel);
 			panel.setLayout(new BorderLayout(0, 0));
 			{
