@@ -102,7 +102,7 @@ public class ListarEnfermedad extends JDialog {
 		}
 		llenarTabla();
 	}
-	
+
 	public void llenarTabla() {
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
@@ -110,16 +110,17 @@ public class ListarEnfermedad extends JDialog {
 			row[0] = aux.getCodigo();
 			row[1] = aux.getNombre();
 			row[2] = aux.getDescripcion();
-			for(int i = 0; i < aux.getSintomas().size()-1; i++) {
-				if(i < aux.getSintomas().size()-2) {
+			row[3] = aux.getSintomas().get(0)+", ";
+			for (int i = 1; i < aux.getSintomas().size(); i++) {
+				if(i < aux.getSintomas().size()-1) {
 					row[3] += aux.getSintomas().get(i)+", ";
 				}else {
 					row[3] += aux.getSintomas().get(i)+".";
 				}
 			}
-	
 			model.addRow(row);
 		}
 	}
-
 }
+
+

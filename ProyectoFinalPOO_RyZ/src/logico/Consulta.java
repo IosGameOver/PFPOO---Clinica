@@ -5,14 +5,15 @@ import java.util.Date;
 
 public class Consulta {
 
-	
+	private String cod;
 	private String motivo;
 	private float ta;
 	private float fr;
 	private float temp;
 	private float peso;
-	private String diagnostcio;
-	private ArrayList<Enfermedad> misEnfermedades;
+	private String diagnostico;
+	private String indicaciones;
+	private Enfermedad enfermedad;
 	/**
 	 * @param motivo
 	 * @param ta
@@ -22,17 +23,27 @@ public class Consulta {
 	 * @param diagnostcio
 	 * @param listaEnfermedades
 	 */
-	public Consulta(String motivo, float ta, float fr, float temp, float peso, String diagnostcio) {
+	public Consulta(String cod, String motivo, float ta, float fr, float temp, float peso, String diagnostico,String indicaciones) {
 		super();
+		this.cod = cod;
 		this.motivo = motivo;
 		this.ta = ta;
 		this.fr = fr;
 		this.temp = temp;
 		this.peso = peso;
-		this.diagnostcio = diagnostcio;
-		this.misEnfermedades = new ArrayList<Enfermedad>();
+		this.diagnostico = diagnostico;
+		this.indicaciones = indicaciones;
+		this.enfermedad = null;
 	}
 	
+	public String getCod() {
+		return cod;
+	}
+
+	public void setCod(String cod) {
+		this.cod = cod;
+	}
+
 	public String getMotivo() {
 		return motivo;
 	}
@@ -63,20 +74,25 @@ public class Consulta {
 	public void setPeso(float peso) {
 		this.peso = peso;
 	}
-	public String getDiagnostcio() {
-		return diagnostcio;
+	public String getDiagnostico() {
+		return diagnostico;
 	}
-	public void setDiagnostcio(String diagnostcio) {
-		this.diagnostcio = diagnostcio;
+	public void setDiagnostico(String diagnostico) {
+		this.diagnostico = diagnostico;
+	}
+	public String getIndicaciones() {
+		return indicaciones;
+	}
+	public void setIndicaciones(String indicaciones) {
+		this.indicaciones = indicaciones;
+	}
+	public Enfermedad getEnfermedad() {
+		return enfermedad;
+	}
+	public void setEnfermedad(Enfermedad enfermedad) {
+		this.enfermedad = enfermedad;
 	}
 
-	public ArrayList<Enfermedad> getMisEnfermedades() {
-		return misEnfermedades;
-	}
-
-	public void setMisEnfermedades(ArrayList<Enfermedad> misEnfermedades) {
-		this.misEnfermedades = misEnfermedades;
-	}
 	
 	
 	

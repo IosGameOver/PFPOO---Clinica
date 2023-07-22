@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Paciente extends Persona {
-
-	private String[] habitosToxicos;
+	
+	private int cantHijos;
+	private String fuma;
+	private String alcohol;
+	private String cafe;
+	private String drogas;
 	private String tieneAlergias;
 	private String alergias;
 	private String tieneCirugias;
@@ -22,12 +26,16 @@ public class Paciente extends Persona {
 	private Historial miHistorial;
 
 	public Paciente(String cod, String cedula, String nombre,  String sexo, String estadoCivil, String telefono,
-			Date fechaNacimiento, String direccion, String tipoSangre, String[] habitosToxicos, String tieneAlergias,
-			String alergias, String tieneCirugias, String cirugias, String tieneTransfusion, String transfusiones,
-			String tieneTraumatismo, String traumatismo, String antecedentesPersonales,
-			String antecedentesFamiliares, Historial miHistorial, String   antecedentesFisiologicos) {
+			Date fechaNacimiento, String direccion, String tipoSangre, int cantHijos, String fuma, 
+			String alcohol, String cafe, String drogas, String tieneAlergias,String alergias, String tieneCirugias, 
+			String cirugias, String tieneTransfusion, String transfusiones,String tieneTraumatismo, String traumatismo, 
+			String antecedentesPersonales,String antecedentesFamiliares, Historial miHistorial, String antecedentesFisiologicos) {
 		super(cod, cedula, nombre,  sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
-		this.habitosToxicos = habitosToxicos;
+		this.cantHijos = cantHijos;
+		this.fuma = fuma;
+		this.alcohol = alcohol;
+		this.cafe = cafe;
+		this.drogas = drogas;
 		this.tieneAlergias = tieneAlergias;
 		this.alergias = alergias;
 		this.tieneCirugias = tieneCirugias;
@@ -45,11 +53,36 @@ public class Paciente extends Persona {
 		
 	}
 
-	public String[] getHabitosToxicos() {
-		return habitosToxicos;
+	public int getCantHijos() {
+		return cantHijos;
 	}
-	public void setHabitosToxicos(String[] habitosToxicos) {
-		this.habitosToxicos = habitosToxicos;
+	public void setCantHijos(int cantHijos) {
+		this.cantHijos = cantHijos;
+	}
+	
+	public String getFuma() {
+		return fuma;
+	}
+	public void setFuma(String fuma) {
+		this.fuma = fuma;
+	}
+	public String getAlcohol() {
+		return alcohol;
+	}
+	public void setAlcohol(String alcohol) {
+		this.alcohol = alcohol;
+	}
+	public String getCafe() {
+		return cafe;
+	}
+	public void setCafe(String cafe) {
+		this.cafe = cafe;
+	}
+	public String getDrogas() {
+		return drogas;
+	}
+	public void setDrogas(String drogas) {
+		this.drogas = drogas;
 	}
 	public String getTieneAlergias() {
 		return tieneAlergias;

@@ -11,6 +11,13 @@ public class ClinicaSONS {
 	private ArrayList<Historial> misHistoriales;
 	private ArrayList<Persona> misPersonas;
 	private static ClinicaSONS clinica = null;
+	public static int codCita = 1;
+	public static int codConsulta = 1;
+	public static int codDoctor = 1;
+	public static int codEnf = 1;
+	public static int codVac = 1;
+	public static int codPac = 1;
+	public static int codHist = 1;
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -28,7 +35,7 @@ public class ClinicaSONS {
 		this.misHistoriales = new ArrayList<Historial>();
 		this.misPersonas = new ArrayList<Persona>();
 	}
-	
+
 	public static ClinicaSONS getInstance() {
 		if(clinica == null)
 			clinica = new ClinicaSONS();
@@ -70,30 +77,44 @@ public class ClinicaSONS {
 	public void setMisPersonas(ArrayList<Persona> misPersonas) {
 		this.misPersonas = misPersonas;
 	}
-	
+
 	public void insertarVacuna(Vacuna vacuna) {
-		
 		misVacunas.add(vacuna);
-		
-		
+		codVac++;
 	}
 
 	public void insertarEnfermedad(Enfermedad enfermedad) {
 		misEnfermedades.add(enfermedad);
+		codEnf++;
 	}
-	
+
 	public void insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
-		
+		codDoctor++;
 	}
-	
+
 	public void insertarPersona(Persona persona) {
 		misPersonas.add(persona);
-		
+		if(persona instanceof Paciente) {
+			codPac++;
+		}else if(persona instanceof Doctor){
+			codDoctor++;
+		}
 	}
-	
+	public void insertarHistorial(Historial historial) {
+		misHistoriales.add(historial);
+		codHist++;
+	}
+	public void insertarCita(Cita cita) {
+		misCitas.add(cita);
+		codCita++;
+	}
+	public void insertarConsulta(Consulta consulta) {
+		misConsultas.add(consulta);
+		codConsulta++;
+	}
 	public Cita buscarCitaPorCodigo(String codigoCita) {
-		
+
 		Cita cita = null; 
 		boolean encontrado = false;
 		int i=0;
@@ -106,9 +127,9 @@ public class ClinicaSONS {
 		}
 		return cita;
 	}	
-	
+
 	public Vacuna buscarVacunaPorCodigo(String codigoVacuna) {
-		
+
 		Vacuna vacuna = null; 
 		boolean encontrado = false;
 		int i=0;
@@ -121,10 +142,10 @@ public class ClinicaSONS {
 		}
 		return vacuna;
 	}	
-	
-	
+
+
 	public Doctor buscarDoctorPorCodigo(String codigoDoctor) {
-		
+
 		Doctor doctor = null; 
 		boolean encontrado = false;
 		int i=0;
@@ -137,9 +158,9 @@ public class ClinicaSONS {
 		}
 		return doctor;
 	}	
-	
+
 	public Paciente buscarPacientePorCodigo(String codigoPaciente) {
-		
+
 		Paciente paciente = null; 
 		boolean encontrado = false;
 		int i=0;
@@ -152,13 +173,13 @@ public class ClinicaSONS {
 		}
 		return paciente;
 	}	
-	
+
 	public Enfermedad buscarEnfermedadPorCodigo(String codigoEnfermedad) {
-		
+
 		Enfermedad enfermedad = null;
 		boolean  encontrado = false;
 		int i=0;
-		
+
 		while (!encontrado&&i<misEnfermedades.size()) {
 			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
 				enfermedad=misEnfermedades.get(i);
@@ -168,43 +189,74 @@ public class ClinicaSONS {
 		}
 		return enfermedad;
 	}
-			
-	
-	
+
+
+
 	public int cantidadDePacientesPorVacuna(String vacuna) {
-		
+
 		int cant = 0;
 		Persona paciente = null;
-		
+
 		for (Persona aux : misPersonas) {
 			if (aux instanceof Paciente) {
 				if (((Paciente) aux).getMisVacunas().equals(vacuna)) {
 					cant++;
 				}
 			}
-		
+
 		}
 		return cant;
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public Historial buscarHistorialByCod(String numRecord) {
+		Historial hist = null;
+		boolean  encontrado = false;
+		int i = 0;
+
+		while (!encontrado && i < misHistoriales.size()) {
+			if (misHistoriales.get(i).getNumRecord().equalsIgnoreCase(numRecord)) {
+				hist = misHistoriales.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return hist;
+	}
+
+	public Paciente buscarPacienteByCedula(String cedPac) {
+		Paciente pac = null;
+		boolean encontrado = false;
+		for (Persona aux : misPersonas) {
+			if(aux instanceof Paciente) {
+				if (aux.getCedula().equalsIgnoreCase(cedPac)) {
+					pac = (Paciente)aux;
+					encontrado = true;
+				}
+			}
+		}
+		return pac;
+	}
+	public Enfermedad buscarEnfermedadByNombre(String nombre) {
+		Enfermedad enfermedad = null;
+		boolean encontrado = false;
+		for (Enfermedad aux : misEnfermedades) {
+			if (aux.getNombre().equalsIgnoreCase(nombre)) {
+				enfermedad = aux;
+				encontrado = true;
+			}
+		}
+		return enfermedad;
+	}
+
 }
 
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
 

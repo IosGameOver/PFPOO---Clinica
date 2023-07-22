@@ -24,6 +24,8 @@ import logico.Vacuna;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class ListarDoctores extends JDialog {
 
@@ -75,7 +77,29 @@ public class ListarDoctores extends JDialog {
 			}
 			{
 				cmbEspec = new JComboBox();
-				cmbEspec.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>"}));
+				cmbEspec.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						model.setRowCount(0);
+						row = new Object[model.getColumnCount()];
+						for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+							if(aux instanceof Doctor) {
+								if(((Doctor) aux).getEspecialidad().equalsIgnoreCase(cmbEspec.getSelectedItem().toString())) {
+									row[0] = aux.getCod();
+									row[1] = aux.getCedula();
+									row[2] = ((Doctor) aux).getExeQuartur();
+									row[3] = aux.getNombre();
+									row[4] = ((Doctor) aux).getEspecialidad();
+									row[5] = aux.getTelefono();
+									
+									model.addRow(row);
+								}else if(cmbEspec.getSelectedItem().toString().equalsIgnoreCase("Todas")){
+									loadDoctores();
+								}
+							}
+						}
+					}
+				});
+				cmbEspec.setModel(new DefaultComboBoxModel(new String[] {"Todas"}));
 				for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
 					if(aux instanceof Doctor) {
 						cmbEspec.addItem(((Doctor)aux).getEspecialidad());
@@ -125,9 +149,10 @@ public class ListarDoctores extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		loadDoctores();
 	}
 	
-	public static void llenarTabla(){
+	public static void loadDoctores(){
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
 		for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {

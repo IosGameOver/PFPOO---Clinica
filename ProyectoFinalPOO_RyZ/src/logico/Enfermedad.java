@@ -15,12 +15,16 @@ public class Enfermedad {
 	 * @param descripcion
 	 * @param sintomas
 	 */
-	public Enfermedad(String codigo, String nombre, String descripcion, ArrayList<String> sintomas) {
+	public Enfermedad(String codigo, String nombre, String descripcion) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.sintomas = sintomas;
+		this.sintomas = new ArrayList<String>();
+	}
+	
+	public void insertarSintomas(String sintoma) {
+		this.sintomas.add(sintoma);
 	}
 	public String getCodigo() {
 		return codigo;

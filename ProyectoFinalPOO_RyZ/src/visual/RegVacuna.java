@@ -59,43 +59,45 @@ public class RegVacuna extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("C\u00F3digo:");
 		lblNewLabel.setBounds(17, 22, 56, 16);
 		lblNewLabel.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
 		lblNewLabel_1.setBounds(17, 68, 56, 16);
 		lblNewLabel_1.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel_1);
-		
+
 		JLabel lblNewLabel_2 = new JLabel("Laboratorio:");
 		lblNewLabel_2.setBounds(269, 68, 98, 16);
 		lblNewLabel_2.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel_2);
-		
+
 		txtNombre = new JTextField();
 		txtNombre.setBounds(72, 65, 175, 22);
 		contentPanel.add(txtNombre);
 		txtNombre.setColumns(10);
-		
+
 		txtLab = new JTextField();
 		txtLab.setColumns(10);
 		txtLab.setBounds(344, 65, 175, 22);
 		contentPanel.add(txtLab);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("Descripci\u00F3n:");
 		lblNewLabel_3.setBounds(17, 110, 83, 16);
 		lblNewLabel_3.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel_3);
-		
+
 		txtDescripcion = new JTextField();
 		txtDescripcion.setBounds(17, 131, 502, 110);
 		contentPanel.add(txtDescripcion);
 		txtDescripcion.setColumns(10);
-		
+
 		txtCodigo = new JTextField();
+		txtCodigo.setEditable(false);
+		txtCodigo.setText("V-"+ClinicaSONS.codVac);
 		txtCodigo.setColumns(10);
 		txtCodigo.setBounds(72, 19, 175, 22);
 		contentPanel.add(txtCodigo);
@@ -108,35 +110,39 @@ public class RegVacuna extends JDialog {
 				JButton btnRegistrar = new JButton("Registrar");
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-				
-					Vacuna vacuna = null;
-					
-					String codigo = txtCodigo.getText();
-					String nombre = txtNombre.getText();
-					String laboratorio = txtLab.getText();
-					String descripcion = txtDescripcion.getText();
-					
-					if ((codigo.isEmpty()||nombre.isEmpty()||laboratorio.isEmpty()||descripcion.isEmpty())) {
-						JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
-					}
-					else {
-						
+						Vacuna vacuna = null;
+
+						String codigo = txtCodigo.getText();
+						String nombre = txtNombre.getText();
+						String laboratorio = txtLab.getText();
+						String descripcion = txtDescripcion.getText();
+
+						if ((codigo.trim().isEmpty()||nombre.trim().isEmpty()||laboratorio.trim().isEmpty()||descripcion.trim().isEmpty())) {
+							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
 							vacuna = new Vacuna(codigo, nombre, laboratorio, descripcion);
-							
+
 							ClinicaSONS.getInstance().insertarVacuna(vacuna);
 							JOptionPane.showMessageDialog(null, "Vacuna registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							clean();
-												
-						
+							clean();						
 						}
-					
-					
-					
-					
+
 					}
 
-					
+
 				});
+				
+				JButton button = new JButton("Registrar");
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						ListarVacunas list = new ListarVacunas();
+						list.setModal(true);
+						list.setVisible(true);
+					}
+				});
+				button.setActionCommand("OK");
+				buttonPane.add(button);
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
@@ -146,22 +152,22 @@ public class RegVacuna extends JDialog {
 				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
-						}
+					}
 				});
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
 		}
 	}
-	
+
 	private void clean() {
-		txtCodigo.setText("");
+		txtCodigo.setText("V-"+ClinicaSONS.codVac);
 		txtDescripcion.setText("");
 		txtLab.setText("");
 		txtNombre.setText("");
-		
+
 	}
-	
-	
-	
+
+
+
 }

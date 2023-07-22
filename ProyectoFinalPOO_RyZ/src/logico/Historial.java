@@ -11,8 +11,11 @@ public class Historial {
 		
 	public Historial(String numRecord) {
 		super();
-		this.numRecord =numRecord;
+		this.numRecord = numRecord;
 		this.misDatosImportantes = new ArrayList<Consulta>();
+	}
+	public void insertarConsulta(Consulta consulta) {
+		this.misDatosImportantes.add(consulta);
 	}
 	public String getNumRecord() {
 		return numRecord;
