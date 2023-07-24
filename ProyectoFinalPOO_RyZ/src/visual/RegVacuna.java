@@ -29,10 +29,12 @@ public class RegVacuna extends JDialog {
 	private JTextField txtLab;
 	private JTextField txtDescripcion;
 	private JTextField txtCodigo;
+	private Vacuna miVacuna;
 
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
 		try {
 			RegVacuna dialog = new RegVacuna();
@@ -43,11 +45,19 @@ public class RegVacuna extends JDialog {
 		}
 	}
 
+	*/
 	/**
 	 * Create the dialog.
 	 */
-	public RegVacuna() {
-		setTitle("Registro de Vacuna");
+	public RegVacuna(Vacuna vacuna) {
+		miVacuna = vacuna;
+		setResizable(false);
+		if (miVacuna==null) {
+			setTitle("Registro de Vacuna");
+		}else {
+			setTitle("Modificación de Vacuna");
+		}
+		
 		setBounds(100, 100, 550, 336);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -108,8 +118,16 @@ public class RegVacuna extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
+				if (miVacuna!=null) {
+					btnRegistrar.setText("Modificar");
+				}
+				btnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if (miVacuna==null) {
+							
+						
+						
 						Vacuna vacuna = null;
 
 						String codigo = txtCodigo.getText();
@@ -125,30 +143,44 @@ public class RegVacuna extends JDialog {
 
 							ClinicaSONS.getInstance().insertarVacuna(vacuna);
 							JOptionPane.showMessageDialog(null, "Vacuna registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							clean();						
-						}
+							clean();}
+					}else {
+						miVacuna.setCodigo(txtCodigo.getText());
+						miVacuna.setDescripcion(txtDescripcion.getText());
+						miVacuna.setLaboratorio(txtLab.getText());
+						miVacuna.setNombre(txtNombre.getText());
+						ClinicaSONS.getInstance().modificarVacuna(miVacuna);
+						dispose();
+						ListarVacunas.llenarTabla();
+					
+					}
 
 					}
 
 
 				});
 				
-				JButton button = new JButton("Registrar");
-				button.addActionListener(new ActionListener() {
+				JButton btnVerLista = new JButton("Ver lista");
+				btnVerLista.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+					
 						ListarVacunas list = new ListarVacunas();
 						list.setModal(true);
 						list.setVisible(true);
+					
 					}
 				});
-				button.setActionCommand("OK");
-				buttonPane.add(button);
+				buttonPane.add(btnVerLista);
+				
+				
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
 				JButton btnCancelar = new JButton("Cancelar");
+				btnCancelar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
@@ -157,6 +189,20 @@ public class RegVacuna extends JDialog {
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
+			
+			
+		}
+		
+		cargarVacunas(); 
+	}
+
+	private void cargarVacunas() {
+		if (miVacuna!=null) {
+			txtCodigo.setText(miVacuna.getCodigo());
+			txtDescripcion.setText(miVacuna.getDescripcion());
+			txtLab.setText(miVacuna.getLaboratorio());
+			txtNombre.setText(miVacuna.getNombre());
+			
 		}
 	}
 

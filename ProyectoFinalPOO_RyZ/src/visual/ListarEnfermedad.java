@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -18,6 +19,10 @@ import logico.Vacuna;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListarEnfermedad extends JDialog {
 
@@ -25,6 +30,9 @@ public class ListarEnfermedad extends JDialog {
 	private JTable table;
 	private static DefaultTableModel model;
 	private static Object[] row = null;
+	private Enfermedad selected = null;
+	private JButton btnActualizar;
+	private JButton btnEliminar;
 
 	/**
 	 * Launch the application.
@@ -67,6 +75,23 @@ public class ListarEnfermedad extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
+					table.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+						
+							int index = table.getSelectedRow();
+							if (index >=0) {
+								
+								btnActualizar.setEnabled(true);
+								btnEliminar.setEnabled(true);
+								selected = ClinicaSONS.getInstance().buscarEnfermedadPorCodigo(table.getValueAt(index, 0).toString());
+						
+							}
+						
+						
+						
+						}
+					});
 					model = new DefaultTableModel();
 					String[] headers = {"Código", "Nombre", "Descripción","Síntomas"};
 					model.setColumnIdentifiers(headers);
@@ -89,13 +114,53 @@ public class ListarEnfermedad extends JDialog {
 			buttonPane.setLayout(fl_buttonPane);
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnActualizar = new JButton("Actualizar");
+				btnActualizar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegEnfermedad actualizar = new RegEnfermedad(selected);
+						actualizar.setModal(true);
+						actualizar.setVisible(true);
+					
+					
+					}
+				});
+				btnActualizar.setEnabled(false);
+				buttonPane.add(btnActualizar);
+			}
+			{
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (selected!=null) {
+							int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Enfermedad:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+							if (option == JOptionPane.OK_OPTION) {
+								ClinicaSONS.getInstance().eliminarEnfermedad(selected);
+								
+								btnActualizar.setEnabled(false);
+								btnEliminar.setEnabled(false);
+								llenarTabla();
+							}
+							
+						}
+					
+					
+					
+					}
+				});
+				btnEliminar.setEnabled(false);
+				btnEliminar.setActionCommand("OK");
+				buttonPane.add(btnEliminar);
+				getRootPane().setDefaultButton(btnEliminar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+				
+					dispose();
+					
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -103,7 +168,7 @@ public class ListarEnfermedad extends JDialog {
 		llenarTabla();
 	}
 
-	public void llenarTabla() {
+	public static void llenarTabla() {
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
 		for (Enfermedad aux : ClinicaSONS.getInstance().getMisEnfermedades()) {

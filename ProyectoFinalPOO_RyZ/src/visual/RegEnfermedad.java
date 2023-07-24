@@ -51,26 +51,36 @@ public class RegEnfermedad extends JDialog{
 	private JLabel label_5;
 	private JLabel label_6;
 	private JLabel label_7;
-	private JButton button;
+	private JButton btnVerLista;
+	private Enfermedad miEnfermedad;
 
 	/**
 	 * Launch the application.
 	 */
+/*
 	public static void main(String[] args) {
 		try {
-			RegEnfermedad dialog = new RegEnfermedad();
+			RegEnfermedad dialog = new RegEnfermedad(Enfermedad selected);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	/**
 	 * Create the dialog.
+	 * @param selected 
 	 */
-	public RegEnfermedad() {
-		setTitle("Registro de enfermedad");
+	public RegEnfermedad(Enfermedad enfermedad) {
+		miEnfermedad = enfermedad;
+		setResizable(false);
+		if (miEnfermedad==null) {
+			setTitle("Registro de Enfermedad");
+		}else {
+			setTitle("Modificación de Enfermedad");
+		}
+		
 		setBounds(100, 100, 550, 410);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -313,6 +323,8 @@ public class RegEnfermedad extends JDialog{
 				btnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if (miEnfermedad==null) {
+							
 						Enfermedad enfermedad = null;
 						String codigo = txtCodigo.getText();
 						String nombre = txtNombre.getText();
@@ -349,24 +361,34 @@ public class RegEnfermedad extends JDialog{
 								System.out.println(aux);
 							}
 							clean();
-							
-						}
+						}		
+			}else {
+				miEnfermedad.setCodigo(txtCodigo.getText());
+				miEnfermedad.setDescripcion(txtDescripcion.getText());
+				miEnfermedad.setNombre(txtNombre.getText());
+				miEnfermedad.setSintomas((ArrayList<String>) Arrays.asList(txtSin1.getText(),txtSin2.getText(),txtSin3.getText(),txtSin3.getText(),txtSin4.getText(),txtSin5.getText(),txtSin6.getText(),txtSin7.getText(),txtSin8.getText(),txtSin9.getText()));
+				
+				ClinicaSONS.getInstance().modificarEnfermedad(miEnfermedad);
+				dispose();
+				ListarEnfermedad.llenarTabla();
+			
+			}
 					
 					}
 
 				});
 				
-				button = new JButton("Registrar");
-				button.addActionListener(new ActionListener() {
+				btnVerLista = new JButton("Ver lista");
+				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						ListarEnfermedad list = new ListarEnfermedad();
 						list.setModal(true);
 						list.setVisible(true);
 					}
 				});
-				button.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-				button.setActionCommand("OK");
-				buttonPane.add(button);
+				btnVerLista.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				btnVerLista.setActionCommand("OK");
+				buttonPane.add(btnVerLista);
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
@@ -382,8 +404,47 @@ public class RegEnfermedad extends JDialog{
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
+		
+			cargarEnfermedades(); 
+		}
+		
+			
+		
+		
+		
+	}
+	
+	
+	private void cargarEnfermedades() {
+		if (miEnfermedad!=null) {
+			txtCodigo.setText(miEnfermedad.getCodigo());
+			txtDescripcion.setText(miEnfermedad.getDescripcion());
+			txtNombre.setText(miEnfermedad.getNombre());
+			txtSin1.setText(miEnfermedad.getSintomas().get(0));
+			txtSin2.setText(miEnfermedad.getSintomas().get(1));
+			txtSin3.setText(miEnfermedad.getSintomas().get(2));
+			txtSin4.setText(miEnfermedad.getSintomas().get(3));
+			txtSin5.setText(miEnfermedad.getSintomas().get(4));
+			txtSin6.setText(miEnfermedad.getSintomas().get(5));
+			
+			txtSin7.setText(miEnfermedad.getSintomas().get(6));
+			txtSin8.setText(miEnfermedad.getSintomas().get(7));
+			txtSin9.setText(miEnfermedad.getSintomas().get(8));
+			
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	private void clean() {
 		txtCodigo.setText("E-"+ClinicaSONS.codEnf);

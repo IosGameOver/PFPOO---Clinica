@@ -9,14 +9,19 @@ public class Cita {
 	private String telefonoPersona;
 	private Doctor doctor;
 	private Date fechaReservada;
+	private String horario;
 	
-	public Cita(String codigo, String nombrePersona, String telefonoPersona, Doctor doctor, 
-			Date fechaReservada) {
+	
+	
+	
+	public Cita(String codigo, String nombrePersona, String telefonoPersona, Doctor doctor, Date fechaReservada, 
+			String horario) {
 		super();
 		this.codigo = codigo;
 		this.nombrePersona = nombrePersona;
 		this.telefonoPersona = telefonoPersona;
 		this.doctor = doctor; 
+		this.horario = horario;
 		this.fechaReservada = fechaReservada;
 	}
 		
@@ -39,6 +44,7 @@ public class Cita {
 		this.telefonoPersona = telefonoPersona;
 	}
 	public Doctor getDoctor() {
+	
 		return doctor;
 	}
 	public void setDoctor(Doctor doctor) {
@@ -49,6 +55,14 @@ public class Cita {
 	}
 	public void setFechaReservada(Date fechaReservada) {
 		this.fechaReservada = fechaReservada;
+	}
+
+	public String getHorario() {
+		return horario;
+	}
+
+	public void setHorario(String horario) {
+		this.horario = horario;
 	}
 	
 	

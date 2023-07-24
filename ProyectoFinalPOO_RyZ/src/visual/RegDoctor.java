@@ -53,10 +53,11 @@ public class RegDoctor extends JDialog {
 	private JTextField txtCorreo;
 	private JTextField txtConstrasena;
 	private JComboBox cmbEspecialidad;
-
+	private Doctor miDoctor;
 	/**
 	 * Launch the application.
 	 */
+/*	
 	public static void main(String[] args) {
 		try {
 			RegDoctor dialog = new RegDoctor();
@@ -66,12 +67,22 @@ public class RegDoctor extends JDialog {
 			e.printStackTrace();
 		}
 	}
-
+*/
 	/**
 	 * Create the dialog.
+	 * @param doctor 
 	 */
-	public RegDoctor() {
-		setTitle("Registro de Doctor");
+	public RegDoctor(Doctor doctor) {
+		
+	
+		miDoctor = doctor;
+		setResizable(false);
+		if (miDoctor==null) {
+			setTitle("Registro de Doctor");
+		}else {
+			setTitle("Modificación de Doctor");
+		}
+		
 		setBounds(100, 100, 711, 500);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -272,6 +283,8 @@ public class RegDoctor extends JDialog {
 				JButton BtnRegistrar = new JButton("Registrar");
 				BtnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				BtnRegistrar.addActionListener(new ActionListener() {
+					
+					
 					public void actionPerformed(ActionEvent e) {
 						Doctor doctor = null;
 						String separador = Pattern.quote("@");
@@ -313,13 +326,26 @@ public class RegDoctor extends JDialog {
 
 
 				});
+				
+				JButton btnVerLista = new JButton("Ver lista");
+				btnVerLista.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				btnVerLista.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					
+						ListarDoctores lista = new ListarDoctores();
+						lista.setModal(true);
+						lista.setVisible(true);
+					
+					}
+				});
+				buttonPane.add(btnVerLista);
 
 				BtnRegistrar.setActionCommand("OK");
 				buttonPane.add(BtnRegistrar);
 				getRootPane().setDefaultButton(BtnRegistrar);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Cancelar");
 				cancelButton.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -376,5 +402,4 @@ public class RegDoctor extends JDialog {
 
 		return sb.toString();
 	}
-
 }

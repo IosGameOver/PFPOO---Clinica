@@ -12,13 +12,14 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 
 public class Principal extends JFrame {
 
 	private JPanel contentPane;
 	private Dimension dim;
 
-	/**
+		/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
@@ -53,38 +54,38 @@ public class Principal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("Doctores");
-		menuBar.add(mnNewMenu);
+		JMenu mnDoctor = new JMenu("Doctores");
+		menuBar.add(mnDoctor);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Registrar doctor");
-		mntmNewMenuItem.addActionListener(new ActionListener() {
+		JMenuItem mntmRegDoctor = new JMenuItem("Registrar doctor");
+		mntmRegDoctor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegDoctor reg = new RegDoctor();
+				RegDoctor reg = new RegDoctor(null);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem);
+		mnDoctor.add(mntmRegDoctor);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Listar doctor");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+		JMenuItem mntmListDoc = new JMenuItem("Listar doctor");
+		mntmListDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarDoctores list = new ListarDoctores();
 				list.setModal(true);
 				list.setVisible(true);
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem_1);
+		mnDoctor.add(mntmListDoc);
 		
-		JMenu mnNewMenu_1 = new JMenu("Pacientes");
-		menuBar.add(mnNewMenu_1);
+		JMenu mnPaciente = new JMenu("Pacientes");
+		menuBar.add(mnPaciente);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Listar pacientes");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		mnNewMenu_1.add(mntmNewMenuItem_2);
+		mnPaciente.add(mntmNewMenuItem_2);
 		
 		JMenu mnNewMenu_2 = new JMenu("");
 		menuBar.add(mnNewMenu_2);
@@ -92,93 +93,106 @@ public class Principal extends JFrame {
 		JMenu mnNewMenu_3 = new JMenu("Citas");
 		menuBar.add(mnNewMenu_3);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Programar cita");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+		JMenuItem mntmProgCita = new JMenuItem("Programar cita");
+		mntmProgCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegCita reg = new RegCita();
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
 		});
-		mnNewMenu_3.add(mntmNewMenuItem_3);
 		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Listar citas");
-		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+		mnNewMenu_3.add(mntmProgCita);
+		
+		JMenuItem mntmListCita = new JMenuItem("Listar citas");
+		mntmListCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		mnNewMenu_3.add(mntmNewMenuItem_4);
+		mnNewMenu_3.add(mntmListCita);
 		
-		JMenu mnNewMenu_4 = new JMenu("Consultas");
-		menuBar.add(mnNewMenu_4);
+		JMenu mnConsulta = new JMenu("Consultas");
+		menuBar.add(mnConsulta);
 		
-		JMenuItem mntmNewMenuItem_5 = new JMenuItem("Registrar consultas");
-		mntmNewMenuItem_5.addActionListener(new ActionListener() {
+		JMenuItem mntmRegConsult = new JMenuItem("Registrar consultas");
+		mntmRegConsult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				HistorialConsulta hist = new HistorialConsulta(null);
 				hist.setModal(true);
 				hist.setVisible(true);
 			}
 		});
-		mnNewMenu_4.add(mntmNewMenuItem_5);
+		mnConsulta.add(mntmRegConsult);
 		
-		JMenuItem mntmNewMenuItem_6 = new JMenuItem("Listar consultas");
-		mntmNewMenuItem_6.addActionListener(new ActionListener() {
+		JMenuItem mntmListConsulta = new JMenuItem("Listar consultas");
+		mntmListConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		mnNewMenu_4.add(mntmNewMenuItem_6);
+		mnConsulta.add(mntmListConsulta);
 		
-		JMenu mnNewMenu_5 = new JMenu("Enfermedades");
-		menuBar.add(mnNewMenu_5);
+		JMenu mnEnfermedad = new JMenu("Enfermedades");
+		menuBar.add(mnEnfermedad);
 		
-		JMenuItem mntmNewMenuItem_7 = new JMenuItem("Registrar enfermedades");
-		mntmNewMenuItem_7.addActionListener(new ActionListener() {
+		JMenuItem mntmRegEnferm = new JMenuItem("Registrar enfermedades");
+		mntmRegEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegEnfermedad reg = new RegEnfermedad();
+				RegEnfermedad reg = new RegEnfermedad(null);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
 		});
-		mnNewMenu_5.add(mntmNewMenuItem_7);
+		mnEnfermedad.add(mntmRegEnferm);
 		
-		JMenuItem mntmNewMenuItem_8 = new JMenuItem("Listar enfermedades");
-		mntmNewMenuItem_8.addActionListener(new ActionListener() {
+		JMenuItem mntmListEnferm = new JMenuItem("Listar enfermedades");
+		mntmListEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarEnfermedad list = new ListarEnfermedad();
 				list.setModal(true);
 				list.setVisible(true);
 			}
 		});
-		mnNewMenu_5.add(mntmNewMenuItem_8);
+		mnEnfermedad.add(mntmListEnferm);
 		
-		JMenu mnNewMenu_6 = new JMenu("Vacunas");
-		menuBar.add(mnNewMenu_6);
+		JMenu mnVacuna = new JMenu("Vacunas");
+		menuBar.add(mnVacuna);
 		
-		JMenuItem mntmNewMenuItem_9 = new JMenuItem("Registrar vacuna");
-		mntmNewMenuItem_9.addActionListener(new ActionListener() {
+		JMenuItem mntmRegVacu = new JMenuItem("Registrar vacuna");
+		mntmRegVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegVacuna reg = new RegVacuna();
+				RegVacuna reg = new RegVacuna(null);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
 		});
-		mnNewMenu_6.add(mntmNewMenuItem_9);
+		mnVacuna.add(mntmRegVacu);
 		
-		JMenuItem mntmNewMenuItem_10 = new JMenuItem("Listar vacuna");
-		mntmNewMenuItem_10.addActionListener(new ActionListener() {
+		JMenuItem mntmListVacu = new JMenuItem("Listar vacuna");
+		mntmListVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarVacunas list = new ListarVacunas();
 				list.setModal(true);
 				list.setVisible(true);
 			}
 		});
-		mnNewMenu_6.add(mntmNewMenuItem_10);
+		mnVacuna.add(mntmListVacu);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		JButton btnCerrarSes = new JButton("Cerrar ses\u00F3n");
+		btnCerrarSes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				Login loginScreen = new Login();
+				loginScreen.setVisible(true);
+				dispose();
+				
+			}
+		});
+		contentPane.add(btnCerrarSes, BorderLayout.SOUTH);
 	}
 
 }

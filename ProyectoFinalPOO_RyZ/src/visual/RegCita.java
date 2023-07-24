@@ -3,6 +3,7 @@ package visual;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,17 +12,29 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.JComboBox;
+import javax.crypto.Cipher;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import com.toedter.calendar.JDayChooser;
+
+import logico.Cita;
+import logico.ClinicaSONS;
+import logico.Doctor;
+import logico.Persona;
+import logico.Vacuna;
+
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JScrollPane;
@@ -36,10 +49,14 @@ public class RegCita extends JDialog {
 	private JTextField txtCod;
 	private SimpleDateFormat df = null;
 	private JComboBox cmbDoctor;
-	private JComboBox comboBox;
-	private JDateChooser dateChooser;
+	
+	private JComboBox cmbHorario;
+	private JDateChooser dtFecha;
 	private JPanel panelTab;
 	private JTable table;
+	private static DefaultTableModel model;
+	private static Object[] row = null;
+	private Doctor[] doctores = {};
 
 	/**
 	 * Launch the application.
@@ -132,38 +149,41 @@ public class RegCita extends JDialog {
 			contentPanel.add(lblDoctor);
 		}
 		
-		cmbDoctor = new JComboBox();
-		cmbDoctor.addItemListener(new ItemListener() {
+		cmbDoctor = new JComboBox<>();
+		cmbDoctor.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>"}));
+		cmbDoctor.addItem(ClinicaSONS.getInstance().listaDoctores());
+	 	cmbDoctor.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				if(!cmbDoctor.getSelectedItem().toString().equalsIgnoreCase("<Seleccionar>")) {
+				if(!cmbDoctor.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")) {
 					panelTab.setBorder(new TitledBorder(null, "Citas del Dr."+cmbDoctor.getSelectedItem(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				}else {
 					panelTab.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				}
 			}
 		});
-		cmbDoctor.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "Pepe"}));
+	
 		cmbDoctor.setBounds(348, 166, 180, 22);
 		cmbDoctor.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(cmbDoctor);
 		
 		txtCod = new JTextField();
 		txtCod.setEditable(false);
+		txtCod.setText("C-"+ClinicaSONS.codCita);
 		txtCod.setColumns(10);
 		txtCod.setBounds(71, 22, 180, 22);
 		contentPanel.add(txtCod);
 		
-		dateChooser = new JDateChooser();
-		dateChooser.setDateFormatString("d/MM/yyyy");
-		dateChooser.setBounds(348, 118, 180, 22);
+		dtFecha = new JDateChooser();
+		dtFecha.setDateFormatString("d/MM/yyyy");
+		dtFecha.setBounds(348, 118, 180, 22);
 		
-		contentPanel.add(dateChooser);
+		contentPanel.add(dtFecha);
 		
-		comboBox = new JComboBox();
-		comboBox.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"}));
-		comboBox.setBounds(71, 166, 180, 22);
-		contentPanel.add(comboBox);
+		cmbHorario = new JComboBox();
+		cmbHorario.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+		cmbHorario.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"}));
+		cmbHorario.setBounds(71, 166, 180, 22);
+		contentPanel.add(cmbHorario);
 		
 		panelTab = new JPanel();
 		panelTab.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -175,6 +195,20 @@ public class RegCita extends JDialog {
 			panelTab.add(scrollPane, BorderLayout.CENTER);
 			
 			table = new JTable();
+			
+			model = new DefaultTableModel();
+			String[] headers = {"Código", "Nombre", "Teléfono", "Fecha","Horario", "Doctor"};
+			model.setColumnIdentifiers(headers);
+			table.setModel(model);
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			TableColumnModel columnModel = table.getColumnModel();
+			columnModel.getColumn(0).setPreferredWidth(70);
+			columnModel.getColumn(1).setPreferredWidth(130);
+			columnModel.getColumn(2).setPreferredWidth(80);
+			columnModel.getColumn(3).setPreferredWidth(80);
+			columnModel.getColumn(4).setPreferredWidth(80);
+			columnModel.getColumn(5).setPreferredWidth(150);
+			
 			scrollPane.setViewportView(table);
 		}
 		{
@@ -182,16 +216,91 @@ public class RegCita extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnRegistrar = new JButton("Registrar");
+				btnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				btnRegistrar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Cita cita = null;
+						String codigo = txtCod.getText();
+						String cedula = txtCedula.getText();
+						String nombre = txtNombre.getText();
+						String telefono = txtTel.getText();
+						String horario = cmbHorario.getSelectedItem().toString();
+					
+						Date fecha = dtFecha.getDate();
+												
+					//	String doctor = cmbDoctor.getClass();
+					//	Class<? extends Object> doctor = cmbDoctor.getSelectedItem().getClass();
+												
+						
+						if ((codigo.trim().isEmpty()||cedula.trim().isEmpty()||nombre.trim().isEmpty()||telefono.trim().isEmpty()||horario.trim().isEmpty()||fecha.toString().trim().isEmpty())) {
+							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+						}
+						else {
+							cita = new Cita(codigo, nombre, telefono, null, fecha, horario);
+									 
+							ClinicaSONS.getInstance().insertarCita(cita);
+							JOptionPane.showMessageDialog(null, "Cita registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
+							clean();
+							llenarTabla();
+						}
+								
+					}
+
+					
+				});
+				btnRegistrar.setActionCommand("OK");
+				buttonPane.add(btnRegistrar);
+				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+				
+						dispose();
+					
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
+		
 	}
+	
+	
+
+	public static void llenarTabla(){
+		model.setRowCount(0);
+		row = new Object[model.getColumnCount()];
+		SimpleDateFormat fechaSimple = new SimpleDateFormat("dd-MM-yyyy");
+
+		for (Cita aux : ClinicaSONS.getInstance().getMisCitas()) {
+			row[0] = aux.getCodigo();
+			row[1] = aux.getNombrePersona();
+			row[2] = aux.getTelefonoPersona();
+			row[3] = fechaSimple.format(aux.getFechaReservada());
+			row[4] = aux.getHorario();
+			row[5] = aux.getDoctor();
+			model.addRow(row);
+		}
+	}
+	
+	private void clean() {
+			
+		txtCod.setText("C-"+ClinicaSONS.codCita);
+		txtCedula.setText("");
+		txtNombre.setText("");
+		txtTel.setText("");
+		dtFecha.setDate(null);
+		
+		
+		
+		
+	}
+	
+
+	
 }

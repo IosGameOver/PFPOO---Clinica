@@ -1,15 +1,19 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
-public class ClinicaSONS {
+public class ClinicaSONS implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Enfermedad> misEnfermedades;
 	private ArrayList<Cita> misCitas;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
 	private ArrayList<Historial> misHistoriales;
 	private ArrayList<Persona> misPersonas;
+	private ArrayList<Usuario> misUsuarios;
 	private static ClinicaSONS clinica = null;
 	public static int codCita = 1;
 	public static int codConsulta = 1;
@@ -18,6 +22,8 @@ public class ClinicaSONS {
 	public static int codVac = 1;
 	public static int codPac = 1;
 	public static int codHist = 1;
+	private static Usuario loginUser;
+	
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -74,8 +80,30 @@ public class ClinicaSONS {
 	public ArrayList<Persona> getMisPersonas() {
 		return misPersonas;
 	}
+	
 	public void setMisPersonas(ArrayList<Persona> misPersonas) {
 		this.misPersonas = misPersonas;
+	}
+
+	public ArrayList<Usuario> getMisUsuarios() {
+		return misUsuarios;
+	}
+
+	public void setMisUsuarios(ArrayList<Usuario> misUsuarios) {
+		this.misUsuarios = misUsuarios;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
+	public static Usuario getLoginUser() {
+		return loginUser;
+	}
+
+	public static void setLoginUser(Usuario loginUser) {
+		ClinicaSONS.loginUser = loginUser;
 	}
 
 	public void insertarVacuna(Vacuna vacuna) {
@@ -88,11 +116,15 @@ public class ClinicaSONS {
 		codEnf++;
 	}
 
-	public void insertarDoctor(Doctor doctor) {
+	public Doctor insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
 		codDoctor++;
+		return doctor;
+		
 	}
-
+	
+	
+	
 	public void insertarPersona(Persona persona) {
 		misPersonas.add(persona);
 		if(persona instanceof Paciente) {
@@ -106,13 +138,127 @@ public class ClinicaSONS {
 		codHist++;
 	}
 	public void insertarCita(Cita cita) {
+		
 		misCitas.add(cita);
+		
 		codCita++;
 	}
 	public void insertarConsulta(Consulta consulta) {
 		misConsultas.add(consulta);
 		codConsulta++;
 	}
+	
+	
+
+	public ArrayList<String>  listaDoctores() {
+		ArrayList<String> doctors = new ArrayList<String>() ;
+		
+		for(Persona doc : misPersonas) {
+			if (doc instanceof Doctor) {
+				doctors.add(doc.getNombre());
+			}
+		}
+		return doctors;
+	}
+
+	public Doctor buscarDoctorPorUsuarioExistente(String usuarioDoctor, String claveDoctor) {
+
+		Doctor doctor = null; 
+		boolean encontrado = false;
+		
+		for (Persona persona : misPersonas) {
+			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(usuarioDoctor)&& ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
+				doctor =(Doctor) persona;
+				encontrado = true;
+				
+			}
+		}
+		return doctor;
+	}
+	public boolean existeDoctorPorUsuario(String usuarioDoctor, String claveDoctor) {
+
+		Doctor doctor = null; 
+		boolean encontrado = false;
+		
+		for (Persona persona : misPersonas) {
+			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(usuarioDoctor)&& ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
+				doctor =(Doctor) persona;
+				encontrado = true;
+				
+			}
+		}
+		return encontrado;
+	}
+	/*
+	  public Doctor buscarDoctorPorContrasennaExistente(String claveDoctor) {
+	 
+
+		Doctor doctor = null; 
+		boolean encontrado = false;
+		
+		for (Persona persona : misPersonas) {
+			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
+				doctor =(Doctor) persona;
+				encontrado = true;
+				
+			}
+		}
+		return doctor;
+	}
+	*/
+
+	public boolean confirmLogin(String username, String pass) {
+		boolean login = false;
+		for (Usuario usuario : misUsuarios) {
+			if (usuario.getUserName().equals(username)&&usuario.getPass().equals(pass)) {
+				loginUser= usuario;
+				login = true;
+			}
+		}
+		
+		return login;
+	} 
+	
+	public boolean confirmLoginDoc(String username, String pass) {
+		boolean login = false;
+		for (Persona usuario : misPersonas) {
+			if (((Doctor)usuario).getUsuario().equals(username)&&((Doctor)usuario).getContrasena().equals(pass)) {
+				login = true;
+			}
+		}
+		
+		return login;
+	} 
+	
+	
+	public boolean confirmLoginSecretario(String username, String pass) {
+		boolean login = false;
+		for (Usuario usuario : misUsuarios) {
+			if ((usuario.getUserName().equals(username)&&usuario.getPass().equals(pass))&&usuario instanceof Secretario) {
+				loginUser= usuario;
+				login = true;
+			}
+		}
+		
+		return login;
+	} 
+	
+
+	public Usuario buscarUsuarioPorUser(String usuariotxt, String clave) {
+
+		Usuario user = null;
+		boolean login = false;
+		for (Usuario usuario : misUsuarios) {
+			if ((usuario.getUserName().equals(usuariotxt)&&usuario.getPass().equals(clave))&&usuario instanceof Secretario) {
+				loginUser= usuario;
+				user = usuario;
+			}
+		}
+		
+		return user;
+	}	
+	
+	
 	public Cita buscarCitaPorCodigo(String codigoCita) {
 
 		Cita cita = null; 
@@ -249,6 +395,114 @@ public class ClinicaSONS {
 		return enfermedad;
 	}
 
+	//Vacuna Mod y Elim
+	
+	public int buscarIndexVacunaPorCodigo(String codigo) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i =0;
+		while(i<misVacunas.size() && !encontrado) {
+			
+			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigo)) {
+				encontrado =true;
+				aux = i;						
+			}
+			i++;
+		}
+		
+		return aux;
+	}
+	
+	public void modificarVacuna(Vacuna miVacuna) {
+
+		int index = buscarIndexVacunaPorCodigo(miVacuna.getCodigo());
+		misVacunas.set(index, miVacuna);
+
+		
+	}
+	
+	
+	public void eliminarVacuna(Vacuna selected) {
+		misVacunas.remove(selected);
+	
+	}
+	
+	//Enfermedad Mod y Elim
+	
+		
+	public int buscarIndexEnfermedadPorCodigo(String codigo) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i =0;
+		while(i<misEnfermedades.size() && !encontrado) {
+			
+			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigo)) {
+				encontrado =true;
+				aux = i;						
+			}
+			i++;
+		}
+		
+		return aux;
+	}
+	
+	public void modificarEnfermedad(Enfermedad miEnfermedad) {
+
+		int index = buscarIndexVacunaPorCodigo(miEnfermedad.getCodigo());
+		misEnfermedades.set(index, miEnfermedad);
+
+		
+	}
+	
+	public void eliminarEnfermedad(Enfermedad enfermedad) {
+		misEnfermedades.remove(enfermedad);
+	
+	}
+	
+	//Doctor Mod y Elim
+	
+	
+		public int buscarIndexDoctorPorCodigo(String codigo) {
+			int aux = -1;
+			boolean encontrado = false;
+			int i =0;
+			while(i<misPersonas.size() && !encontrado) {
+				
+				if (misPersonas.get(i)instanceof Doctor&&misPersonas.get(i).getCod().equalsIgnoreCase(codigo)) {
+					encontrado =true;
+					aux = i;
+									
+				}
+				i++;
+			}
+			
+			return aux;
+		}
+		
+		public void modificarDoctor(Doctor miDoctor) {
+
+			int index = buscarIndexVacunaPorCodigo(miDoctor.getCod());
+			misPersonas.set(index, miDoctor);
+
+			
+		}
+		
+		public void eliminarDoctor(Doctor selected) {
+			misPersonas.remove(selected);
+		
+		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 
 

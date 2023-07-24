@@ -8,6 +8,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -26,6 +28,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListarDoctores extends JDialog {
 
@@ -34,7 +38,11 @@ public class ListarDoctores extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private JComboBox cmbEspec;
-
+	private Doctor selected = null;
+	private JButton btnEliminar;
+	private JButton btnActualizar;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -93,7 +101,7 @@ public class ListarDoctores extends JDialog {
 									
 									model.addRow(row);
 								}else if(cmbEspec.getSelectedItem().toString().equalsIgnoreCase("Todas")){
-									loadDoctores();
+									llenarDoctores();
 								}
 							}
 						}
@@ -118,6 +126,21 @@ public class ListarDoctores extends JDialog {
 					panel_1.add(scrollPane, BorderLayout.CENTER);
 					{
 						table = new JTable();
+						table.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+							
+								int index = table.getSelectedRow();
+								if (index >=0) {
+									
+									btnActualizar.setEnabled(true);
+									btnEliminar.setEnabled(true);
+									selected = ClinicaSONS.getInstance().buscarDoctorPorCodigo(table.getValueAt(index, 0).toString());
+							
+							
+							}
+						}
+						});
 						model = new DefaultTableModel();
 						String[] headers = {"Código","Cédula","Exequatur","Nombre", "Especialidad","Teléfono"};
 						model.setColumnIdentifiers(headers);
@@ -132,10 +155,49 @@ public class ListarDoctores extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnActualizar = new JButton("Actualizar");
+				btnActualizar.setEnabled(false);
+				btnActualizar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegDoctor actualizar = new RegDoctor(selected);
+						actualizar.setModal(true);
+						actualizar.setVisible(true);
+					
+					
+					
+					}
+				});
+				buttonPane.add(btnActualizar);
+			}
+			{
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.setEnabled(false);
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (selected!=null) {
+							int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al DR(a):  " + selected.getNombre(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+							if (option == JOptionPane.OK_OPTION) {
+								ClinicaSONS.getInstance().eliminarDoctor(selected);
+								
+								btnActualizar.setEnabled(false);
+								btnEliminar.setEnabled(false);
+								llenarDoctores();
+							}
+							
+						}
+					
+					
+					
+					}
+					
+					
+					
+					
+					
+				});
+				btnEliminar.setActionCommand("OK");
+				buttonPane.add(btnEliminar);
+				getRootPane().setDefaultButton(btnEliminar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
@@ -149,10 +211,10 @@ public class ListarDoctores extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		loadDoctores();
+		llenarDoctores();
 	}
 	
-	public static void loadDoctores(){
+	public static void llenarDoctores(){
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
 		for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {

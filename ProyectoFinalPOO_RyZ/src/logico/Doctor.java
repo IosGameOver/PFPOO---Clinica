@@ -10,6 +10,7 @@ public class Doctor extends Persona {
 	private String especialidad;
 	private String usuario;
 	private String contrasena;
+	protected  int nvlAutoridad = 5;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Cita> misCitas;
 	private ArrayList<Consulta> misConsultas;
@@ -62,6 +63,11 @@ public class Doctor extends Persona {
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
+	public int getNvlAutoridad() {
+		return nvlAutoridad;
+	}
+
+
 	public ArrayList<Paciente> getMisPacientes() {
 		return misPacientes;
 	}

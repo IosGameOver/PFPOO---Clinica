@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JScrollPane;
@@ -17,6 +18,10 @@ import logico.ClinicaSONS;
 import logico.Vacuna;
 
 import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListarVacunas extends JDialog {
 
@@ -24,6 +29,9 @@ public class ListarVacunas extends JDialog {
 	private JTable table;
 	private static DefaultTableModel model;
 	private static Object[] row = null;
+	private Vacuna selected = null;
+	private JButton btnEliminar;
+	private JButton btnActualizar;
 
 	/**
 	 * Launch the application.
@@ -58,6 +66,21 @@ public class ListarVacunas extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
+					table.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+						
+							int index = table.getSelectedRow();
+							if (index >=0) {
+								
+								btnActualizar.setEnabled(true);
+								btnEliminar.setEnabled(true);
+								selected = ClinicaSONS.getInstance().buscarVacunaPorCodigo(table.getValueAt(index, 0).toString());
+						
+							}
+							
+						}
+					});
 					model = new DefaultTableModel();
 					String[] headers = {"Código", "Nombre", "Laboratorio","Descripción"};
 					model.setColumnIdentifiers(headers);
@@ -78,13 +101,51 @@ public class ListarVacunas extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnRegistrar = new JButton("Registrar");
-				btnRegistrar.setActionCommand("OK");
-				buttonPane.add(btnRegistrar);
-				getRootPane().setDefaultButton(btnRegistrar);
+				btnActualizar = new JButton("Actualizar");
+				btnActualizar.setEnabled(false);
+				btnActualizar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					RegVacuna actualizar = new RegVacuna(selected);
+					actualizar.setModal(true);
+					actualizar.setVisible(true);
+														
+					
+					}
+				});
+				buttonPane.add(btnActualizar);
+			}
+			{
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					if (selected!=null) {
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Vacuna:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+						if (option == JOptionPane.OK_OPTION) {
+							ClinicaSONS.getInstance().eliminarVacuna(selected);
+							
+							btnActualizar.setEnabled(false);
+							btnEliminar.setEnabled(false);
+							llenarTabla();
+						}
+						
+					}
+					
+					
+					
+					}
+				});
+				btnEliminar.setEnabled(false);
+				btnEliminar.setActionCommand("OK");
+				buttonPane.add(btnEliminar);
+				getRootPane().setDefaultButton(btnEliminar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
