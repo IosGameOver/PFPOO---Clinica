@@ -55,6 +55,7 @@ public class HistorialConsulta extends JDialog {
 	private JTextField txtDir;
 	private JTextField txtCodConsulta;
 	private Paciente miPac = null;
+	public static ArrayList<String> analisis;
 
 
 	/**
@@ -76,6 +77,7 @@ public class HistorialConsulta extends JDialog {
 	 */
 	public HistorialConsulta(Paciente pac) {
 		this.miPac = pac;
+		analisis = new ArrayList<>();
 		setBounds(100, 100, 910, 970);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -371,22 +373,30 @@ public class HistorialConsulta extends JDialog {
 		}
 
 		JButton btnIndAnalisis = new JButton("Indicar an\u00E1lisis");
+		btnIndAnalisis.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IndicarAnalisis ind = new IndicarAnalisis(miPac, null);
+				ind.setModal(true);
+				ind.setVisible(true);
+			}
+		});
 		btnIndAnalisis.setBackground(Color.WHITE);
 		btnIndAnalisis.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-		btnIndAnalisis.setBounds(53, 845, 230, 25);
+		btnIndAnalisis.setBounds(148, 845, 230, 25);
 		panel.add(btnIndAnalisis);
 
 		JButton btnIndicarVacunas = new JButton("Indicar vacunas");
+		btnIndicarVacunas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IndicarVacunas ind = new IndicarVacunas(miPac);
+				ind.setModal(true);
+				ind.setVisible(true);
+			}
+		});
 		btnIndicarVacunas.setBackground(Color.WHITE);
 		btnIndicarVacunas.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-		btnIndicarVacunas.setBounds(336, 845, 230, 25);
+		btnIndicarVacunas.setBounds(526, 845, 230, 25);
 		panel.add(btnIndicarVacunas);
-
-		JButton btnIndicar = new JButton("Imprimir Receta");
-		btnIndicar.setBackground(Color.WHITE);
-		btnIndicar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-		btnIndicar.setBounds(619, 845, 230, 25);
-		panel.add(btnIndicar);
 
 		JLabel lblNewLabel_2 = new JLabel("C\u00F3digo de consulta:");
 		lblNewLabel_2.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -451,7 +461,13 @@ public class HistorialConsulta extends JDialog {
 						dispose();
 					}else {
 						Consulta cons = new Consulta(codConsulta, motivo, ta, fr, temp, peso, diagnostico,indic);
+						if(analisis.size() > 0) {
+							for (String aux : analisis) {
+								cons.insertarAnalisis(aux);
+							}
+						}
 						ClinicaSONS.getInstance().insertarConsulta(cons);
+						
 						if(cmbEnferm.getSelectedItem() != "Seleccione") {
 							Enfermedad enf = ClinicaSONS.getInstance().buscarEnfermedadByNombre(cmbEnferm.getSelectedItem().toString());
 							cons.setEnfermedad(enf);
@@ -506,5 +522,7 @@ public class HistorialConsulta extends JDialog {
 		}
 	}
 
-	
+	public static void guardarAnalisis(String check) {
+		analisis.add(check);
+	}
 }

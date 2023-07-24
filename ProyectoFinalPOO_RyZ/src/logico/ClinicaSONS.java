@@ -288,7 +288,21 @@ public class ClinicaSONS implements Serializable{
 		}
 		return vacuna;
 	}	
+	
+	public Vacuna buscarVacunaPorNombre(String nomVacuna) {
 
+		Vacuna vacuna = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misVacunas.size()) { 
+			if (misVacunas.get(i).getNombre().equalsIgnoreCase(nomVacuna)) {
+				vacuna= misVacunas.get(i); 
+				encontrado = true;
+			}
+			i++;
+		}
+		return vacuna;
+	}	
 
 	public Doctor buscarDoctorPorCodigo(String codigoDoctor) {
 
@@ -420,7 +434,6 @@ public class ClinicaSONS implements Serializable{
 
 		
 	}
-	
 	
 	public void eliminarVacuna(Vacuna selected) {
 		misVacunas.remove(selected);

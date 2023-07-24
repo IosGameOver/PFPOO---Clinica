@@ -52,14 +52,18 @@ public class Paciente extends Persona {
 		this.misVacunas = new ArrayList<Vacuna>();
 		
 	}
-
+	public void insertarConsulta(Consulta consulta) {
+		misConsultas.add(consulta);
+	}
+	public void insertarVacuna(Vacuna vacuna) {
+		misVacunas.add(vacuna);
+	}
 	public int getCantHijos() {
 		return cantHijos;
 	}
 	public void setCantHijos(int cantHijos) {
 		this.cantHijos = cantHijos;
 	}
-	
 	public String getFuma() {
 		return fuma;
 	}

@@ -13,6 +13,7 @@ public class Consulta {
 	private float peso;
 	private String diagnostico;
 	private String indicaciones;
+	private ArrayList<String> analisis;
 	private Enfermedad enfermedad;
 	/**
 	 * @param motivo
@@ -33,17 +34,18 @@ public class Consulta {
 		this.peso = peso;
 		this.diagnostico = diagnostico;
 		this.indicaciones = indicaciones;
+		this.analisis = new ArrayList<>();
 		this.enfermedad = null;
 	}
-	
+	public void insertarAnalisis(String aux) {
+		analisis.add(aux);
+	}
 	public String getCod() {
 		return cod;
 	}
-
 	public void setCod(String cod) {
 		this.cod = cod;
 	}
-
 	public String getMotivo() {
 		return motivo;
 	}
