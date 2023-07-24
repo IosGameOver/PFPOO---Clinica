@@ -18,6 +18,13 @@ public class Principal extends JFrame {
 
 	private JPanel contentPane;
 	private Dimension dim;
+	public JMenu mnAdministracion;
+	public JMenu mnVacuna;
+	public JMenu mnEnfermedad;
+	public JMenu mnCita;
+	public JMenu mnPaciente;
+	public JMenu mnDoctor;
+	public JMenu mnConsulta;
 
 		/**
 	 * Launch the application.
@@ -54,7 +61,7 @@ public class Principal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnDoctor = new JMenu("Doctores");
+		mnDoctor = new JMenu("Doctores");
 		menuBar.add(mnDoctor);
 		
 		JMenuItem mntmRegDoctor = new JMenuItem("Registrar doctor");
@@ -77,7 +84,7 @@ public class Principal extends JFrame {
 		});
 		mnDoctor.add(mntmListDoc);
 		
-		JMenu mnPaciente = new JMenu("Pacientes");
+		mnPaciente = new JMenu("Pacientes");
 		menuBar.add(mnPaciente);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Listar pacientes");
@@ -90,8 +97,8 @@ public class Principal extends JFrame {
 		JMenu mnNewMenu_2 = new JMenu("");
 		menuBar.add(mnNewMenu_2);
 		
-		JMenu mnNewMenu_3 = new JMenu("Citas");
-		menuBar.add(mnNewMenu_3);
+		mnCita = new JMenu("Citas");
+		menuBar.add(mnCita);
 		
 		JMenuItem mntmProgCita = new JMenuItem("Programar cita");
 		mntmProgCita.addActionListener(new ActionListener() {
@@ -102,7 +109,7 @@ public class Principal extends JFrame {
 			}
 		});
 		
-		mnNewMenu_3.add(mntmProgCita);
+		mnCita.add(mntmProgCita);
 		
 		JMenuItem mntmListCita = new JMenuItem("Listar citas");
 		mntmListCita.addActionListener(new ActionListener() {
@@ -110,9 +117,9 @@ public class Principal extends JFrame {
 				
 			}
 		});
-		mnNewMenu_3.add(mntmListCita);
+		mnCita.add(mntmListCita);
 		
-		JMenu mnConsulta = new JMenu("Consultas");
+		mnConsulta = new JMenu("Consultas");
 		menuBar.add(mnConsulta);
 		
 		JMenuItem mntmRegConsult = new JMenuItem("Registrar consultas");
@@ -132,7 +139,7 @@ public class Principal extends JFrame {
 		});
 		mnConsulta.add(mntmListConsulta);
 		
-		JMenu mnEnfermedad = new JMenu("Enfermedades");
+		mnEnfermedad = new JMenu("Enfermedades");
 		menuBar.add(mnEnfermedad);
 		
 		JMenuItem mntmRegEnferm = new JMenuItem("Registrar enfermedades");
@@ -155,7 +162,7 @@ public class Principal extends JFrame {
 		});
 		mnEnfermedad.add(mntmListEnferm);
 		
-		JMenu mnVacuna = new JMenu("Vacunas");
+		mnVacuna = new JMenu("Vacunas");
 		menuBar.add(mnVacuna);
 		
 		JMenuItem mntmRegVacu = new JMenuItem("Registrar vacuna");
@@ -177,6 +184,18 @@ public class Principal extends JFrame {
 			}
 		});
 		mnVacuna.add(mntmListVacu);
+		
+		mnAdministracion = new JMenu("Administraci\u00F3n");
+		menuBar.add(mnAdministracion);
+		
+		JMenuItem mntmRegUser = new JMenuItem("Registrar Usuario");
+		mnAdministracion.add(mntmRegUser);
+		
+		JMenuItem mntmListUser = new JMenuItem("Listar Usuario");
+		mnAdministracion.add(mntmListUser);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("New menu item");
+		mnAdministracion.add(mntmNewMenuItem_1);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
