@@ -45,10 +45,4 @@ public class Vacuna {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-
-	
-	
-	
-	
-	
 }

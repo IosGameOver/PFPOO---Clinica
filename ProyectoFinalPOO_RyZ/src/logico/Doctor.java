@@ -10,29 +10,36 @@ public class Doctor extends Persona {
 	private String especialidad;
 	private String usuario;
 	private String contrasena;
-	protected  int nvlAutoridad = 5;
+	protected  int nvlAutoridad;
+	private String correo;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Cita> misCitas;
 	private ArrayList<Consulta> misConsultas;
 
-	
-	
 	public Doctor(String cod, String cedula, String nombre,  String sexo, String estadoCivil, String telefono,
 			Date fechaNacimiento, String direccion, String tipoSangre, String exeQuartur, String almaMater,
-			String especialidad, String usuario, String contrasena) {
+			String especialidad, String usuario, String contrasena, String correo) {
 		super(cod, cedula, nombre,  sexo, estadoCivil, telefono, fechaNacimiento, direccion, tipoSangre);
 		this.exeQuartur = exeQuartur;
 		this.almaMater = almaMater;
 		this.especialidad = especialidad;
 		this.usuario = usuario;
 		this.contrasena = contrasena;
+		this.correo = correo;
 		this.misCitas = new ArrayList<Cita>();
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misPacientes = new ArrayList<Paciente>();
+		this.nvlAutoridad = 5;
 	}
-
-
-
+	public void agregarCita(Cita cita) {
+		misCitas.add(cita);
+	}
+	public void agregarConsulta(Consulta consulta) {
+		misConsultas.add(consulta);
+	}
+	public void agregarPaciente(Paciente paciente) {
+		misPacientes.add(paciente);
+	}
 	public String getExeQuartur() {
 		return exeQuartur;
 	}
@@ -63,11 +70,16 @@ public class Doctor extends Persona {
 	public void setContrasena(String contrasena) {
 		this.contrasena = contrasena;
 	}
+	
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
 	public int getNvlAutoridad() {
 		return nvlAutoridad;
 	}
-
-
 	public ArrayList<Paciente> getMisPacientes() {
 		return misPacientes;
 	}
@@ -86,5 +98,4 @@ public class Doctor extends Persona {
 	public void setMisConsultas(ArrayList<Consulta> misConsultas) {
 		this.misConsultas = misConsultas;
 	}
-	
 }

@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Enfermedad;
 import logico.Vacuna;
@@ -52,8 +53,8 @@ public class RegEnfermedad extends JDialog{
 	private JLabel label_6;
 	private JLabel label_7;
 	private JButton btnVerLista;
-	private Enfermedad miEnfermedad;
-
+	private Enfermedad miEnfermedad = null;
+	private Administrador miAdmin = null;
 	/**
 	 * Launch the application.
 	 */
@@ -72,7 +73,8 @@ public class RegEnfermedad extends JDialog{
 	 * Create the dialog.
 	 * @param selected 
 	 */
-	public RegEnfermedad(Enfermedad enfermedad) {
+	public RegEnfermedad(Enfermedad enfermedad, Administrador admin) {
+		miAdmin = admin;
 		miEnfermedad = enfermedad;
 		setResizable(false);
 		if (miEnfermedad==null) {
@@ -381,7 +383,7 @@ public class RegEnfermedad extends JDialog{
 				btnVerLista = new JButton("Ver lista");
 				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						ListarEnfermedad list = new ListarEnfermedad();
+						ListarEnfermedad list = new ListarEnfermedad(miAdmin);
 						list.setModal(true);
 						list.setVisible(true);
 					}
@@ -405,13 +407,9 @@ public class RegEnfermedad extends JDialog{
 				buttonPane.add(btnCancelar);
 			}
 		
-			cargarEnfermedades(); 
+
 		}
-		
-			
-		
-		
-		
+		cargarEnfermedades(); 
 	}
 	
 	
@@ -426,7 +424,6 @@ public class RegEnfermedad extends JDialog{
 			txtSin4.setText(miEnfermedad.getSintomas().get(3));
 			txtSin5.setText(miEnfermedad.getSintomas().get(4));
 			txtSin6.setText(miEnfermedad.getSintomas().get(5));
-			
 			txtSin7.setText(miEnfermedad.getSintomas().get(6));
 			txtSin8.setText(miEnfermedad.getSintomas().get(7));
 			txtSin9.setText(miEnfermedad.getSintomas().get(8));
@@ -434,18 +431,6 @@ public class RegEnfermedad extends JDialog{
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	private void clean() {
 		txtCodigo.setText("E-"+ClinicaSONS.codEnf);
 		txtDescripcion.setText("");

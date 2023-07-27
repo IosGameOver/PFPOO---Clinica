@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
+import logico.ClinicaSONS;
 import logico.Consulta;
 import logico.Paciente;
 
@@ -62,6 +63,11 @@ public class IndicarAnalisis extends JDialog {
 		setSize(1100, 1015);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		if(miCons != null) {
+			setTitle("Indicar análisis");
+		}else {
+			setTitle("Ver análisis indicados");
+		}
 		initComponents();
 	}
 	private void initComponents() {
@@ -132,8 +138,8 @@ public class IndicarAnalisis extends JDialog {
 			txtEdad.setEditable(false);
 			txtEdad.setColumns(10);
 
-			int edad = calcularEdad(miPac.getFechaNacimiento(), new Date());
-			txtEdad.setText(String.valueOf(edad));
+			int edad = ClinicaSONS.getInstance().calcularEdad(miPac.getFechaNacimiento(), new Date());
+			txtEdad.setText(String.valueOf(edad)+" años");
 			txtEdad.setBounds(822, 137, 250, 22);
 			contentPanel.add(txtEdad);
 		}
@@ -679,6 +685,10 @@ public class IndicarAnalisis extends JDialog {
 				checkBox.setBounds(1167, -520, 113, 25);
 				panelIndi.add(checkBox);
 			}
+			for(int i = 0;i < panelIndi.getComponentCount();i++){
+				JCheckBox check = (JCheckBox) panelIndi.getComponent(i);
+				check.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+			}
 		}
 		{
 			JLabel lblPruebasQueRequieren = new JLabel("Recomendaciones para la toma de Orina: Previo lavado genital \u00B7 Pruebas que requieren ayuna:  Glicemia, \u00FArea, Creatrina, \u00E1cido");
@@ -730,6 +740,9 @@ public class IndicarAnalisis extends JDialog {
 				btnRegistrar.setBackground(Color.WHITE);
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
+				if(miCons != null) {
+					btnRegistrar.setVisible(false);
+				}
 				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
@@ -739,13 +752,20 @@ public class IndicarAnalisis extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		cargarAnalisis();
 	}
 	
-	public int calcularEdad(Date fechaDeNacimiento, Date fecha) {
-	    DateFormat formatter = new SimpleDateFormat("yyyyMMdd");                           
-	    int d1 = Integer.parseInt(formatter.format(fechaDeNacimiento));                            
-	    int d2 = Integer.parseInt(formatter.format(fecha));                          
-	    int edad = (d2 - d1) / 10000;                                                       
-	    return edad;                                                                        
+	public void cargarAnalisis() {
+		if (miCons != null) {
+			for(int i = 0;i < panelIndi.getComponentCount();i++){
+				JCheckBox check = (JCheckBox) panelIndi.getComponent(i);
+				for (String aux :miCons.getAnalisis()) {
+					if(check.getLabel().equalsIgnoreCase(aux)) {
+						check.setSelected(true);
+					}
+				}
+				check.setEnabled(false);
+			}
+		}
 	}
 }

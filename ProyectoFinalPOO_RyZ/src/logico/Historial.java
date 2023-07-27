@@ -3,17 +3,15 @@ package logico;
 import java.util.ArrayList;
 
 public class Historial {
-
-	
 	private String numRecord; 
 	private ArrayList<Consulta> misDatosImportantes;
 	
-		
 	public Historial(String numRecord) {
 		super();
 		this.numRecord = numRecord;
 		this.misDatosImportantes = new ArrayList<Consulta>();
 	}
+	
 	public void insertarConsulta(Consulta consulta) {
 		this.misDatosImportantes.add(consulta);
 	}
@@ -28,13 +26,5 @@ public class Historial {
 	}
 	public void setmisDatosImportantes(ArrayList<Consulta> misDatosImportantes) {
 		this.misDatosImportantes = misDatosImportantes;
-	}
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 }

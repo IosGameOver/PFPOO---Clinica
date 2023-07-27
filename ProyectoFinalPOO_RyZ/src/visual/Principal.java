@@ -7,6 +7,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import logico.Administrador;
+import logico.Doctor;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -25,6 +29,11 @@ public class Principal extends JFrame {
 	public JMenu mnPaciente;
 	public JMenu mnDoctor;
 	public JMenu mnConsulta;
+	private Doctor miDoc;
+	public JMenuItem mntmRegEnferm;
+	public JMenuItem mntmRegVacu;
+	public JMenuItem mntmProgCita;
+	private Administrador miAdmin = null;
 
 		/**
 	 * Launch the application.
@@ -33,7 +42,7 @@ public class Principal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal frame = new Principal();
+					Principal frame = new Principal(null,null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,8 +53,11 @@ public class Principal extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param doc 
 	 */
-	public Principal() {
+	public Principal(Doctor doc, Administrador admin) {
+		this.miAdmin = admin;
+		this.miDoc = doc;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -55,7 +67,7 @@ public class Principal extends JFrame {
 	private void initComponents() {
 		setBounds(-10, 0, 450, 300);
 		dim = getToolkit().getScreenSize();
-        setSize(dim.width+20,dim.height-35);
+        setSize(dim.width+20,dim.height-40);
         setResizable(false);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -90,6 +102,9 @@ public class Principal extends JFrame {
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Listar pacientes");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ListarPacientes list = new ListarPacientes(miDoc);
+				list.setModal(true);
+				list.setVisible(true);
 			}
 		});
 		mnPaciente.add(mntmNewMenuItem_2);
@@ -100,10 +115,10 @@ public class Principal extends JFrame {
 		mnCita = new JMenu("Citas");
 		menuBar.add(mnCita);
 		
-		JMenuItem mntmProgCita = new JMenuItem("Programar cita");
+		mntmProgCita = new JMenuItem("Programar cita");
 		mntmProgCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegCita reg = new RegCita();
+				RegCita reg = new RegCita(null);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
@@ -114,7 +129,9 @@ public class Principal extends JFrame {
 		JMenuItem mntmListCita = new JMenuItem("Listar citas");
 		mntmListCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				ListarCitas list = new ListarCitas(miDoc);
+				list.setModal(true);
+				list.setVisible(true);
 			}
 		});
 		mnCita.add(mntmListCita);
@@ -125,7 +142,7 @@ public class Principal extends JFrame {
 		JMenuItem mntmRegConsult = new JMenuItem("Registrar consultas");
 		mntmRegConsult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				HistorialConsulta hist = new HistorialConsulta(null);
+				HistorialConsulta hist = new HistorialConsulta(miDoc,null,null);
 				hist.setModal(true);
 				hist.setVisible(true);
 			}
@@ -135,6 +152,7 @@ public class Principal extends JFrame {
 		JMenuItem mntmListConsulta = new JMenuItem("Listar consultas");
 		mntmListConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		mnConsulta.add(mntmListConsulta);
@@ -142,10 +160,10 @@ public class Principal extends JFrame {
 		mnEnfermedad = new JMenu("Enfermedades");
 		menuBar.add(mnEnfermedad);
 		
-		JMenuItem mntmRegEnferm = new JMenuItem("Registrar enfermedades");
+		mntmRegEnferm = new JMenuItem("Registrar enfermedades");
 		mntmRegEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegEnfermedad reg = new RegEnfermedad(null);
+				RegEnfermedad reg = new RegEnfermedad(null, miAdmin);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
@@ -155,7 +173,7 @@ public class Principal extends JFrame {
 		JMenuItem mntmListEnferm = new JMenuItem("Listar enfermedades");
 		mntmListEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListarEnfermedad list = new ListarEnfermedad();
+				ListarEnfermedad list = new ListarEnfermedad(miAdmin);
 				list.setModal(true);
 				list.setVisible(true);
 			}
@@ -165,10 +183,10 @@ public class Principal extends JFrame {
 		mnVacuna = new JMenu("Vacunas");
 		menuBar.add(mnVacuna);
 		
-		JMenuItem mntmRegVacu = new JMenuItem("Registrar vacuna");
+		mntmRegVacu = new JMenuItem("Registrar vacuna");
 		mntmRegVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegVacuna reg = new RegVacuna(null);
+				RegVacuna reg = new RegVacuna(null, miAdmin);
 				reg.setModal(true);
 				reg.setVisible(true);
 			}
@@ -178,7 +196,7 @@ public class Principal extends JFrame {
 		JMenuItem mntmListVacu = new JMenuItem("Listar vacuna");
 		mntmListVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ListarVacunas list = new ListarVacunas();
+				ListarVacunas list = new ListarVacunas(miAdmin);
 				list.setModal(true);
 				list.setVisible(true);
 			}

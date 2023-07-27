@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.ClinicaSONS;
+import logico.Consulta;
 import logico.Paciente;
 import logico.Vacuna;
 
@@ -38,13 +39,13 @@ public class IndicarVacunas extends JDialog {
 	private DefaultTableModel model;
 	private Object[] row = null;
 	private SimpleDateFormat df;
-
+	private Consulta miCons = null;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			IndicarVacunas dialog = new IndicarVacunas(null);
+			IndicarVacunas dialog = new IndicarVacunas(null,null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -54,8 +55,10 @@ public class IndicarVacunas extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @param miCons 
 	 */
-	public IndicarVacunas(Paciente pac) {
+	public IndicarVacunas(Paciente pac, Consulta miCons) {
+		this.miCons = miCons;
 		this.miPac = pac;
 		df = new SimpleDateFormat("dd/MM/yyyy");
 		setBounds(100, 100, 775, 360);
@@ -117,6 +120,10 @@ public class IndicarVacunas extends JDialog {
 			panel.add(lblNewLabel);
 			
 			JButton btnNewButton = new JButton("Indicar vacuna");
+			if(miCons != null) {
+				btnNewButton.setEnabled(false);
+				cmbVacunas.setEnabled(false);
+			}
 			btnNewButton.setBackground(Color.WHITE);
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

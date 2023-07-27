@@ -2,19 +2,12 @@ package logico;
 
 import java.util.ArrayList;
 
-public class Enfermedad {
-
-	
+public class Enfermedad {	
 	private String codigo;
 	private String nombre;
 	private String descripcion;
 	private ArrayList<String> sintomas;
-	/**
-	 * @param codigo
-	 * @param nombre
-	 * @param descripcion
-	 * @param sintomas
-	 */
+
 	public Enfermedad(String codigo, String nombre, String descripcion) {
 		super();
 		this.codigo = codigo;
@@ -50,12 +43,4 @@ public class Enfermedad {
 	public void setSintomas(ArrayList<String> sintomas) {
 		this.sintomas = sintomas;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }

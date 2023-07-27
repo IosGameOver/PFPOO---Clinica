@@ -40,7 +40,7 @@ public class ListarDoctores extends JDialog {
 	private JComboBox cmbEspec;
 	private Doctor selected = null;
 	private JButton btnEliminar;
-	private JButton btnActualizar;
+	private JButton btnModificar;
 	
 	
 	/**
@@ -133,7 +133,7 @@ public class ListarDoctores extends JDialog {
 								int index = table.getSelectedRow();
 								if (index >=0) {
 									
-									btnActualizar.setEnabled(true);
+									btnModificar.setEnabled(true);
 									btnEliminar.setEnabled(true);
 									selected = ClinicaSONS.getInstance().buscarDoctorPorCodigo(table.getValueAt(index, 0).toString());
 							
@@ -155,19 +155,16 @@ public class ListarDoctores extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnActualizar = new JButton("Actualizar");
-				btnActualizar.setEnabled(false);
-				btnActualizar.addActionListener(new ActionListener() {
+				btnModificar = new JButton("Modificar");
+				btnModificar.setEnabled(false);
+				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						RegDoctor actualizar = new RegDoctor(selected);
 						actualizar.setModal(true);
 						actualizar.setVisible(true);
-					
-					
-					
 					}
 				});
-				buttonPane.add(btnActualizar);
+				buttonPane.add(btnModificar);
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
@@ -179,7 +176,7 @@ public class ListarDoctores extends JDialog {
 							if (option == JOptionPane.OK_OPTION) {
 								ClinicaSONS.getInstance().eliminarDoctor(selected);
 								
-								btnActualizar.setEnabled(false);
+								btnModificar.setEnabled(false);
 								btnEliminar.setEnabled(false);
 								llenarDoctores();
 							}
@@ -225,9 +222,8 @@ public class ListarDoctores extends JDialog {
 				row[3] = aux.getNombre();
 				row[4] = ((Doctor) aux).getEspecialidad();
 				row[5] = aux.getTelefono();
+				model.addRow(row);
 			}
-			
-			model.addRow(row);
 		}
 	}
 

@@ -16,6 +16,7 @@ import javax.swing.border.TitledBorder;
 
 import org.omg.PortableInterceptor.SUCCESSFUL;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Vacuna;
 
@@ -30,7 +31,7 @@ public class RegVacuna extends JDialog {
 	private JTextField txtDescripcion;
 	private JTextField txtCodigo;
 	private Vacuna miVacuna;
-
+	private Administrador miAdmin = null;
 	/**
 	 * Launch the application.
 	 */
@@ -49,7 +50,8 @@ public class RegVacuna extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public RegVacuna(Vacuna vacuna) {
+	public RegVacuna(Vacuna vacuna,Administrador admin) {
+		this.miAdmin = admin;
 		miVacuna = vacuna;
 		setResizable(false);
 		if (miVacuna==null) {
@@ -165,7 +167,7 @@ public class RegVacuna extends JDialog {
 				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					
-						ListarVacunas list = new ListarVacunas();
+						ListarVacunas list = new ListarVacunas(miAdmin);
 						list.setModal(true);
 						list.setVisible(true);
 					
@@ -201,8 +203,7 @@ public class RegVacuna extends JDialog {
 			txtCodigo.setText(miVacuna.getCodigo());
 			txtDescripcion.setText(miVacuna.getDescripcion());
 			txtLab.setText(miVacuna.getLaboratorio());
-			txtNombre.setText(miVacuna.getNombre());
-			
+			txtNombre.setText(miVacuna.getNombre());	
 		}
 	}
 

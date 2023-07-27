@@ -78,13 +78,14 @@ public class HistorialMedico extends JDialog {
 	private JComboBox cmbTieneCir;
 	private JComboBox cmbTieneTrau;
 	private JComboBox cmbTieneTransf;
+	private Doctor miDoc = null;
 	
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			HistorialMedico dialog = new HistorialMedico(null);
+			HistorialMedico dialog = new HistorialMedico(null,null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -96,7 +97,8 @@ public class HistorialMedico extends JDialog {
 	 * Create the dialog.
 	 * @param pac 
 	 */
-	public HistorialMedico(Paciente pac) {
+	public HistorialMedico(Doctor doc,Paciente pac) {
+		this.miDoc  = doc;
 		this.miPac = pac;
 		setBounds(100, 100, 1090, 1030);
 		setLocationRelativeTo(null);
@@ -620,8 +622,9 @@ public class HistorialMedico extends JDialog {
 							ClinicaSONS.getInstance().insertarHistorial(miHist);
 							Paciente pac = new Paciente(codPac, ced, nom, sexo, estCiv, tel, fNac, dir, tpSangre, cantHijos, fuma, alc, caf, drog, tieAle, ale, tieCir, cir, tieTrans, trans, tieTrau, trau, antPer, antFam, miHist, antFis);
 							ClinicaSONS.getInstance().insertarPersona(pac);
+							miDoc.agregarPaciente(pac);
 							JOptionPane.showMessageDialog(null, "Paciente agregado con éxito", "¡Operación exitosa!",JOptionPane.INFORMATION_MESSAGE);
-							HistorialConsulta histC = new HistorialConsulta(pac);
+							HistorialConsulta histC = new HistorialConsulta(miDoc,pac,null);
 							histC.setModal(true);
 							histC.setVisible(true);
 							dispose();

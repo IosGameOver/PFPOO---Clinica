@@ -171,21 +171,5 @@ public class Paciente extends Persona {
 	}
 	public void setAntecedentesFisiologicos(String antecedentesFisiologicos) {
 		this.antecedentesFisiologicos = antecedentesFisiologicos;
-	}
-	
-	
-	
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 }

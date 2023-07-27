@@ -1,6 +1,8 @@
 package logico;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,7 +25,7 @@ public class ClinicaSONS implements Serializable{
 	public static int codPac = 1;
 	public static int codHist = 1;
 	private static Usuario loginUser;
-	
+
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -40,6 +42,7 @@ public class ClinicaSONS implements Serializable{
 		this.misVacunas = new ArrayList<Vacuna>();
 		this.misHistoriales = new ArrayList<Historial>();
 		this.misPersonas = new ArrayList<Persona>();
+		this.misUsuarios = new ArrayList<Usuario>();
 	}
 
 	public static ClinicaSONS getInstance() {
@@ -80,51 +83,37 @@ public class ClinicaSONS implements Serializable{
 	public ArrayList<Persona> getMisPersonas() {
 		return misPersonas;
 	}
-	
 	public void setMisPersonas(ArrayList<Persona> misPersonas) {
 		this.misPersonas = misPersonas;
 	}
-
 	public ArrayList<Usuario> getMisUsuarios() {
 		return misUsuarios;
 	}
-
 	public void setMisUsuarios(ArrayList<Usuario> misUsuarios) {
 		this.misUsuarios = misUsuarios;
 	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
 	public static Usuario getLoginUser() {
 		return loginUser;
 	}
-
 	public static void setLoginUser(Usuario loginUser) {
 		ClinicaSONS.loginUser = loginUser;
 	}
-
 	public void insertarVacuna(Vacuna vacuna) {
 		misVacunas.add(vacuna);
 		codVac++;
 	}
-
 	public void insertarEnfermedad(Enfermedad enfermedad) {
 		misEnfermedades.add(enfermedad);
 		codEnf++;
 	}
-
 	public Doctor insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
 		codDoctor++;
 		return doctor;
-		
 	}
-	
-	
-	
 	public void insertarPersona(Persona persona) {
 		misPersonas.add(persona);
 		if(persona instanceof Paciente) {
@@ -138,21 +127,23 @@ public class ClinicaSONS implements Serializable{
 		codHist++;
 	}
 	public void insertarCita(Cita cita) {
-		
+
 		misCitas.add(cita);
-		
+
 		codCita++;
 	}
 	public void insertarConsulta(Consulta consulta) {
 		misConsultas.add(consulta);
 		codConsulta++;
 	}
-	
-	
+	public void insertarUsuario(Usuario usuario) {
+		misUsuarios.add(usuario);
+	}
+
 
 	public ArrayList<String>  listaDoctores() {
 		ArrayList<String> doctors = new ArrayList<String>() ;
-		
+
 		for(Persona doc : misPersonas) {
 			if (doc instanceof Doctor) {
 				doctors.add(doc.getNombre());
@@ -162,111 +153,81 @@ public class ClinicaSONS implements Serializable{
 	}
 
 	public Doctor buscarDoctorPorUsuarioExistente(String usuarioDoctor, String claveDoctor) {
-
-		Doctor doctor = null; 
+		Doctor doc = null;
+		int i = 0;
 		boolean encontrado = false;
-		
-		for (Persona persona : misPersonas) {
-			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(usuarioDoctor)&& ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
-				doctor =(Doctor) persona;
+		while (i < misPersonas.size() && !encontrado) {
+			if(((Doctor)misPersonas.get(i)).getUsuario().equalsIgnoreCase(usuarioDoctor) 
+			&& ((Doctor)misPersonas.get(i)).getContrasena().equalsIgnoreCase(claveDoctor)) {
+				doc = (Doctor)misPersonas.get(i);
 				encontrado = true;
-				
 			}
 		}
-		return doctor;
-	}
-	public boolean existeDoctorPorUsuario(String usuarioDoctor, String claveDoctor) {
-
-		Doctor doctor = null; 
-		boolean encontrado = false;
-		
-		for (Persona persona : misPersonas) {
-			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(usuarioDoctor)&& ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
-				doctor =(Doctor) persona;
-				encontrado = true;
-				
-			}
-		}
-		return encontrado;
+		return doc;
 	}
 	/*
 	  public Doctor buscarDoctorPorContrasennaExistente(String claveDoctor) {
-	 
-
 		Doctor doctor = null; 
 		boolean encontrado = false;
-		
+
 		for (Persona persona : misPersonas) {
 			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
 				doctor =(Doctor) persona;
 				encontrado = true;
-				
+
 			}
 		}
 		return doctor;
 	}
-	*/
-
+	 */
+	//Confirmación de Login
 	public boolean confirmLogin(String username, String pass) {
+		int i = 0;
 		boolean login = false;
-		for (Usuario usuario : misUsuarios) {
-			if (usuario.getUserName().equals(username)&&usuario.getPass().equals(pass)) {
-				loginUser= usuario;
+		while(i < misUsuarios.size() && !login) {
+			if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)) {
+				//loginUser = misUsuarios.get(i);
 				login = true;
 			}
+			i++;
 		}
-		
 		return login;
 	} 
-	
+
 	public boolean confirmLoginDoc(String username, String pass) {
+		int i = 0;
 		boolean login = false;
-		for (Persona usuario : misPersonas) {
-			if (((Doctor)usuario).getUsuario().equals(username)&&((Doctor)usuario).getContrasena().equals(pass)) {
-				login = true;
-			}
+
+		while(i < misPersonas.size() && !login) {
+			if(misPersonas.get(i) instanceof Doctor)
+				if (((Doctor)misPersonas.get(i)).getUsuario().equals(username) && ((Doctor)misPersonas.get(i)).getContrasena().equals(pass)) {
+					login = true;
+				}
 		}
-		
 		return login;
 	} 
-	
-	
-	public boolean confirmLoginSecretario(String username, String pass) {
-		boolean login = false;
-		for (Usuario usuario : misUsuarios) {
-			if ((usuario.getUserName().equals(username)&&usuario.getPass().equals(pass))&&usuario instanceof Secretario) {
-				loginUser= usuario;
-				login = true;
-			}
-		}
-		
-		return login;
-	} 
-	
 
-	public Usuario buscarUsuarioPorUser(String usuariotxt, String clave) {
-
+	//Busqueda de usuarios por user.
+	public Usuario buscarUsuarioPorUser(String usuario, String clave) {
 		Usuario user = null;
-		boolean login = false;
-		for (Usuario usuario : misUsuarios) {
-			if ((usuario.getUserName().equals(usuariotxt)&&usuario.getPass().equals(clave))&&usuario instanceof Secretario) {
-				loginUser= usuario;
-				user = usuario;
+		int i = 0;
+		boolean encontrado = false;
+		while (i < misUsuarios.size() && !encontrado) {
+			if(misUsuarios.get(i).getUserName().equalsIgnoreCase(usuario) && misUsuarios.get(i).getPass().equalsIgnoreCase(clave)) {
+				user = misUsuarios.get(i);
+				encontrado = true;
 			}
 		}
-		
 		return user;
 	}	
-	
-	
-	public Cita buscarCitaPorCodigo(String codigoCita) {
 
+	public Cita buscarCitaPorCodigo(String codigoCita) {
 		Cita cita = null; 
 		boolean encontrado = false;
-		int i=0;
-		while (!encontrado&&i<misCitas.size()) { 
+		int i = 0;
+		while (i<misCitas.size() && !encontrado) { 
 			if (misCitas.get(i).getCodigo().equalsIgnoreCase(codigoCita)) {
-				cita= misCitas.get(i); 
+				cita = misCitas.get(i); 
 				encontrado = true;
 			}
 			i++;
@@ -288,7 +249,7 @@ public class ClinicaSONS implements Serializable{
 		}
 		return vacuna;
 	}	
-	
+
 	public Vacuna buscarVacunaPorNombre(String nomVacuna) {
 
 		Vacuna vacuna = null; 
@@ -318,6 +279,20 @@ public class ClinicaSONS implements Serializable{
 		}
 		return doctor;
 	}	
+
+	public Doctor buscarDoctorPorNombre(String nomDoctor) {
+		Doctor doctor = null; 
+		boolean encontrado = false;
+		int i=0;
+		while (!encontrado&&i<misPersonas.size()) { 
+			if (misPersonas.get(i)instanceof Doctor && misPersonas.get(i).getNombre().equalsIgnoreCase(nomDoctor)) {
+				doctor = (Doctor) misPersonas.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return doctor;
+	}
 
 	public Paciente buscarPacientePorCodigo(String codigoPaciente) {
 
@@ -350,8 +325,6 @@ public class ClinicaSONS implements Serializable{
 		return enfermedad;
 	}
 
-
-
 	public int cantidadDePacientesPorVacuna(String vacuna) {
 
 		int cant = 0;
@@ -366,7 +339,6 @@ public class ClinicaSONS implements Serializable{
 
 		}
 		return cant;
-
 	}
 
 	public Historial buscarHistorialByCod(String numRecord) {
@@ -410,120 +382,181 @@ public class ClinicaSONS implements Serializable{
 	}
 
 	//Vacuna Mod y Elim
-	
 	public int buscarIndexVacunaPorCodigo(String codigo) {
 		int aux = -1;
 		boolean encontrado = false;
 		int i =0;
 		while(i<misVacunas.size() && !encontrado) {
-			
+
 			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigo)) {
 				encontrado =true;
 				aux = i;						
 			}
 			i++;
 		}
-		
 		return aux;
 	}
-	
+
 	public void modificarVacuna(Vacuna miVacuna) {
 
 		int index = buscarIndexVacunaPorCodigo(miVacuna.getCodigo());
 		misVacunas.set(index, miVacuna);
-
-		
 	}
-	
+
 	public void eliminarVacuna(Vacuna selected) {
 		misVacunas.remove(selected);
-	
 	}
-	
+
 	//Enfermedad Mod y Elim
-	
-		
 	public int buscarIndexEnfermedadPorCodigo(String codigo) {
 		int aux = -1;
 		boolean encontrado = false;
 		int i =0;
 		while(i<misEnfermedades.size() && !encontrado) {
-			
+
 			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigo)) {
 				encontrado =true;
 				aux = i;						
 			}
 			i++;
 		}
-		
 		return aux;
 	}
-	
+
 	public void modificarEnfermedad(Enfermedad miEnfermedad) {
 
 		int index = buscarIndexVacunaPorCodigo(miEnfermedad.getCodigo());
 		misEnfermedades.set(index, miEnfermedad);
-
-		
 	}
-	
+
 	public void eliminarEnfermedad(Enfermedad enfermedad) {
 		misEnfermedades.remove(enfermedad);
-	
+	}
+
+	//Doctor Mod y Elim
+
+
+	public int buscarIndexDoctorPorCodigo(String codigo) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i =0;
+		while(i<misPersonas.size() && !encontrado) {
+
+			if (misPersonas.get(i)instanceof Doctor&&misPersonas.get(i).getCod().equalsIgnoreCase(codigo)) {
+				encontrado =true;
+				aux = i;
+
+			}
+			i++;
+		}
+		return aux;
+	}
+
+	public void modificarDoctor(Doctor miDoctor) {
+
+		int index = buscarIndexDoctorPorCodigo(miDoctor.getCod());
+		misPersonas.set(index, miDoctor);
+	}
+
+	public void eliminarDoctor(Doctor selected) {
+		misPersonas.remove(selected);
+	}
+	public int buscarIndexCitaPorCodigo(String codigo) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i =0;
+		while(i < misCitas.size() && !encontrado) {
+			if (misCitas.get(i).getCodigo().equalsIgnoreCase(codigo)) {
+				encontrado = true;
+				aux = i;
+			}
+			i++;
+		}
+		return aux;
+	}
+
+	public void modificarCita(Cita miCita) {
+		int index = buscarIndexCitaPorCodigo(miCita.getCodigo());
+		misCitas.set(index, miCita);
+	}	
+
+	public void eliminarCita(Cita cita) {
+		misCitas.remove(cita);
+	}
+
+	public Administrador buscarAdministradorPorUsuario(String usuario, String password) {
+		int i = 0;
+		boolean encontrado = false;
+		Administrador admin = null;
+
+		while(i < misUsuarios.size() && !encontrado) {
+			if(misUsuarios.get(i) instanceof Administrador && misUsuarios.get(i).getUserName().equalsIgnoreCase(usuario) 
+			&& misUsuarios.get(i).getPass().equalsIgnoreCase(password)) {
+				admin = (Administrador)misUsuarios.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return admin;
 	}
 	
-	//Doctor Mod y Elim
-	
-	
-		public int buscarIndexDoctorPorCodigo(String codigo) {
-			int aux = -1;
-			boolean encontrado = false;
-			int i =0;
-			while(i<misPersonas.size() && !encontrado) {
-				
-				if (misPersonas.get(i)instanceof Doctor&&misPersonas.get(i).getCod().equalsIgnoreCase(codigo)) {
-					encontrado =true;
-					aux = i;
-									
+	public Paciente buscarPacienteByConsulta(String codCons) {
+		Paciente pac = null;
+		boolean encontrado = false;
+		int i = 0;
+		int j = 0;
+		while (i < misPersonas.size() && !encontrado) {
+			if (misPersonas.get(i) instanceof Paciente) {
+				while(j < ((Paciente)misPersonas.get(i)).getMisConsultas().size() && !encontrado) {
+					if(((Paciente)misPersonas.get(i)).getMisConsultas().get(j).getCod().equalsIgnoreCase(codCons)) {
+						pac = (Paciente)misPersonas.get(i);
+						encontrado = true;
+					}
+					j++;
 				}
-				i++;
 			}
-			
-			return aux;
+			i++;
 		}
-		
-		public void modificarDoctor(Doctor miDoctor) {
+		return pac;
+	}
+	public Doctor buscarDoctorByConsulta(String codCons) {
+		Doctor doc = null;
+		boolean encontrado = false;
+		int i = 0;
+		int j = 0;
+		while (i < misPersonas.size() && !encontrado) {
+			if (misPersonas.get(i) instanceof Doctor) {
+				while(j < ((Doctor)misPersonas.get(i)).getMisConsultas().size() && !encontrado) {
+					if(((Doctor)misPersonas.get(i)).getMisConsultas().get(j).getCod().equalsIgnoreCase(codCons)) {
+						doc = (Doctor)misPersonas.get(i);
+						encontrado = true;
+					}
+					j++;
+				}
+			}
+			i++;
+		}
+		return doc;
+	}
 
-			int index = buscarIndexVacunaPorCodigo(miDoctor.getCod());
-			misPersonas.set(index, miDoctor);
+	//Calcular edad
+	public int calcularEdad(Date fechaDeNacimiento, Date fecha) {
+		DateFormat formatter = new SimpleDateFormat("yyyyMMdd");                           
+		int d1 = Integer.parseInt(formatter.format(fechaDeNacimiento));                            
+		int d2 = Integer.parseInt(formatter.format(fecha));                          
+		int edad = (d2 - d1) / 10000;                                                       
+		return edad;                                                                        
+	}
 
-			
+	public Consulta buscarConsultaByCod(String cod) {
+		Consulta cons = null;
+		boolean encontrado = false;
+		for (Consulta aux : misConsultas) {
+			if (aux.getCod().equalsIgnoreCase(cod)) {
+				cons = aux;
+				encontrado = true;
+			}
 		}
-		
-		public void eliminarDoctor(Doctor selected) {
-			misPersonas.remove(selected);
-		
-		}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		return cons;
+	}
 }
-
-
-
-
-
-
-
-
-
-

@@ -78,9 +78,9 @@ public class RegDoctor extends JDialog {
 		miDoctor = doctor;
 		setResizable(false);
 		if (miDoctor==null) {
-			setTitle("Registro de Doctor");
+			setTitle("Registrar Doctor");
 		}else {
-			setTitle("Modificación de Doctor");
+			setTitle("Modificar Doctor");
 		}
 		
 		setBounds(100, 100, 711, 500);
@@ -190,7 +190,7 @@ public class RegDoctor extends JDialog {
 		}
 		dtCalendario = new JDateChooser();	
 		dtCalendario.setDateFormatString("d/MM/yyyy");
-		dtCalendario.setMaxSelectableDate(restarAnnios(new Date()).getTime());
+		dtCalendario.setMaxSelectableDate(new Date());
 		dtCalendario.setBounds(95, 190, 234, 22);
 
 		contentPanel.add(dtCalendario);
@@ -315,9 +315,9 @@ public class RegDoctor extends JDialog {
 						}else if(contrasena.trim().length() < 8){	
 							JOptionPane.showMessageDialog(null, "La contraseña debe tener como mínimo 8 dígitos", "¡Error!", JOptionPane.ERROR_MESSAGE);
 						}else {
-							doctor = new Doctor(codigo, cedula, nombre, sexo, estadoCvl, telefono, fechaNacimiento, direccion, tpSangre, exequartur, universidad, especialidad,usuario,contrasena);
+							doctor = new Doctor(codigo, cedula, nombre, sexo, estadoCvl, telefono, fechaNacimiento, direccion, tpSangre, exequartur, universidad, especialidad,usuario,contrasena,correo);
 							ClinicaSONS.getInstance().insertarDoctor(doctor);
-							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente\nUsuario: "+doctor.getUsuario()+"\nContraseña: "+doctor.getContrasena(), "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
 							clean();
 						}
 
@@ -357,6 +357,27 @@ public class RegDoctor extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
+		}
+		loadDoctor();
+	}
+	private void loadDoctor() {
+		if(miDoctor != null) {
+			txtCedula.setText(miDoctor.getCedula());
+			txtCedula.setEnabled(false);
+			dtCalendario.setEnabled(true);
+			txtCodigo.setText(miDoctor.getCod());
+			txtDireccion.setText(miDoctor.getDireccion());
+			txtExequartur.setText(miDoctor.getExeQuartur());
+			txtNombre.setText(miDoctor.getNombre());
+			txtTelefono.setText(miDoctor.getTelefono());
+			TxtAlmaMater.setText(miDoctor.getAlmaMater());
+			cmbEstCivil.setSelectedItem(miDoctor.getEstadoCivil());
+			cmbSexo.setSelectedItem(miDoctor.getSexo());
+			cmbTipoSangre.setSelectedItem(miDoctor);
+			cmbEspecialidad.setSelectedItem(miDoctor.getEspecialidad());
+			dtCalendario.setDate(miDoctor.getFechaNacimiento());
+			txtCorreo.setText(miDoctor.getCorreo());
+			txtConstrasena.setText(miDoctor.getContrasena());
 		}
 	}
 

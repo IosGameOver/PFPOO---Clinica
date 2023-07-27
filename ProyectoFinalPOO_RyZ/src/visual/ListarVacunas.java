@@ -14,6 +14,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Vacuna;
 
@@ -32,13 +33,13 @@ public class ListarVacunas extends JDialog {
 	private Vacuna selected = null;
 	private JButton btnEliminar;
 	private JButton btnActualizar;
-
+	private Administrador miAdmin = null;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarVacunas dialog = new ListarVacunas();
+			ListarVacunas dialog = new ListarVacunas(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -49,7 +50,8 @@ public class ListarVacunas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarVacunas() {
+	public ListarVacunas(Administrador admin) {
+		this.miAdmin = admin;
 		setBounds(100, 100, 710, 370);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -66,21 +68,23 @@ public class ListarVacunas extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
-					table.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-						
-							int index = table.getSelectedRow();
-							if (index >=0) {
-								
-								btnActualizar.setEnabled(true);
-								btnEliminar.setEnabled(true);
-								selected = ClinicaSONS.getInstance().buscarVacunaPorCodigo(table.getValueAt(index, 0).toString());
-						
-							}
+					if(miAdmin != null) {
+						table.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
 							
-						}
-					});
+								int index = table.getSelectedRow();
+								if (index >=0) {
+									
+									btnActualizar.setEnabled(true);
+									btnEliminar.setEnabled(true);
+									selected = ClinicaSONS.getInstance().buscarVacunaPorCodigo(table.getValueAt(index, 0).toString());
+							
+								}
+								
+							}
+						});
+					}
 					model = new DefaultTableModel();
 					String[] headers = {"Código", "Nombre", "Laboratorio","Descripción"};
 					model.setColumnIdentifiers(headers);
@@ -105,7 +109,7 @@ public class ListarVacunas extends JDialog {
 				btnActualizar.setEnabled(false);
 				btnActualizar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					RegVacuna actualizar = new RegVacuna(selected);
+					RegVacuna actualizar = new RegVacuna(selected,miAdmin);
 					actualizar.setModal(true);
 					actualizar.setVisible(true);
 														
@@ -122,7 +126,6 @@ public class ListarVacunas extends JDialog {
 						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Vacuna:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
 						if (option == JOptionPane.OK_OPTION) {
 							ClinicaSONS.getInstance().eliminarVacuna(selected);
-							
 							btnActualizar.setEnabled(false);
 							btnEliminar.setEnabled(false);
 							llenarTabla();

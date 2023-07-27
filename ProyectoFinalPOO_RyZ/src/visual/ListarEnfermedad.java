@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Enfermedad;
 import logico.Vacuna;
@@ -31,15 +32,16 @@ public class ListarEnfermedad extends JDialog {
 	private static DefaultTableModel model;
 	private static Object[] row = null;
 	private Enfermedad selected = null;
-	private JButton btnActualizar;
+	private JButton btnModificar;
 	private JButton btnEliminar;
+	private Administrador miAdmin = null;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarEnfermedad dialog = new ListarEnfermedad();
+			ListarEnfermedad dialog = new ListarEnfermedad(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -50,7 +52,8 @@ public class ListarEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarEnfermedad() {
+	public ListarEnfermedad(Administrador admin) {
+		miAdmin = admin;
 		setTitle("Listado de Enfermedades bajo vigilancia");
 		setBounds(100, 100, 860, 370);
 		setLocationRelativeTo(null);
@@ -75,23 +78,22 @@ public class ListarEnfermedad extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
-					table.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-						
-							int index = table.getSelectedRow();
-							if (index >=0) {
-								
-								btnActualizar.setEnabled(true);
-								btnEliminar.setEnabled(true);
-								selected = ClinicaSONS.getInstance().buscarEnfermedadPorCodigo(table.getValueAt(index, 0).toString());
-						
+					if(miAdmin != null) {
+						table.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent e) {
+
+								int index = table.getSelectedRow();
+								if (index >=0) {
+
+									btnModificar.setEnabled(true);
+									btnEliminar.setEnabled(true);
+									selected = ClinicaSONS.getInstance().buscarEnfermedadPorCodigo(table.getValueAt(index, 0).toString());
+
+								}
 							}
-						
-						
-						
-						}
-					});
+						});
+					}
 					model = new DefaultTableModel();
 					String[] headers = {"Código", "Nombre", "Descripción","Síntomas"};
 					model.setColumnIdentifiers(headers);
@@ -114,18 +116,16 @@ public class ListarEnfermedad extends JDialog {
 			buttonPane.setLayout(fl_buttonPane);
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				btnActualizar = new JButton("Actualizar");
-				btnActualizar.addActionListener(new ActionListener() {
+				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegEnfermedad actualizar = new RegEnfermedad(selected);
+						RegEnfermedad actualizar = new RegEnfermedad(selected,miAdmin);
 						actualizar.setModal(true);
 						actualizar.setVisible(true);
-					
-					
 					}
 				});
-				btnActualizar.setEnabled(false);
-				buttonPane.add(btnActualizar);
+				btnModificar.setEnabled(false);
+				buttonPane.add(btnModificar);
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
@@ -135,16 +135,16 @@ public class ListarEnfermedad extends JDialog {
 							int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Enfermedad:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
 							if (option == JOptionPane.OK_OPTION) {
 								ClinicaSONS.getInstance().eliminarEnfermedad(selected);
-								
-								btnActualizar.setEnabled(false);
+
+								btnModificar.setEnabled(false);
 								btnEliminar.setEnabled(false);
 								llenarTabla();
 							}
-							
+
 						}
-					
-					
-					
+
+
+
 					}
 				});
 				btnEliminar.setEnabled(false);
@@ -156,9 +156,9 @@ public class ListarEnfermedad extends JDialog {
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-				
-					dispose();
-					
+
+						dispose();
+
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
