@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+
+
 public class ClinicaSONS implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -24,8 +26,11 @@ public class ClinicaSONS implements Serializable{
 	public static int codVac = 1;
 	public static int codPac = 1;
 	public static int codHist = 1;
-	private static Usuario loginUser;
-
+	private static Administrador loginUserAdmin;
+	private static Secretario loginUserSecre;
+	private static Doctor loginUserDoc;
+	
+	
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -95,12 +100,39 @@ public class ClinicaSONS implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public static Usuario getLoginUser() {
-		return loginUser;
+	
+	public static Secretario getLoginUserSecre() {
+		return loginUserSecre;
 	}
-	public static void setLoginUser(Usuario loginUser) {
-		ClinicaSONS.loginUser = loginUser;
+
+	public static void setLoginUserSecre(Secretario loginUserSecre) {
+		ClinicaSONS.loginUserSecre = loginUserSecre;
 	}
+
+	public static Administrador getLoginUserAdmin() {
+		return loginUserAdmin;
+	}
+
+	public static void setLoginUserAdmin(Administrador loginUserAdmin) {
+		ClinicaSONS.loginUserAdmin = loginUserAdmin;
+	}
+
+	public static Doctor getLoginUserDoc() {
+		return loginUserDoc;
+	}
+
+	public static void setLoginUserDoc(Doctor loginUserDoc) {
+		ClinicaSONS.loginUserDoc = loginUserDoc;
+	}
+
+	public static ClinicaSONS getClinica() {
+		return clinica;
+	}
+
+	public static void setClinica(ClinicaSONS clinica) {
+		ClinicaSONS.clinica = clinica;
+	}
+
 	public void insertarVacuna(Vacuna vacuna) {
 		misVacunas.add(vacuna);
 		codVac++;
@@ -109,11 +141,20 @@ public class ClinicaSONS implements Serializable{
 		misEnfermedades.add(enfermedad);
 		codEnf++;
 	}
+	public void crearUsuarioPorDoctor(String doctorUser, String doctorPassWord) {
+	
+		Usuario doctor = new DoctorUsuario(doctorUser, doctorPassWord);
+	
+		insertarUsuario(doctor);
+	}
 	public Doctor insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
+		crearUsuarioPorDoctor(doctor.getUsuario(), doctor.getContrasena());
 		codDoctor++;
 		return doctor;
 	}
+	
+
 	public void insertarPersona(Persona persona) {
 		misPersonas.add(persona);
 		if(persona instanceof Paciente) {
@@ -140,7 +181,8 @@ public class ClinicaSONS implements Serializable{
 		misUsuarios.add(usuario);
 	}
 
-
+	
+	
 	public ArrayList<String>  listaDoctores() {
 		ArrayList<String> doctors = new ArrayList<String>() ;
 
@@ -152,13 +194,12 @@ public class ClinicaSONS implements Serializable{
 		return doctors;
 	}
 
-	public Doctor buscarDoctorPorUsuarioExistente(String usuarioDoctor, String claveDoctor) {
+	public Doctor buscarDoctorPorUsuario(String usuarioDoctor) {
 		Doctor doc = null;
 		int i = 0;
 		boolean encontrado = false;
 		while (i < misPersonas.size() && !encontrado) {
-			if(((Doctor)misPersonas.get(i)).getUsuario().equalsIgnoreCase(usuarioDoctor) 
-			&& ((Doctor)misPersonas.get(i)).getContrasena().equalsIgnoreCase(claveDoctor)) {
+			if(((Doctor)misPersonas.get(i)).getUsuario().equalsIgnoreCase(usuarioDoctor)) {
 				doc = (Doctor)misPersonas.get(i);
 				encontrado = true;
 			}
@@ -186,7 +227,7 @@ public class ClinicaSONS implements Serializable{
 		boolean login = false;
 		while(i < misUsuarios.size() && !login) {
 			if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)) {
-				//loginUser = misUsuarios.get(i);
+				loginUserAdmin = (Administrador)misUsuarios.get(i);
 				login = true;
 			}
 			i++;
@@ -201,6 +242,7 @@ public class ClinicaSONS implements Serializable{
 		while(i < misPersonas.size() && !login) {
 			if(misPersonas.get(i) instanceof Doctor)
 				if (((Doctor)misPersonas.get(i)).getUsuario().equals(username) && ((Doctor)misPersonas.get(i)).getContrasena().equals(pass)) {
+					loginUserDoc = (Doctor)misPersonas.get(i);
 					login = true;
 				}
 		}
@@ -208,12 +250,12 @@ public class ClinicaSONS implements Serializable{
 	} 
 
 	//Busqueda de usuarios por user.
-	public Usuario buscarUsuarioPorUser(String usuario, String clave) {
+	public Usuario buscarUsuarioPorUser(String usuario) {
 		Usuario user = null;
 		int i = 0;
 		boolean encontrado = false;
 		while (i < misUsuarios.size() && !encontrado) {
-			if(misUsuarios.get(i).getUserName().equalsIgnoreCase(usuario) && misUsuarios.get(i).getPass().equalsIgnoreCase(clave)) {
+			if(misUsuarios.get(i).getUserName().equalsIgnoreCase(usuario)) {
 				user = misUsuarios.get(i);
 				encontrado = true;
 			}
@@ -559,4 +601,36 @@ public class ClinicaSONS implements Serializable{
 		}
 		return cons;
 	}
+	
+	//Usuario Mod y Elim
+		public int buscarIndexUsuarioPorUsername(String username) {
+			int aux = -1;
+			boolean encontrado = false;
+			int i =0;
+			while(i<misUsuarios.size() && !encontrado) {
+
+				if (misUsuarios.get(i).getUserName().equalsIgnoreCase(username)) {
+					encontrado =true;
+					aux = i;						
+				}
+				i++;
+			}
+			return aux;
+		}
+
+		public void modificarUsuario(Usuario miUsuario) {
+
+			int index = buscarIndexUsuarioPorUsername(miUsuario.getUserName());
+			misUsuarios.set(index, miUsuario);
+		}
+
+		public void eliminarUsuario(Usuario selected) {
+			misUsuarios.remove(selected);
+		}
+	
+	
+	
+	
+	
+	
 }

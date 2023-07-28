@@ -1,10 +1,13 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Consulta {
+public class Consulta implements Serializable{
 
+	private static final long serialVersionUID = 1L;
+	
 	private String cod;
 	private String motivo;
 	private float ta;

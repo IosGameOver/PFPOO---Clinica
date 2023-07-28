@@ -1,9 +1,11 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Cita {
+public class Cita implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private String codigo;
 	private String nombrePersona;
 	private String telefonoPersona;
@@ -63,6 +65,10 @@ public class Cita {
 
 	public void setHorario(String horario) {
 		this.horario = horario;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
 	

@@ -1,8 +1,13 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Historial {
+public class Historial implements Serializable {
+	
+	
+	private static final long serialVersionUID = 1L;
+	
 	private String numRecord; 
 	private ArrayList<Consulta> misDatosImportantes;
 	
@@ -24,6 +29,10 @@ public class Historial {
 	public ArrayList<Consulta> getmisDatosImportantes() {
 		return misDatosImportantes;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	public void setmisDatosImportantes(ArrayList<Consulta> misDatosImportantes) {
 		this.misDatosImportantes = misDatosImportantes;
 	}	

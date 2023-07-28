@@ -1,10 +1,13 @@
 package logico;
 
-public class Secretario extends Usuario {
+import java.io.Serializable;
+
+public class Secretario extends Usuario implements Serializable{
+	
 	private static final long serialVersionUID = 1L;
 
 	public Secretario(String userName, String pass) {
 		super(userName, pass);
-		this.nvlAutoridad = 10;
+		this.tipo= "Secretario";
 	}
 }

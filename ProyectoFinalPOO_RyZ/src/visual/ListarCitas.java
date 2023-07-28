@@ -53,7 +53,7 @@ public class ListarCitas extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarCitas dialog = new ListarCitas(null);
+			ListarCitas dialog = new ListarCitas();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -64,8 +64,8 @@ public class ListarCitas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarCitas(Doctor doc) {
-		this.miDoc = doc;
+	public ListarCitas() {
+	
 		setBounds(100, 100, 910, 455);
 		setResizable(false);
 		setLocationRelativeTo(null);

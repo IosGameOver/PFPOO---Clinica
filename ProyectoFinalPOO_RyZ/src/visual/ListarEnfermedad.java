@@ -34,14 +34,14 @@ public class ListarEnfermedad extends JDialog {
 	private Enfermedad selected = null;
 	private JButton btnModificar;
 	private JButton btnEliminar;
-	private Administrador miAdmin = null;
+	//private Administrador miAdmin = null;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarEnfermedad dialog = new ListarEnfermedad(null);
+			ListarEnfermedad dialog = new ListarEnfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -52,8 +52,8 @@ public class ListarEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarEnfermedad(Administrador admin) {
-		miAdmin = admin;
+	public ListarEnfermedad() {
+
 		setTitle("Listado de Enfermedades bajo vigilancia");
 		setBounds(100, 100, 860, 370);
 		setLocationRelativeTo(null);
@@ -78,7 +78,7 @@ public class ListarEnfermedad extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
-					if(miAdmin != null) {
+					if(selected != null) {
 						table.addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
@@ -119,7 +119,7 @@ public class ListarEnfermedad extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegEnfermedad actualizar = new RegEnfermedad(selected,miAdmin);
+						RegEnfermedad actualizar = new RegEnfermedad(selected,null);
 						actualizar.setModal(true);
 						actualizar.setVisible(true);
 					}

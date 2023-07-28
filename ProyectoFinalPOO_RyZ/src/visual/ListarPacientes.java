@@ -32,7 +32,7 @@ public class ListarPacientes extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarPacientes dialog = new ListarPacientes(null);
+			ListarPacientes dialog = new ListarPacientes();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,8 +43,8 @@ public class ListarPacientes extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarPacientes(Doctor doc) {
-		miDoc = doc;
+	public ListarPacientes() {
+	
 		setBounds(100, 100, 860, 410);
 		setResizable(false);
 		setLocationRelativeTo(null);

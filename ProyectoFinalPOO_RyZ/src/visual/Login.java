@@ -22,17 +22,31 @@ import javax.swing.JButton;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.util.Date;
+import java.util.logging.ErrorManager;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JPasswordField;
 import javax.swing.border.TitledBorder;
+import javax.xml.transform.ErrorListener;
+
+
 import javax.swing.ImageIcon;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.peer.PanelPeer;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtUser;
 	private JPasswordField txtPassword;
+	private JButton btnIngresar;
 
 	/**
 	 * Launch the application.
@@ -40,6 +54,43 @@ public class Login extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				FileInputStream clinicaViene;
+				FileOutputStream clinicaVa;
+				ObjectInputStream clinicaRead;
+				ObjectOutputStream clinicaWrite;
+				try {
+					clinicaViene = new FileInputStream ("empresa.dat");
+					clinicaRead = new ObjectInputStream(clinicaViene);
+					ClinicaSONS temp = (ClinicaSONS)clinicaRead.readObject();
+					ClinicaSONS.setClinica(temp);
+					clinicaViene.close();
+					clinicaRead.close();
+				} catch (FileNotFoundException e) {
+					try {
+						clinicaVa = new  FileOutputStream("empresa.dat");
+						clinicaWrite = new ObjectOutputStream(clinicaVa);
+						Usuario aux = new Administrador("Elmaca","non");
+						Usuario aux2 = new Secretario("Secre", "Secre");
+						Doctor doc = new Doctor("D-1", "031", "Bat-Man", "Masc", "Soltero/a", "010", new Date(), "BRUCE", "A+", 
+								"5BS", "GOTICA", "Aja", "BATMAN", "ROBIN","BATMAN@ELCABALLERODELANOCHE.com");
+						ClinicaSONS.getInstance().insertarUsuario(aux);
+						ClinicaSONS.getInstance().insertarUsuario(aux2);
+						ClinicaSONS.getInstance().insertarDoctor(doc);
+						clinicaWrite.writeObject(ClinicaSONS.getInstance());
+						clinicaVa.close();
+						clinicaWrite.close();
+					} catch (FileNotFoundException e1) {
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+					}
+				} catch (IOException e) {
+					
+					
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				try {
 					Login frame = new Login();
 					frame.setVisible(true);
@@ -53,19 +104,16 @@ public class Login extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+
+	/**
+	 * Create the frame.
+	 */
 	public Login() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 500);
 		setTitle("Cl\u00EDnicaSONS - LOGIN");
 		setResizable(false);
 		setLocationRelativeTo(null);
-		Usuario admin = new Administrador("Admin", "Admin");
-		ClinicaSONS.getInstance().insertarUsuario(admin);
-		Doctor doc = new Doctor("D-1", "031", "Pepe", "Masc", "Soltero/a", "809", new Date(), "Pepe", "A+", 
-				"5BS", "pucmm", "Aja", "Pepe", "Pepe","Pepe@gmail.com");
-		ClinicaSONS.getInstance().insertarDoctor(doc);
-		Usuario secre = new Administrador("Secre", "Secre");
-		ClinicaSONS.getInstance().insertarUsuario(secre);
 		initComponents();
 	}
 
@@ -76,6 +124,7 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 
 		JPanel panel = new JPanel();
+		
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(new Rectangle(0, 0, 0, 250));
 		contentPane.add(panel, BorderLayout.CENTER);
@@ -86,7 +135,7 @@ public class Login extends JFrame {
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 
-		JButton btnIngresar = new JButton("Ingresar");
+		btnIngresar = new JButton("Ingresar");
 		btnIngresar.setBounds(110, 185, 91, 29);
 		panel_1.add(btnIngresar);
 		btnIngresar.setForeground(Color.DARK_GRAY);
@@ -96,40 +145,22 @@ public class Login extends JFrame {
 				char[] arrayC = txtPassword.getPassword();
 				String password = new String(arrayC);
 				System.out.println(password);
-			
-				if (ClinicaSONS.getInstance().confirmLogin(usuario, password) || ClinicaSONS.getInstance().confirmLoginDoc(usuario, password)) { 
-					if (ClinicaSONS.getInstance().buscarUsuarioPorUser(usuario, password).getNvlAutoridad() == 1) {
-						//Administrador
-						Administrador admin = ClinicaSONS.getInstance().buscarAdministradorPorUsuario(usuario, password); 
-						Principal ventana = new Principal(null,admin);
-						ventana.setVisible(true);
-						dispose();
-					}else if (ClinicaSONS.getInstance().buscarDoctorPorUsuarioExistente(usuario, password).getNvlAutoridad() == 5) {
-						//Doctor(a) a limitar
-						Doctor doc = ClinicaSONS.getInstance().buscarDoctorPorUsuarioExistente(usuario, password);
-						Principal ventana = new Principal(doc,null);
-						ventana.setVisible(true);
-						ventana.mnAdministracion.setEnabled(false);
-						ventana.mntmRegEnferm.setEnabled(false);
-						ventana.mntmProgCita.setEnabled(false);
-						ventana.mntmRegVacu.setEnabled(false);
-						dispose();
-					} else if (ClinicaSONS.getInstance().buscarUsuarioPorUser(usuario, password).getNvlAutoridad() == 10) {
-						//Secretario(a) a limitar
-						Principal ventana = new Principal(null,null);
-						ventana.setVisible(true);
-						ventana.mnAdministracion.setEnabled(false);
-						ventana.mnConsulta.setEnabled(false);
-						ventana.mnDoctor.setEnabled(false);
-						ventana.mnPaciente.setEnabled(false);
-						ventana.mnVacuna.setEnabled(false);
-						ventana.mnEnfermedad.setEnabled(false);
-						dispose();
+				
+				
+				if (ClinicaSONS.getInstance().confirmLogin(usuario, password)||ClinicaSONS.getInstance().confirmLoginDoc(usuario, password)) {
+					Principal main = new Principal();
+					try {
+						Principal frame = new Principal();
+						frame.setVisible(true);
+					} catch (Exception exception) {
+						exception.printStackTrace();
 					}
-				}else{
-					JOptionPane.showMessageDialog(null, "El usuario no existe", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
-				}
-
+										
+				}else {
+					JOptionPane.showMessageDialog(null, "Usuario o constraseña incorrecto(s)","Ha ocurrido un error",JOptionPane.ERROR_MESSAGE);
+				
+				
+				}dispose();
 			}
 		});
 		btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));

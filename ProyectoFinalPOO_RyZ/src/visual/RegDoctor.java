@@ -286,6 +286,8 @@ public class RegDoctor extends JDialog {
 					
 					
 					public void actionPerformed(ActionEvent e) {
+					
+
 						Doctor doctor = null;
 						String separador = Pattern.quote("@");
 						String correo = txtCorreo.getText();
@@ -304,7 +306,7 @@ public class RegDoctor extends JDialog {
 						String tpSangre = cmbTipoSangre.getSelectedItem().toString();
 						String universidad = TxtAlmaMater.getText();
 						Date fechaNacimiento = dtCalendario.getDate();
-
+						if (miDoctor==null) {
 						if(correo.trim().isEmpty()||especialidad.trim().isEmpty()||sexo.trim().isEmpty()||estadoCvl.trim().isEmpty()||tpSangre.trim().isEmpty()
 								||universidad.trim().isEmpty()||telefono.trim().isEmpty()||cedula.trim().isEmpty()||codigo.trim().isEmpty()||nombre.trim().isEmpty()
 								||exequartur.trim().isEmpty()||direccion.trim().isEmpty()) {
@@ -319,6 +321,30 @@ public class RegDoctor extends JDialog {
 							ClinicaSONS.getInstance().insertarDoctor(doctor);
 							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente\nUsuario: "+doctor.getUsuario()+"\nContraseña: "+doctor.getContrasena(), "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
 							clean();
+					}
+						
+					}else {
+						
+						miDoctor.setAlmaMater(universidad);
+						miDoctor.setCedula(cedula);
+						miDoctor.setCod(codigo);
+						miDoctor.setContrasena(contrasena);
+						miDoctor.setCorreo(correo);
+						miDoctor.setNombre(nombre);
+						miDoctor.setDireccion(direccion);
+						miDoctor.setExeQuartur(exequartur);
+						miDoctor.setTelefono(telefono);
+						miDoctor.setTipoSangre(tpSangre);
+						miDoctor.setEspecialidad(especialidad);
+						miDoctor.setEstadoCivil(estadoCvl);
+						miDoctor.setFechaNacimiento(fechaNacimiento);
+						miDoctor.setSexo(sexo);
+						miDoctor.setUsuario(usuario);
+						
+						ClinicaSONS.getInstance().modificarDoctor(miDoctor);
+						dispose();
+						JOptionPane.showMessageDialog(null, "La modificación fue realizada con éxito", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+						ListarDoctores.llenarDoctores();
 						}
 
 

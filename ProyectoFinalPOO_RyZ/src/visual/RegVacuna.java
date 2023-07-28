@@ -127,9 +127,7 @@ public class RegVacuna extends JDialog {
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (miVacuna==null) {
-							
-						
-						
+										
 						Vacuna vacuna = null;
 
 						String codigo = txtCodigo.getText();
@@ -167,7 +165,7 @@ public class RegVacuna extends JDialog {
 				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					
-						ListarVacunas list = new ListarVacunas(miAdmin);
+						ListarVacunas list = new ListarVacunas();
 						list.setModal(true);
 						list.setVisible(true);
 					

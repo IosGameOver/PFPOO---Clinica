@@ -1,9 +1,13 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Paciente extends Persona {
+public class Paciente extends Persona implements Serializable {
+	
+	
+	private static final long serialVersionUID = 1L;
 	
 	private int cantHijos;
 	private String fuma;

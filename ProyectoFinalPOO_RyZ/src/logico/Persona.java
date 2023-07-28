@@ -1,8 +1,11 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Persona {
+public class Persona implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	protected String cod;
 	protected String cedula;
@@ -81,5 +84,17 @@ public class Persona {
 	}
 	public void setTipoSangre(String tipoSangre) {
 		this.tipoSangre = tipoSangre;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void mostrarPersona() {
+     System.out.println("Nombre   " + nombre);		
+     System.out.println("Cedula   " + cedula);		
+     System.out.println("Telefono   " + telefono);		
+     System.out.println("Direccion   " + direccion);		
+     
 	}	
 }

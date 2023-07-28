@@ -383,7 +383,7 @@ public class RegEnfermedad extends JDialog{
 				btnVerLista = new JButton("Ver lista");
 				btnVerLista.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						ListarEnfermedad list = new ListarEnfermedad(miAdmin);
+						ListarEnfermedad list = new ListarEnfermedad();
 						list.setModal(true);
 						list.setVisible(true);
 					}

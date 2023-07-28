@@ -51,7 +51,7 @@ public class ListarConsultas extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListarConsultas dialog = new ListarConsultas(null);
+			ListarConsultas dialog = new ListarConsultas();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -62,8 +62,8 @@ public class ListarConsultas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListarConsultas(Doctor doc) {
-		miDoc = doc;
+	public ListarConsultas() {
+		
 		df = new SimpleDateFormat("dd/MM/yyyy");
 		setBounds(100, 100, 780, 400);
 		getContentPane().setLayout(new BorderLayout());

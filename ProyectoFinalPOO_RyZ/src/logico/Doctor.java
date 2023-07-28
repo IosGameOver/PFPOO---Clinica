@@ -1,16 +1,19 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Doctor extends Persona {
+public class Doctor extends Persona implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	private String exeQuartur;
 	private String almaMater;
 	private String especialidad;
 	private String usuario;
 	private String contrasena;
-	protected  int nvlAutoridad;
+	private String tipo;
 	private String correo;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Cita> misCitas;
@@ -29,7 +32,7 @@ public class Doctor extends Persona {
 		this.misCitas = new ArrayList<Cita>();
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misPacientes = new ArrayList<Paciente>();
-		this.nvlAutoridad = 5;
+		this.tipo = "Doctor";
 	}
 	public void agregarCita(Cita cita) {
 		misCitas.add(cita);
@@ -64,6 +67,9 @@ public class Doctor extends Persona {
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
+	public String getTipo() {
+		return tipo;
+	}
 	public String getContrasena() {
 		return contrasena;
 	}
@@ -77,9 +83,7 @@ public class Doctor extends Persona {
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
-	public int getNvlAutoridad() {
-		return nvlAutoridad;
-	}
+	
 	public ArrayList<Paciente> getMisPacientes() {
 		return misPacientes;
 	}
@@ -98,4 +102,9 @@ public class Doctor extends Persona {
 	public void setMisConsultas(ArrayList<Consulta> misConsultas) {
 		this.misConsultas = misConsultas;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 }

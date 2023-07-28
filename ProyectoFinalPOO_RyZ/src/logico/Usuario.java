@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Usuario implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	protected  int nvlAutoridad;
+	protected  String tipo;
 	protected String userName;
 	protected String pass;
 
@@ -16,12 +16,15 @@ public class Usuario implements Serializable {
 		this.pass = pass;
 	}
 
-	public int getNvlAutoridad() {
-		return nvlAutoridad;
+	public String getTipo() {
+		return tipo;
 	}
-	public void  setNvlAutoridad(int nvlAutoridad) {
-		this.nvlAutoridad = nvlAutoridad;
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
+
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -37,4 +40,6 @@ public class Usuario implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
 }

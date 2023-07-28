@@ -12,15 +12,22 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.Administrador;
 import logico.ClinicaSONS;
+import logico.Doctor;
+import logico.Enfermedad;
 import logico.Usuario;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ListarUsuarios extends JDialog {
 
@@ -28,7 +35,12 @@ public class ListarUsuarios extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private Object[] row;
-
+	private Usuario miUsuario = null;
+	private Doctor selected = null;
+	private JButton btnModificar;
+	private JButton btnEliminar;
+	private JScrollPane scrollPane;
+	private static ListarUsuarios listasUsuarios = null;
 	/**
 	 * Launch the application.
 	 */
@@ -42,16 +54,26 @@ public class ListarUsuarios extends JDialog {
 		}
 	}
 
+	public static ListarUsuarios getInstance() {
+		if(listasUsuarios == null)
+			listasUsuarios = new ListarUsuarios();
+		return listasUsuarios;
+	}
+	
+	
 	/**
 	 * Create the dialog.
 	 */
 	public ListarUsuarios() {
+	
 		setBounds(100, 100, 600, 350);
 		setTitle("Listado de usuarios");
 		setLocationRelativeTo(null);
+		setResizable(false);
 		initComponents();
 	}
 
+	
 	private void initComponents() {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,12 +93,12 @@ public class ListarUsuarios extends JDialog {
 				llenarTabla(tipo);
 			}
 		});
-		comboBox.setBounds(112, 13, 185, 22);
+		comboBox.setBounds(140, 13, 185, 22);
 		panel.add(comboBox);
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Administrador/a", "Secretario/a"}));
 
 		JLabel lblNewLabel = new JLabel("Tipo de usuario:");
-		lblNewLabel.setBounds(12, 16, 110, 16);
+		lblNewLabel.setBounds(12, 16, 137, 16);
 		panel.add(lblNewLabel);
 
 		JPanel panel_1 = new JPanel();
@@ -85,10 +107,36 @@ public class ListarUsuarios extends JDialog {
 		panel.add(panel_1);
 		panel_1.setLayout(new BorderLayout(0, 0));
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
+		
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			
+
+				int index = table.getSelectedRow();
+				if (index >=0) {
+
+					btnModificar.setEnabled(true);
+					btnEliminar.setEnabled(true);
+					miUsuario =ClinicaSONS.getInstance().buscarUsuarioPorUser(table.getValueAt(index, 0).toString());
+			
+				}
+				int indexd = table.getSelectedRow();
+				if (index >=0) {
+
+					btnModificar.setEnabled(true);
+					btnEliminar.setEnabled(true);
+					selected = ClinicaSONS.getInstance().buscarDoctorPorUsuario(table.getValueAt(indexd, 0).toString());
+					
+				}
+			
+			
+			}
+		});
 		model = new DefaultTableModel();
 		String[] headers = {" Usuario ", " Contraseña ", " Tipo "};
 		model.setColumnIdentifiers(headers);
@@ -100,25 +148,78 @@ public class ListarUsuarios extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnModificar = new JButton("Modificar");
+				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					if (miUsuario!=null) {
+						RegUsuario actualizar = new RegUsuario(miUsuario);
+						actualizar.setModal(true);
+						actualizar.setVisible(true);
+							
+					}else {
+						RegDoctor actualizar = new RegDoctor(selected);
+						actualizar.setModal(true);
+						actualizar.setVisible(true);
+					}
+					
+					}
+				});
 				btnModificar.setEnabled(false);
 				btnModificar.setActionCommand("OK");
 				buttonPane.add(btnModificar);
 				getRootPane().setDefaultButton(btnModificar);
 			}
 			
-			JButton btnEliminar = new JButton("Eliminar");
+			btnEliminar = new JButton("Eliminar");
+			btnEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				
+					if (miUsuario!=null) {
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al usuario:  " + miUsuario.getUserName(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+						if (option == JOptionPane.OK_OPTION) {
+							ClinicaSONS.getInstance().eliminarUsuario(miUsuario);;
+
+							btnModificar.setEnabled(false);
+							btnEliminar.setEnabled(false);
+							llenarTabla("Todos");
+						}
+
+					}
+					if (selected!=null) {
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al usuario:  " + selected.getUsuario(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+						if (option == JOptionPane.OK_OPTION) {
+							ClinicaSONS.getInstance().eliminarDoctor(selected);
+
+							btnModificar.setEnabled(false);
+							btnEliminar.setEnabled(false);
+							llenarTabla("Todos");
+						}
+
+					}
+				
+																				
+				
+				}
+			});
 			btnEliminar.setEnabled(false);
 			buttonPane.add(btnEliminar);
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Cancelar");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 		llenarTabla("Todos");
+		
+		
 	}
 
+	
 	public void llenarTabla(String tipo) {
 		model.setRowCount(0);
 		row = new Object[table.getColumnCount()];
@@ -126,9 +227,9 @@ public class ListarUsuarios extends JDialog {
 			for (Usuario  aux: ClinicaSONS.getInstance().getMisUsuarios()) {
 				row[0] = aux.getUserName();
 				row[1] = aux.getPass();
-				if(aux.getNvlAutoridad() == 1) {
+				if(aux.getTipo().equals("Administrador")) {
 					row[2] = "Administrador";
-				}else if(aux.getNvlAutoridad() == 10) {
+				}else if(aux.getTipo().equals("Secretario")) {
 					row[2] = "Secretario";
 				}
 				model.addRow(row);
@@ -153,4 +254,8 @@ public class ListarUsuarios extends JDialog {
 			}
 		}
 	}
+
+
+
 }
+
