@@ -87,7 +87,7 @@ public class Principal extends JFrame {
 				FileOutputStream clinica;
 				ObjectOutputStream clinicaWrite;
 				try {
-					clinica = new  FileOutputStream("empresa.dat");
+					clinica = new  FileOutputStream("Clinica.dat");
 					clinicaWrite = new ObjectOutputStream(clinica);
 					clinicaWrite.writeObject(ClinicaSONS.getInstance());
 				} catch (FileNotFoundException e1) {
@@ -289,7 +289,7 @@ public class Principal extends JFrame {
 				ObjectInputStream clinicaRead;
 				ObjectOutputStream clinicaWrite;
 				try {
-					clinicaViene = new FileInputStream ("empresa.dat");
+					clinicaViene = new FileInputStream ("Clinica.dat");
 					clinicaRead = new ObjectInputStream(clinicaViene);
 					ClinicaSONS temp = (ClinicaSONS)clinicaRead.readObject();
 					ClinicaSONS.setClinica(temp);
@@ -297,7 +297,7 @@ public class Principal extends JFrame {
 					clinicaRead.close();
 				} catch (FileNotFoundException exception) {
 					try {
-						clinicaVa = new  FileOutputStream("empresa.dat");
+						clinicaVa = new  FileOutputStream("Clinica.dat");
 						clinicaWrite = new ObjectOutputStream(clinicaVa);
 						Usuario aux = new Administrador("Elmaca","non");
 						ClinicaSONS.getInstance().insertarUsuario(aux);
