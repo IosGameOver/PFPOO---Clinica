@@ -11,6 +11,7 @@ import javax.swing.border.EtchedBorder;
 import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
+
 import logico.Secretario;
 import logico.Usuario;
 
@@ -82,19 +83,19 @@ public class Login extends JFrame {
 					try {
 						clinicaVa = new  FileOutputStream("empresa.dat");
 						clinicaWrite = new ObjectOutputStream(clinicaVa);
-						Usuario aux = new Administrador("Elmaca","non");
-						Usuario aux2 = new Secretario("Secre", "Secre");
-						Doctor doc = new Doctor("D-1", "031", "Bat-Man", "Masc", "Soltero/a", "010", new Date(), "BRUCE", "A+", 
-								"5BS", "GOTICA", "Aja", "BATMAN", "ROBIN","BATMAN@ELCABALLERODELANOCHE.com");
-						ClinicaSONS.getInstance().insertarUsuario(aux);
-						ClinicaSONS.getInstance().insertarUsuario(aux2);
+						Administrador adm = new Administrador("Elmaca","non");
+						Secretario sec = new Secretario("Secre", "Secre");
+						Doctor doc = new Doctor("69", null, null, null, null, null, null, null, null, null, null, null, "BB", "C", null);
+						ClinicaSONS.getInstance().insertarUsuario(adm);
+						ClinicaSONS.getInstance().insertarUsuario(sec);
 						ClinicaSONS.getInstance().insertarDoctor(doc);
 						clinicaWrite.writeObject(ClinicaSONS.getInstance());
 						clinicaVa.close();
 						clinicaWrite.close();
 					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				} catch (IOException e) {
 
@@ -201,7 +202,7 @@ public class Login extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				String con = new String(txtPassword.getPassword());
 				if(con.equalsIgnoreCase("Ingrese su contraseña")) {
-					txtPassword.setText("");
+					txtPassword.setText("non");
 				}
 			}
 		});
@@ -241,7 +242,7 @@ public class Login extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(txtUser.getText().equalsIgnoreCase("Ingrese su nombre de usuario")) {
-					txtUser.setText("");
+					txtUser.setText("Elmaca");
 				}
 			}
 		});
@@ -268,9 +269,11 @@ public class Login extends JFrame {
 				char[] arrayC = txtPassword.getPassword();
 				String password = new String(arrayC);
 
-				if (ClinicaSONS.getInstance().confirmLogin(usuario, password)||ClinicaSONS.getInstance().confirmLoginDoc(usuario, password)) {
-					Principal main = new Principal();
+				if (ClinicaSONS.getInstance().confirmLoginAdmin(usuario, password)||ClinicaSONS.getInstance().confirmLoginSecre(usuario, password)||ClinicaSONS.getInstance().confirmLoginDoc(usuario, password)) {
+				//	Principal main = new Principal();
+				//	main.setVisible(true);
 					try {
+						dispose();
 						Principal frame = new Principal();
 						frame.setVisible(true);
 					} catch (Exception exception) {
@@ -292,13 +295,14 @@ public class Login extends JFrame {
 		Fondo.setIcon(new ImageIcon(Login.class.getResource("/fotos/FondoLogin.png")));
 		Fondo.setBounds(0, 0, 934, 505);
 		panel.add(Fondo);
+				
 		
-		
-		
-		
-		
-	
-		
-		
+		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(0).getUserName());
+		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(0).getPass());
+		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(1).getUserName());
+		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(1).getPass());
+		System.out.println(((Doctor)ClinicaSONS.getInstance().getMisPersonas().get(0)).getUsuario());
+		System.out.println(((Doctor)ClinicaSONS.getInstance().getMisPersonas().get(0)).getContrasena());
+		System.out.println(ClinicaSONS.getInstance().getMisPersonas());
 	}
 }

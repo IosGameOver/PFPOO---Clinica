@@ -141,15 +141,10 @@ public class ClinicaSONS implements Serializable{
 		misEnfermedades.add(enfermedad);
 		codEnf++;
 	}
-	public void crearUsuarioPorDoctor(String doctorUser, String doctorPassWord) {
 	
-		Usuario doctor = new DoctorUsuario(doctorUser, doctorPassWord);
-	
-		insertarUsuario(doctor);
-	}
 	public Doctor insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
-		crearUsuarioPorDoctor(doctor.getUsuario(), doctor.getContrasena());
+		
 		codDoctor++;
 		return doctor;
 	}
@@ -222,11 +217,11 @@ public class ClinicaSONS implements Serializable{
 	}
 	 */
 	//Confirmación de Login
-	public boolean confirmLogin(String username, String pass) {
+	public boolean confirmLoginAdmin(String username, String pass) {
 		int i = 0;
 		boolean login = false;
 		while(i < misUsuarios.size() && !login) {
-			if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)) {
+			if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)&&misUsuarios.get(i) instanceof Administrador) {
 				loginUserAdmin = (Administrador)misUsuarios.get(i);
 				login = true;
 			}
@@ -235,6 +230,21 @@ public class ClinicaSONS implements Serializable{
 		return login;
 	} 
 
+	//Confirmación de Login
+		public boolean confirmLoginSecre(String username, String pass) {
+			int i = 0;
+			boolean login = false;
+			while(i < misUsuarios.size() && !login) {
+				if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)&&misUsuarios.get(i) instanceof Secretario) {
+					loginUserSecre = (Secretario)misUsuarios.get(i);
+					login = true;
+				}
+				i++;
+			}
+			return login;
+		} 
+	
+	
 	public boolean confirmLoginDoc(String username, String pass) {
 		int i = 0;
 		boolean login = false;

@@ -13,7 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
-import logico.Enfermedad;
+
+import logico.Persona;
+import logico.Secretario;
 import logico.Usuario;
 
 import javax.swing.JLabel;
@@ -35,12 +37,16 @@ public class ListarUsuarios extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private Object[] row;
-	private Usuario miUsuario = null;
-	private Doctor selected = null;
+	
+
+	private Usuario selected = null;
+//	private Doctor selected = null;
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JScrollPane scrollPane;
 	private static ListarUsuarios listasUsuarios = null;
+	private Administrador miAdmin = null;
+
 	/**
 	 * Launch the application.
 	 */
@@ -65,7 +71,7 @@ public class ListarUsuarios extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarUsuarios() {
-	
+		miAdmin = ClinicaSONS.getLoginUserAdmin();
 		setBounds(100, 100, 600, 350);
 		setTitle("Listado de usuarios");
 		setLocationRelativeTo(null);
@@ -95,7 +101,7 @@ public class ListarUsuarios extends JDialog {
 		});
 		comboBox.setBounds(140, 13, 185, 22);
 		panel.add(comboBox);
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Administrador/a", "Secretario/a"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Administrador/a", "Secretario/a", "Doctor/a"}));
 
 		JLabel lblNewLabel = new JLabel("Tipo de usuario:");
 		lblNewLabel.setBounds(12, 16, 137, 16);
@@ -111,32 +117,24 @@ public class ListarUsuarios extends JDialog {
 		
 		panel_1.add(scrollPane, BorderLayout.CENTER);
 
+
 		table = new JTable();
+		if(miAdmin != null) {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 			
+			int index = table.getSelectedRow();
+			if (index >=0) {
 
-				int index = table.getSelectedRow();
-				if (index >=0) {
-
-					btnModificar.setEnabled(true);
-					btnEliminar.setEnabled(true);
-					miUsuario =ClinicaSONS.getInstance().buscarUsuarioPorUser(table.getValueAt(index, 0).toString());
-			
-				}
-				int indexd = table.getSelectedRow();
-				if (index >=0) {
-
-					btnModificar.setEnabled(true);
-					btnEliminar.setEnabled(true);
-					selected = ClinicaSONS.getInstance().buscarDoctorPorUsuario(table.getValueAt(indexd, 0).toString());
-					
-				}
-			
-			
+				btnModificar.setEnabled(true);
+				btnEliminar.setEnabled(true);
+				selected = ClinicaSONS.getInstance().buscarUsuarioPorUser(table.getValueAt(index, 0).toString());
+			}
+		
 			}
 		});
+		}
 		model = new DefaultTableModel();
 		String[] headers = {" Usuario ", " Contraseña ", " Tipo "};
 		model.setColumnIdentifiers(headers);
@@ -151,19 +149,24 @@ public class ListarUsuarios extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					if (miUsuario!=null) {
-						RegUsuario actualizar = new RegUsuario(miUsuario);
+					if (selected!=null) {
+						RegUsuario actualizar = new RegUsuario(selected);
 						actualizar.setModal(true);
 						actualizar.setVisible(true);
 							
-					}else {
-						RegDoctor actualizar = new RegDoctor(selected);
-						actualizar.setModal(true);
-						actualizar.setVisible(true);
 					}
-					
 					}
 				});
+				
+				JButton btnVaciar = new JButton("Vaciar");
+				btnVaciar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						model.getDataVector().removeAllElements();
+						model.fireTableDataChanged(); 
+						
+					}
+				});
+				buttonPane.add(btnVaciar);
 				btnModificar.setEnabled(false);
 				btnModificar.setActionCommand("OK");
 				buttonPane.add(btnModificar);
@@ -174,21 +177,10 @@ public class ListarUsuarios extends JDialog {
 			btnEliminar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 				
-					if (miUsuario!=null) {
-						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al usuario:  " + miUsuario.getUserName(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
-						if (option == JOptionPane.OK_OPTION) {
-							ClinicaSONS.getInstance().eliminarUsuario(miUsuario);;
-
-							btnModificar.setEnabled(false);
-							btnEliminar.setEnabled(false);
-							llenarTabla("Todos");
-						}
-
-					}
 					if (selected!=null) {
-						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al usuario:  " + selected.getUsuario(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al usuario:  " + selected.getUserName(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
 						if (option == JOptionPane.OK_OPTION) {
-							ClinicaSONS.getInstance().eliminarDoctor(selected);
+							ClinicaSONS.getInstance().eliminarUsuario(selected);;
 
 							btnModificar.setEnabled(false);
 							btnEliminar.setEnabled(false);
@@ -196,8 +188,7 @@ public class ListarUsuarios extends JDialog {
 						}
 
 					}
-				
-																				
+																								
 				
 				}
 			});
@@ -214,6 +205,12 @@ public class ListarUsuarios extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+	/*	Administrador adm = new Administrador("Elmaca","non");
+		Secretario sec = new Secretario("Secre", "Secre");
+		ClinicaSONS.getInstance().insertarUsuario(adm);
+		ClinicaSONS.getInstance().insertarUsuario(sec); */
+		
 		llenarTabla("Todos");
 		
 		
@@ -232,8 +229,8 @@ public class ListarUsuarios extends JDialog {
 				}else if(aux.getTipo().equals("Secretario")) {
 					row[2] = "Secretario";
 				}
-				model.addRow(row);
-			}
+					model.addRow(row);
+			} 
 		}else if(tipo.equalsIgnoreCase("Administrador/a")) {
 			for (Usuario  aux: ClinicaSONS.getInstance().getMisUsuarios()) {
 				if(aux instanceof Administrador) {
@@ -253,8 +250,9 @@ public class ListarUsuarios extends JDialog {
 				}
 			}
 		}
+		
 	}
-
+	
 
 
 }

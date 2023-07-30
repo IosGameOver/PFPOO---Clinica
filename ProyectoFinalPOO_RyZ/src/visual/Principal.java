@@ -12,7 +12,10 @@ import javax.swing.border.EmptyBorder;
 import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
-import logico.FicheroSalida;
+
+
+
+
 import logico.Secretario;
 import logico.Usuario;
 
@@ -30,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -55,6 +59,8 @@ public class Principal extends JFrame {
 
 	private static Principal panelPrincipal = null;
 	private JMenuBar menuBar;
+	private JButton btnCerrarSesion;
+	
 	private JMenuItem mntmRegDoctor;
 	private JMenuItem mntmListDoc;
 	private JMenuItem mntmListarPaciente;
@@ -321,50 +327,6 @@ public class Principal extends JFrame {
 			
 			}
 		});
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Realizar respaldo");
-		mntmNewMenuItem_1.setForeground(Color.BLACK);
-		mntmNewMenuItem_1.setFont(new Font("Sylfaen", Font.PLAIN, 16));
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-
-				FileInputStream clinicaViene;
-				FileOutputStream clinicaVa;
-				ObjectInputStream clinicaRead;
-				ObjectOutputStream clinicaWrite;
-				try {
-					clinicaViene = new FileInputStream ("empresa.dat");
-					clinicaRead = new ObjectInputStream(clinicaViene);
-					ClinicaSONS temp = (ClinicaSONS)clinicaRead.readObject();
-					ClinicaSONS.setClinica(temp);
-					clinicaViene.close();
-					clinicaRead.close();
-				} catch (FileNotFoundException exception) {
-					try {
-						clinicaVa = new  FileOutputStream("empresa.dat");
-						clinicaWrite = new ObjectOutputStream(clinicaVa);
-						Usuario aux = new Administrador("Elmaca","non");
-						ClinicaSONS.getInstance().insertarUsuario(aux);
-						clinicaWrite.writeObject(ClinicaSONS.getInstance());
-						clinicaVa.close();
-						clinicaWrite.close();
-					} catch (FileNotFoundException e1) {
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-					}
-				} catch (IOException exception) {
-					
-					
-				} catch (ClassNotFoundException exception) {
-					// TODO Auto-generated catch block
-					exception.printStackTrace();
-				}	
-				
-				
-			}
-		});
-		
-		mnAdministracion.add(mntmNewMenuItem_1);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -375,6 +337,19 @@ public class Principal extends JFrame {
 		
 		panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
+		btnCerrarSesion = new JButton("Cerrar ses\u00F3n");
+		btnCerrarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ClinicaSONS.setLoginUserAdmin(null);
+				ClinicaSONS.setLoginUserDoc(null);
+				ClinicaSONS.setLoginUserSecre(null);
+				Login loginScreen = new Login();
+				loginScreen.setVisible(true);
+				dispose();
+				
+			}
+		});
+		contentPane.add(btnCerrarSesion, BorderLayout.SOUTH);
 		
 		detectarUsuarios();
 	
@@ -398,7 +373,7 @@ public class Principal extends JFrame {
 				mntmProgCita.setEnabled(false);
 				mntmRegVacu.setEnabled(false);
 				mntmRegDoctor.setEnabled(false);
-				JOptionPane.showMessageDialog(null, "Doctor " +ClinicaSONS.getLoginUserDoc().getNombre()+ " reconocido, bienvenido Doctor.", "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Doctor reconocido, bienvenido Doctor.", "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
 				
 			}if (secre!=null) {
 				mnAdministracion.setEnabled(false);
@@ -415,6 +390,7 @@ public class Principal extends JFrame {
 		
 		else {
 			JOptionPane.showMessageDialog(null, "El sistema se deshabilitará, inicie sesión", "Error: usuario no existente", JOptionPane.ERROR_MESSAGE);
+			btnCerrarSesion.setText("Inicar Sesion");
 			mnAdministracion.setEnabled(false);
 			mnConsulta.setEnabled(false);
 			mnDoctor.setEnabled(false);

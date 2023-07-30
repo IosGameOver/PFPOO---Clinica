@@ -92,7 +92,7 @@ public class RegUsuario extends JDialog {
 		}
 		{
 			cmbTipo = new JComboBox();
-			cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "Administrador/a", "Secretario/a", "Doctor/a"}));
+			cmbTipo.setModel(new DefaultComboBoxModel(new String[] {"<Seleccione>", "Administrador/a", "Secretario/a"}));
 			cmbTipo.setBounds(89, 108, 202, 22);
 			contentPanel.add(cmbTipo);
 		}
@@ -191,9 +191,9 @@ public class RegUsuario extends JDialog {
 				cmbTipo.setSelectedIndex(1);
 			}if (miUsuario.getTipo()=="Secretario") {
 				cmbTipo.setSelectedIndex(2);
-			}else {
+			}/*else {
 				cmbTipo.setSelectedIndex(3);
-			}
+			}*/
 		}
 		
 	}
