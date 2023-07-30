@@ -145,7 +145,7 @@ public class Login extends JFrame {
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
-		separator.setBounds(40, 265, 341, 2);
+		separator.setBounds(40, 274, 341, 2);
 		panel.add(separator);
 
 		separator_1 = new JSeparator();
@@ -192,7 +192,7 @@ public class Login extends JFrame {
 		
 		lblNewLabel_1 = new JLabel("Usuario:");
 		lblNewLabel_1.setFont(new Font("Sylfaen", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(40, 211, 73, 15);
+		lblNewLabel_1.setBounds(40, 220, 73, 15);
 		panel.add(lblNewLabel_1);
 		
 		txtPassword = new JPasswordField();
@@ -250,7 +250,7 @@ public class Login extends JFrame {
 		
 		txtUser.setForeground(Color.GRAY);
 		txtUser.setText("Ingrese su nombre de usuario");
-		txtUser.setBounds(40, 239, 341, 21);
+		txtUser.setBounds(40, 248, 341, 21);
 		panel.add(txtUser);
 		txtUser.setColumns(10);
 
@@ -259,7 +259,7 @@ public class Login extends JFrame {
 		btnIngresar = new JButton("Iniciar Sesi\u00F3n");
 		btnIngresar.setBackground(Color.WHITE);
 		btnIngresar.setFont(new Font("Sylfaen", Font.BOLD, 15));
-		btnIngresar.setBounds(40, 422, 341, 29);
+		btnIngresar.setBounds(40, 431, 341, 29);
 		panel.add(btnIngresar);
 		btnIngresar.setForeground(Color.BLACK);
 		btnIngresar.addActionListener(new ActionListener() {
