@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
 import logico.Persona;
@@ -41,8 +42,8 @@ public class ListarDoctores extends JDialog {
 	private Doctor selected = null;
 	private JButton btnEliminar;
 	private JButton btnModificar;
-	
-	
+	private Administrador miAdmin = null;
+
 	/**
 	 * Launch the application.
 	 */
@@ -60,6 +61,7 @@ public class ListarDoctores extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarDoctores() {
+		miAdmin = ClinicaSONS.getLoginUserAdmin();
 		setBounds(100, 100, 640, 370);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -85,23 +87,26 @@ public class ListarDoctores extends JDialog {
 			}
 			{
 				cmbEspec = new JComboBox();
+				cmbEspec.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				cmbEspec.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
 						model.setRowCount(0);
 						row = new Object[model.getColumnCount()];
-						for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
-							if(aux instanceof Doctor) {
-								if(((Doctor) aux).getEspecialidad().equalsIgnoreCase(cmbEspec.getSelectedItem().toString())) {
-									row[0] = aux.getCod();
-									row[1] = aux.getCedula();
-									row[2] = ((Doctor) aux).getExeQuartur();
-									row[3] = aux.getNombre();
-									row[4] = ((Doctor) aux).getEspecialidad();
-									row[5] = aux.getTelefono();
-									
-									model.addRow(row);
-								}else if(cmbEspec.getSelectedItem().toString().equalsIgnoreCase("Todas")){
-									llenarDoctores();
+						if(cmbEspec.getSelectedItem().toString().equalsIgnoreCase("Todas")){
+							llenarDoctores();
+						}else {
+							for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+								if(aux instanceof Doctor) {
+									if(((Doctor) aux).getEspecialidad().equalsIgnoreCase(cmbEspec.getSelectedItem().toString())) {
+										row[0] = aux.getCod();
+										row[1] = aux.getCedula();
+										row[2] = ((Doctor) aux).getExeQuartur();
+										row[3] = aux.getNombre();
+										row[4] = ((Doctor) aux).getEspecialidad();
+										row[5] = aux.getTelefono();
+
+										model.addRow(row);
+									}
 								}
 							}
 						}
@@ -118,7 +123,7 @@ public class ListarDoctores extends JDialog {
 			}
 			{
 				JPanel panel_1 = new JPanel();
-				panel_1.setBounds(17, 46, 576, 211);
+				panel_1.setBounds(17, 50, 576, 207);
 				panel.add(panel_1);
 				panel_1.setLayout(new BorderLayout(0, 0));
 				{
@@ -126,21 +131,22 @@ public class ListarDoctores extends JDialog {
 					panel_1.add(scrollPane, BorderLayout.CENTER);
 					{
 						table = new JTable();
-						table.addMouseListener(new MouseAdapter() {
-							@Override
-							public void mouseClicked(MouseEvent e) {
-							
-								int index = table.getSelectedRow();
-								if (index >=0) {
-									
-									btnModificar.setEnabled(true);
-									btnEliminar.setEnabled(true);
-									selected = ClinicaSONS.getInstance().buscarDoctorPorCodigo(table.getValueAt(index, 0).toString());
-							
-							
-							}
+						table.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+						if(miAdmin != null) {
+							table.addMouseListener(new MouseAdapter() {
+								@Override
+								public void mouseClicked(MouseEvent e) {
+
+									int index = table.getSelectedRow();
+									if (index >=0) {
+
+										btnModificar.setEnabled(true);
+										btnEliminar.setEnabled(true);
+										selected = ClinicaSONS.getInstance().buscarDoctorPorCodigo(table.getValueAt(index, 0).toString());
+									}
+								}
+							});
 						}
-						});
 						model = new DefaultTableModel();
 						String[] headers = {"Código","Cédula","Exequatur","Nombre", "Especialidad","Teléfono"};
 						model.setColumnIdentifiers(headers);
@@ -156,6 +162,7 @@ public class ListarDoctores extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnModificar = new JButton("Modificar");
+				btnModificar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnModificar.setEnabled(false);
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -168,6 +175,7 @@ public class ListarDoctores extends JDialog {
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
+				btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnEliminar.setEnabled(false);
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -175,22 +183,22 @@ public class ListarDoctores extends JDialog {
 							int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar al DR(a):  " + selected.getNombre(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
 							if (option == JOptionPane.OK_OPTION) {
 								ClinicaSONS.getInstance().eliminarDoctor(selected);
-								
+
 								btnModificar.setEnabled(false);
 								btnEliminar.setEnabled(false);
 								llenarDoctores();
 							}
-							
+
 						}
-					
-					
-					
+
+
+
 					}
-					
-					
-					
-					
-					
+
+
+
+
+
 				});
 				btnEliminar.setActionCommand("OK");
 				buttonPane.add(btnEliminar);
@@ -198,9 +206,10 @@ public class ListarDoctores extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					
+
 						dispose();
 					}
 				});
@@ -210,7 +219,7 @@ public class ListarDoctores extends JDialog {
 		}
 		llenarDoctores();
 	}
-	
+
 	public static void llenarDoctores(){
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];

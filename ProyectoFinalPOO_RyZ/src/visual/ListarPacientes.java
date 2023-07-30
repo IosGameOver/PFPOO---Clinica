@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -19,6 +20,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.util.Date;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ListarPacientes extends JDialog {
 
@@ -27,6 +32,10 @@ public class ListarPacientes extends JDialog {
 	private Doctor miDoc = null;
 	private DefaultTableModel model;
 	private Object[] row = null;
+	private JButton btnEliminar;
+	private JButton btnHistorialVacuna;
+	private JButton btnVerHistorialMed;
+	private Paciente selected = null;
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +53,7 @@ public class ListarPacientes extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarPacientes() {
-	
+		miDoc = ClinicaSONS.getLoginUserDoc();
 		setBounds(100, 100, 860, 410);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -67,6 +76,19 @@ public class ListarPacientes extends JDialog {
 		panel.add(scrollPane, BorderLayout.CENTER);
 		{
 			tableDoc = new JTable();
+			
+			tableDoc.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int index = tableDoc.getSelectedRow();
+					if(index >= 0){
+						btnEliminar.setEnabled(true);
+						btnHistorialVacuna.setEnabled(true);
+						btnVerHistorialMed.setEnabled(true);
+						selected = ClinicaSONS.getInstance().buscarPacientePorCodigo(tableDoc.getValueAt(index, 0).toString());
+					}
+				}
+			});
 			tableDoc.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 			model = new DefaultTableModel();
 			String[] headers = {" Código ","  Cedula  ","  Nombre  ","  Telefono  ","  Sexo  ","  Edad  "};
@@ -80,7 +102,53 @@ public class ListarPacientes extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton btnEliminar = new JButton("Eliminar");
+				btnVerHistorialMed = new JButton("Ver historial m\u00E9dico");
+				btnVerHistorialMed.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						HistorialMedico hist = new HistorialMedico(null, selected);
+						hist.setEnabled(false);
+						hist.setVisible(false);
+						btnEliminar.setEnabled(false);
+						btnHistorialVacuna.setEnabled(false);
+						btnVerHistorialMed.setEnabled(false);
+					}
+				});
+				btnVerHistorialMed.setEnabled(false);
+				btnVerHistorialMed.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				buttonPane.add(btnVerHistorialMed);
+			}
+			{
+				btnHistorialVacuna = new JButton("Ver historial de Vacunaci\u00F3n");
+				btnHistorialVacuna.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						IndicarVacunas ind = new IndicarVacunas(selected, null);
+						ind.setModal(true);
+						ind.setVisible(true);
+						btnEliminar.setEnabled(false);
+						btnHistorialVacuna.setEnabled(false);
+						btnVerHistorialMed.setEnabled(false);
+					}
+				});
+				btnHistorialVacuna.setEnabled(false);
+				btnHistorialVacuna.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+				buttonPane.add(btnHistorialVacuna);
+			}
+			{
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int option = JOptionPane.showConfirmDialog(null, "Está seguro(a) que desea eliminar el paciente con código: "+selected.getCod(),"Confirmación",JOptionPane.OK_CANCEL_OPTION);
+						if(option == JOptionPane.OK_OPTION){
+							ClinicaSONS.getInstance().getInstance().eliminarPaciente(selected);
+							btnEliminar.setEnabled(false);
+							btnHistorialVacuna.setEnabled(false);
+							btnVerHistorialMed.setEnabled(false);
+							llenarTabla();
+						}
+						
+					}
+				});
+				btnEliminar.setEnabled(false);
 				btnEliminar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnEliminar.setActionCommand("Registrar");
 				buttonPane.add(btnEliminar);

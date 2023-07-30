@@ -30,7 +30,7 @@ public class RegVacuna extends JDialog {
 	private JTextField txtLab;
 	private JTextField txtDescripcion;
 	private JTextField txtCodigo;
-	private Vacuna miVacuna;
+	private Vacuna miVacuna = null;
 	private Administrador miAdmin = null;
 	/**
 	 * Launch the application.
@@ -46,7 +46,7 @@ public class RegVacuna extends JDialog {
 		}
 	}
 
-	*/
+	 */
 	/**
 	 * Create the dialog.
 	 */
@@ -56,10 +56,12 @@ public class RegVacuna extends JDialog {
 		setResizable(false);
 		if (miVacuna==null) {
 			setTitle("Registro de Vacuna");
+		}else if(miVacuna != null && miAdmin == null){
+			setTitle("Ver Vacuna");
 		}else {
 			setTitle("Modificación de Vacuna");
 		}
-		
+
 		setBounds(100, 100, 550, 336);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -120,60 +122,50 @@ public class RegVacuna extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
-				if (miVacuna!=null) {
+				if(miVacuna != null && miAdmin == null) {
+					btnRegistrar.setVisible(false);
+					for (int i = 0; i < contentPanel.getComponentCount(); i++) {
+						contentPanel.getComponent(i).setEnabled(false);
+					}
+				}else if (miVacuna != null) {
 					btnRegistrar.setText("Modificar");
 				}
 				btnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (miVacuna==null) {
-										
-						Vacuna vacuna = null;
+							Vacuna vacuna = null;
+							String codigo = txtCodigo.getText();
+							String nombre = txtNombre.getText();
+							String laboratorio = txtLab.getText();
+							String descripcion = txtDescripcion.getText();
 
-						String codigo = txtCodigo.getText();
-						String nombre = txtNombre.getText();
-						String laboratorio = txtLab.getText();
-						String descripcion = txtDescripcion.getText();
+							if ((codigo.trim().isEmpty()||nombre.trim().isEmpty()||laboratorio.trim().isEmpty()||descripcion.trim().isEmpty())) {
+								JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+							}
+							else {
+								vacuna = new Vacuna(codigo, nombre, laboratorio, descripcion);
 
-						if ((codigo.trim().isEmpty()||nombre.trim().isEmpty()||laboratorio.trim().isEmpty()||descripcion.trim().isEmpty())) {
-							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+								ClinicaSONS.getInstance().insertarVacuna(vacuna);
+								JOptionPane.showMessageDialog(null, "Vacuna registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
+								clean();}
+						}else {
+							miVacuna.setCodigo(txtCodigo.getText());
+							miVacuna.setDescripcion(txtDescripcion.getText());
+							miVacuna.setLaboratorio(txtLab.getText());
+							miVacuna.setNombre(txtNombre.getText());
+							ClinicaSONS.getInstance().modificarVacuna(miVacuna);
+							dispose();
+							ListarVacunas.llenarTabla();
+
 						}
-						else {
-							vacuna = new Vacuna(codigo, nombre, laboratorio, descripcion);
-
-							ClinicaSONS.getInstance().insertarVacuna(vacuna);
-							JOptionPane.showMessageDialog(null, "Vacuna registrada satisfactoriamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							clean();}
-					}else {
-						miVacuna.setCodigo(txtCodigo.getText());
-						miVacuna.setDescripcion(txtDescripcion.getText());
-						miVacuna.setLaboratorio(txtLab.getText());
-						miVacuna.setNombre(txtNombre.getText());
-						ClinicaSONS.getInstance().modificarVacuna(miVacuna);
-						dispose();
-						ListarVacunas.llenarTabla();
-					
-					}
 
 					}
 
 
 				});
-				
-				JButton btnVerLista = new JButton("Ver lista");
-				btnVerLista.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-				btnVerLista.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					
-						ListarVacunas list = new ListarVacunas();
-						list.setModal(true);
-						list.setVisible(true);
-					
-					}
-				});
-				buttonPane.add(btnVerLista);
-				
-				
+
+
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
 				getRootPane().setDefaultButton(btnRegistrar);
@@ -189,10 +181,10 @@ public class RegVacuna extends JDialog {
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
 			}
-			
-			
+
+
 		}
-		
+
 		cargarVacunas(); 
 	}
 

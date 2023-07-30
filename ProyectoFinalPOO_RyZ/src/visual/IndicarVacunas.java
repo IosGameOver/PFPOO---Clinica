@@ -68,6 +68,9 @@ public class IndicarVacunas extends JDialog {
 	}
 
 	private void initComponents() {
+		if(miPac != null && miCons == null) {
+			setTitle("Historiald de vacunación de "+miPac.getNombre());
+		}
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -81,7 +84,11 @@ public class IndicarVacunas extends JDialog {
 			{
 				JPanel panel_1 = new JPanel();
 				panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panel_1.setBounds(12, 71, 713, 173);
+				if(miPac != null && miCons == null) {
+					panel_1.setBounds(12, 23, 713, 221);
+				}else {
+					panel_1.setBounds(12, 77, 713, 167);
+				}
 				panel.add(panel_1);
 				panel_1.setLayout(new BorderLayout(0, 0));
 				{
@@ -119,13 +126,10 @@ public class IndicarVacunas extends JDialog {
 			lblNewLabel.setBounds(12, 36, 56, 16);
 			panel.add(lblNewLabel);
 			
-			JButton btnNewButton = new JButton("Indicar vacuna");
-			if(miCons != null) {
-				btnNewButton.setEnabled(false);
-				cmbVacunas.setEnabled(false);
-			}
-			btnNewButton.setBackground(Color.WHITE);
-			btnNewButton.addActionListener(new ActionListener() {
+			JButton btnIndicar = new JButton("Indicar vacuna");
+			
+			btnIndicar.setBackground(Color.WHITE);
+			btnIndicar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(cmbVacunas.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")) {
 						JOptionPane.showMessageDialog(null, "Seleccione una vacuna válida", "Ha ocurrido un error",JOptionPane.ERROR_MESSAGE);
@@ -136,9 +140,15 @@ public class IndicarVacunas extends JDialog {
 					}
 				}
 			});
-			btnNewButton.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-			btnNewButton.setBounds(312, 32, 143, 25);
-			panel.add(btnNewButton);
+			btnIndicar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
+			btnIndicar.setBounds(312, 32, 143, 25);
+			panel.add(btnIndicar);
+			
+			if(miPac != null && miCons == null) {
+				btnIndicar.setVisible(false);
+				cmbVacunas.setVisible(false);
+				lblNewLabel.setVisible(false);
+			}
 		}
 		{
 			JPanel buttonPane = new JPanel();

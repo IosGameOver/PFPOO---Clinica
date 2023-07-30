@@ -34,7 +34,7 @@ public class ListarEnfermedad extends JDialog {
 	private Enfermedad selected = null;
 	private JButton btnModificar;
 	private JButton btnEliminar;
-	//private Administrador miAdmin = null;
+	private Administrador miAdmin = null;
 
 	/**
 	 * Launch the application.
@@ -53,7 +53,7 @@ public class ListarEnfermedad extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarEnfermedad() {
-
+		miAdmin = ClinicaSONS.getLoginUserAdmin();
 		setTitle("Listado de Enfermedades bajo vigilancia");
 		setBounds(100, 100, 860, 370);
 		setLocationRelativeTo(null);
@@ -78,7 +78,7 @@ public class ListarEnfermedad extends JDialog {
 				panel.add(scrollPane, BorderLayout.CENTER);
 				{
 					table = new JTable();
-					if(selected != null) {
+					if(miAdmin != null) {
 						table.addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
@@ -163,6 +163,10 @@ public class ListarEnfermedad extends JDialog {
 				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
+			}
+			if(miAdmin == null) {
+				btnEliminar.setVisible(false);
+				btnModificar.setVisible(false);
 			}
 		}
 		llenarTabla();

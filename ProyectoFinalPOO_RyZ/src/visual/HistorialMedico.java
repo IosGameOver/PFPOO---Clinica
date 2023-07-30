@@ -38,6 +38,10 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class HistorialMedico extends JDialog {
 
@@ -55,8 +59,6 @@ public class HistorialMedico extends JDialog {
 	private Object[] rowVacuna = null;
 	private JTextField txtCodHist;
 	private JTable tablaVacunas;
-	private JButton btnVerCon;
-	private JButton btnVerVacuna;
 	private JButton btnCancelar;
 	private JComboBox cmbEstCivil;
 	private JComboBox cmbSexo;
@@ -79,6 +81,10 @@ public class HistorialMedico extends JDialog {
 	private JComboBox cmbTieneTrau;
 	private JComboBox cmbTieneTransf;
 	private Doctor miDoc = null;
+	private Consulta selectedCons = null;
+	private Vacuna selectedVac = null;
+	private JButton btnVerVacuna;
+	private JButton btnVerCon;
 	
 	/**
 	 * Launch the application.
@@ -494,18 +500,36 @@ public class HistorialMedico extends JDialog {
 			}
 		}
 		{
-			JPanel panel = new JPanel();
-			panel.setBorder(new TitledBorder(null, "Consultas importantes:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Sylfaen", Font.PLAIN, 14), null));
-			panel.setBounds(12, 694, 505, 232);
-			contentPanel.add(panel);
-			panel.setLayout(null);
+			JPanel panelConsultas = new JPanel();
+			panelConsultas.setBorder(new TitledBorder(null, "Consultas importantes:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Sylfaen", Font.PLAIN, 14), null));
+			panelConsultas.setBounds(12, 694, 505, 232);
+			contentPanel.add(panelConsultas);
+			panelConsultas.setLayout(null);
 			{
 				JScrollPane scrollPane = new JScrollPane();
 				scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 				scrollPane.setBounds(9, 20, 487, 171);
-				panel.add(scrollPane);
+				panelConsultas.add(scrollPane);
 				
 				tablaConsultas = new JTable();
+				tablaConsultas.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent e) {
+						tablaVacunas.setRowSelectionAllowed(false);
+						tablaConsultas.setRowSelectionAllowed(true);
+					}
+				});
+				tablaConsultas.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						int index = tablaConsultas.getSelectedRow();
+						if(index >= 0){
+							btnVerVacuna.setEnabled(false);
+							btnVerCon.setEnabled(true);
+							selectedCons = ClinicaSONS.getInstance().buscarConsultaByCod(tablaConsultas.getValueAt(index, 0).toString());
+						}
+					}
+				});
 				modelConsulta = new DefaultTableModel();
 				String[] headers = {"Código","Motivo de Consulta","Diagnóstico"};
 				modelConsulta.setColumnIdentifiers(headers);
@@ -520,26 +544,52 @@ public class HistorialMedico extends JDialog {
 			}
 			{
 				btnVerCon = new JButton("Ver consulta");
+				btnVerCon.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						HistorialConsulta hist = new HistorialConsulta(null, miPac, selectedCons);
+						hist.setModal(true);
+						hist.setVisible(true);
+						btnVerCon.setEnabled(false);
+					}
+				});
 				btnVerCon.setEnabled(false);
 				btnVerCon.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnVerCon.setBackground(Color.WHITE);
 				btnVerCon.setBounds(172, 197, 160, 25);
-				panel.add(btnVerCon);
+				panelConsultas.add(btnVerCon);
 			}
 		}
 		{
-			JPanel panel = new JPanel();
-			panel.setLayout(null);
-			panel.setBorder(new TitledBorder(null, "Vacunas:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Sylfaen", Font.PLAIN, 14), null));
-			panel.setBounds(557, 694, 505, 232);
-			contentPanel.add(panel);
+			JPanel panelVacunas = new JPanel();
+			panelVacunas.setLayout(null);
+			panelVacunas.setBorder(new TitledBorder(null, "Vacunas:", TitledBorder.LEADING, TitledBorder.TOP, new Font("Sylfaen", Font.PLAIN, 14), null));
+			panelVacunas.setBounds(557, 694, 505, 232);
+			contentPanel.add(panelVacunas);
 			{
 				JScrollPane scrollPane = new JScrollPane();
 				scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 				scrollPane.setBounds(9, 20, 487, 171);
-				panel.add(scrollPane);
+				panelVacunas.add(scrollPane);
 				{
 					tablaVacunas = new JTable();
+					tablaVacunas.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							int index = tablaConsultas.getSelectedRow();
+							if(index >= 0){
+								btnVerVacuna.setEnabled(false);
+								btnVerCon.setEnabled(true);
+								selectedVac = ClinicaSONS.getInstance().buscarVacunaPorCodigo(tablaVacunas.getValueAt(index, 0).toString());
+							}
+						}
+					});
+					tablaVacunas.addFocusListener(new FocusAdapter() {
+						@Override
+						public void focusGained(FocusEvent e) {
+							tablaVacunas.setRowSelectionAllowed(true);
+							tablaConsultas.setRowSelectionAllowed(false);
+						}
+					});
 					modelVacuna = new DefaultTableModel();
 					String[] headers = {"Código","Nombre","Descripción"};
 					modelVacuna.setColumnIdentifiers(headers);
@@ -555,11 +605,19 @@ public class HistorialMedico extends JDialog {
 			}
 			{
 				btnVerVacuna = new JButton("Ver vacuna");
+				btnVerVacuna.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegVacuna reg = new RegVacuna(selectedVac, null);
+						reg.setModal(true);
+						reg.setVisible(true);
+						btnVerVacuna.setEnabled(false);
+					}
+				});
 				btnVerVacuna.setEnabled(false);
 				btnVerVacuna.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnVerVacuna.setBackground(Color.WHITE);
 				btnVerVacuna.setBounds(172, 197, 160, 25);
-				panel.add(btnVerVacuna);
+				panelVacunas.add(btnVerVacuna);
 			}
 		}
 		{
@@ -569,65 +627,90 @@ public class HistorialMedico extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
+				if(miPac != null && miDoc == null) {
+					btnRegistrar.setText("Modificar");
+				}
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						String codHist = txtCodHist.getText();
-						String codPac = txtCodPac.getText();
-						String ced = txtCed.getText();
-						String nom = txtNombre.getText();
-						String tel = txtTel.getText();
-						Date fNac = dtNacimiento.getDate();
-						String estCiv = cmbEstCivil.getSelectedItem().toString();
-						String sexo = cmbSexo.getSelectedItem().toString();
-						String tpSangre = cmbTpSangre.getSelectedItem().toString();
-						int cantHijos = (int) spnCantHijos.getValue();
-						String dir = txtDir.getText();
-						String fuma = cmbFuma.getSelectedItem().toString();
-						String alc = cmbAlcohol.getSelectedItem().toString();
-						String caf = cmbCafe.getSelectedItem().toString();
-						String drog = cmbDrogas.getSelectedItem().toString();
-						String antPer = txtAntPers.getText();
-						String antFam = txtAntFam.getText();
-						String antFis = txtAntFis.getText();
-						String tieCir = cmbTieneCir.getSelectedItem().toString();
-						String tieAle = cmbTieneAlergia.getSelectedItem().toString();
-						String tieTrau = cmbTieneTrau.getSelectedItem().toString();
-						String tieTrans = cmbTieneTransf.getSelectedItem().toString();
-						String cir = txtCirugias.getText();
-						String ale = txtAlergia.getText();
-						String trau = txtTrauma.getText();
-						String trans = txtTransf.getText();
-						String codHis = txtCodHist.getText();
-						
-						if(ced.trim().isEmpty() || nom.trim().isEmpty() || tel.trim().isEmpty() || fNac == null || dir.trim().isEmpty() 
-						|| antPer.trim().isEmpty() || antFam.trim().isEmpty() || antFis.trim().isEmpty()) {
-							JOptionPane.showMessageDialog(null, "Complete los campos vacíos", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else if(cmbAlcohol.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbCafe.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								|| cmbDrogas.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbEstCivil.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								|| cmbFuma.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbSexo.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								|| cmbTpSangre.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbTieneAlergia.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								|| cmbTieneCir.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbTieneTransf.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								|| cmbTieneTrau.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")){
-							JOptionPane.showMessageDialog(null, "Seleccione opciones válidas", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else if(txtCirugias.isEditable() && cir.trim().isEmpty()){
-							JOptionPane.showMessageDialog(null, "Especifique las cirugías realizadas", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else if(txtAlergia.isEditable() && ale.trim().isEmpty()){
-							JOptionPane.showMessageDialog(null, "Especifique las alergías del paciente", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else if(txtTrauma.isEditable() && trau.trim().isEmpty()){
-							JOptionPane.showMessageDialog(null, "Especifique los traumatismos sufridos", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else if(txtTransf.isEditable() && trans.trim().isEmpty()){
-							JOptionPane.showMessageDialog(null, "Especifique los transfusiones realizadas", "¡Error!",JOptionPane.ERROR_MESSAGE);
-						}else{
-							Historial miHist = new Historial(codHis);
-							ClinicaSONS.getInstance().insertarHistorial(miHist);
-							Paciente pac = new Paciente(codPac, ced, nom, sexo, estCiv, tel, fNac, dir, tpSangre, cantHijos, fuma, alc, caf, drog, tieAle, ale, tieCir, cir, tieTrans, trans, tieTrau, trau, antPer, antFam, miHist, antFis);
-							ClinicaSONS.getInstance().insertarPersona(pac);
-							miDoc.agregarPaciente(pac);
-							JOptionPane.showMessageDialog(null, "Paciente agregado con éxito", "¡Operación exitosa!",JOptionPane.INFORMATION_MESSAGE);
-							HistorialConsulta histC = new HistorialConsulta(miDoc,pac,null);
-							histC.setModal(true);
-							histC.setVisible(true);
+						if(miPac != null && miDoc == null) {
+							miPac.getMiHistorial().setNumRecord(txtCodHist.getText());
+							miPac.setCedula(txtCed.getText());
+							miPac.setNombre(txtNombre.getText());
+							miPac.setTelefono(txtTel.getText());
+							miPac.setAntecedentesPersonales(txtAntPers.getText());
+							miPac.setAntecedentesFamiliares(txtAntFam.getText());
+							miPac.setAntecedentesFisiologicos(txtAntFis.getText());
+							miPac.setDireccion(txtDir.getText());
+							miPac.setEstadoCivil(cmbEstCivil.getSelectedItem().toString());
+							miPac.setSexo(cmbSexo.getSelectedItem().toString());
+							miPac.setTipoSangre(cmbTpSangre.getSelectedItem().toString());
+							miPac.setFuma(cmbFuma.getSelectedItem().toString());
+							miPac.setAlcohol(cmbAlcohol.getSelectedItem().toString());
+							miPac.setCafe(cmbCafe.getSelectedItem().toString());
+							miPac.setDrogas(cmbDrogas.getSelectedItem().toString());
+							miPac.setFechaNacimiento(dtNacimiento.getDate());
+							ClinicaSONS.getInstance().modificarPaciente(miPac);
+							JOptionPane.showMessageDialog(null,  "La modificación fue realizada con éxito", "¡Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
 							dispose();
+						}else {
+							String codHist = txtCodHist.getText();
+							String codPac = txtCodPac.getText();
+							String ced = txtCed.getText();
+							String nom = txtNombre.getText();
+							String tel = txtTel.getText();
+							Date fNac = dtNacimiento.getDate();
+							String estCiv = cmbEstCivil.getSelectedItem().toString();
+							String sexo = cmbSexo.getSelectedItem().toString();
+							String tpSangre = cmbTpSangre.getSelectedItem().toString();
+							int cantHijos = (int) spnCantHijos.getValue();
+							String dir = txtDir.getText();
+							String fuma = cmbFuma.getSelectedItem().toString();
+							String alc = cmbAlcohol.getSelectedItem().toString();
+							String caf = cmbCafe.getSelectedItem().toString();
+							String drog = cmbDrogas.getSelectedItem().toString();
+							String antPer = txtAntPers.getText();
+							String antFam = txtAntFam.getText();
+							String antFis = txtAntFis.getText();
+							String tieCir = cmbTieneCir.getSelectedItem().toString();
+							String tieAle = cmbTieneAlergia.getSelectedItem().toString();
+							String tieTrau = cmbTieneTrau.getSelectedItem().toString();
+							String tieTrans = cmbTieneTransf.getSelectedItem().toString();
+							String cir = txtCirugias.getText();
+							String ale = txtAlergia.getText();
+							String trau = txtTrauma.getText();
+							String trans = txtTransf.getText();
+							String codHis = txtCodHist.getText();
+							
+							if(ced.trim().isEmpty() || nom.trim().isEmpty() || tel.trim().isEmpty() || fNac == null || dir.trim().isEmpty() 
+							|| antPer.trim().isEmpty() || antFam.trim().isEmpty() || antFis.trim().isEmpty()) {
+								JOptionPane.showMessageDialog(null, "Complete los campos vacíos", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else if(cmbAlcohol.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbCafe.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+									|| cmbDrogas.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbEstCivil.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+									|| cmbFuma.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbSexo.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+									|| cmbTpSangre.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbTieneAlergia.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+									|| cmbTieneCir.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>") || cmbTieneTransf.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+									|| cmbTieneTrau.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")){
+								JOptionPane.showMessageDialog(null, "Seleccione opciones válidas", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else if(txtCirugias.isEditable() && cir.trim().isEmpty()){
+								JOptionPane.showMessageDialog(null, "Especifique las cirugías realizadas", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else if(txtAlergia.isEditable() && ale.trim().isEmpty()){
+								JOptionPane.showMessageDialog(null, "Especifique las alergías del paciente", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else if(txtTrauma.isEditable() && trau.trim().isEmpty()){
+								JOptionPane.showMessageDialog(null, "Especifique los traumatismos sufridos", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else if(txtTransf.isEditable() && trans.trim().isEmpty()){
+								JOptionPane.showMessageDialog(null, "Especifique los transfusiones realizadas", "¡Error!",JOptionPane.ERROR_MESSAGE);
+							}else{
+								Historial miHist = new Historial(codHis);
+								ClinicaSONS.getInstance().insertarHistorial(miHist);
+								Paciente pac = new Paciente(codPac, ced, nom, sexo, estCiv, tel, fNac, dir, tpSangre, cantHijos, fuma, alc, caf, drog, tieAle, ale, tieCir, cir, tieTrans, trans, tieTrau, trau, antPer, antFam, miHist, antFis);
+								ClinicaSONS.getInstance().insertarPersona(pac);
+								miDoc.agregarPaciente(pac);
+								JOptionPane.showMessageDialog(null, "Paciente agregado con éxito", "¡Operación exitosa!",JOptionPane.INFORMATION_MESSAGE);
+								HistorialConsulta histC = new HistorialConsulta(miDoc,pac,null);
+								histC.setModal(true);
+								histC.setVisible(true);
+								dispose();
+							}
 						}
 					}
 				});

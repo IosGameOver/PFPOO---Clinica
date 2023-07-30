@@ -15,6 +15,7 @@ import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JDayChooser;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
 import logico.Vacuna;
@@ -53,7 +54,8 @@ public class RegDoctor extends JDialog {
 	private JTextField txtCorreo;
 	private JTextField txtConstrasena;
 	private JComboBox cmbEspecialidad;
-	private Doctor miDoctor;
+	private Doctor miDoctor = null;
+	private Administrador miAdmin = null;
 	/**
 	 * Launch the application.
 	 */
@@ -73,8 +75,7 @@ public class RegDoctor extends JDialog {
 	 * @param doctor 
 	 */
 	public RegDoctor(Doctor doctor) {
-		
-	
+		miAdmin = ClinicaSONS.getLoginUserAdmin();	
 		miDoctor = doctor;
 		setResizable(false);
 		if (miDoctor==null) {
@@ -90,6 +91,7 @@ public class RegDoctor extends JDialog {
 	}
 
 	private void initComponents() {
+		System.out.println(miAdmin.getPass());
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

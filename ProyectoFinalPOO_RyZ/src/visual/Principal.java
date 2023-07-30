@@ -32,6 +32,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.Color;
 
 public class Principal extends JFrame {
 
@@ -52,10 +54,10 @@ public class Principal extends JFrame {
 
 	private static Principal panelPrincipal = null;
 	private JMenuBar menuBar;
-	private JButton btnCerrarSesion;
 	private JMenuItem mntmRegDoctor;
 	private JMenuItem mntmListDoc;
 	private JMenuItem mntmListarPaciente;
+	private JPanel panelReloj;
 	
 		/**
 	 * Launch the application.
@@ -119,12 +121,18 @@ public class Principal extends JFrame {
         setResizable(false);
 		
 		menuBar = new JMenuBar();
+		menuBar.setBackground(new Color(255, 255, 255));
+		menuBar.setFont(new Font("Sylfaen", Font.BOLD, 15));
 		setJMenuBar(menuBar);
 		
 		mnDoctor = new JMenu("Doctores");
+		mnDoctor.setForeground(Color.BLACK);
+		mnDoctor.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnDoctor);
 		
 		mntmRegDoctor = new JMenuItem("Registrar doctor");
+		mntmRegDoctor.setForeground(Color.BLACK);
+		mntmRegDoctor.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmRegDoctor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegDoctor reg = new RegDoctor(null);
@@ -135,6 +143,8 @@ public class Principal extends JFrame {
 		mnDoctor.add(mntmRegDoctor);
 		
 		mntmListDoc = new JMenuItem("Listar doctor");
+		mntmListDoc.setForeground(Color.BLACK);
+		mntmListDoc.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListDoc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarDoctores list = new ListarDoctores();
@@ -145,9 +155,13 @@ public class Principal extends JFrame {
 		mnDoctor.add(mntmListDoc);
 		
 		mnPaciente = new JMenu("Pacientes");
+		mnPaciente.setForeground(Color.BLACK);
+		mnPaciente.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnPaciente);
 		
 		mntmListarPaciente = new JMenuItem("Listar pacientes");
+		mntmListarPaciente.setForeground(Color.BLACK);
+		mntmListarPaciente.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListarPaciente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarPacientes list = new ListarPacientes();
@@ -157,13 +171,14 @@ public class Principal extends JFrame {
 		});
 		mnPaciente.add(mntmListarPaciente);
 		
-		JMenu mnNewMenu_2 = new JMenu("");
-		menuBar.add(mnNewMenu_2);
-		
 		mnCita = new JMenu("Citas");
+		mnCita.setForeground(Color.BLACK);
+		mnCita.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnCita);
 		
 		mntmProgCita = new JMenuItem("Programar cita");
+		mntmProgCita.setForeground(Color.BLACK);
+		mntmProgCita.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmProgCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegCita reg = new RegCita(null);
@@ -175,6 +190,8 @@ public class Principal extends JFrame {
 		mnCita.add(mntmProgCita);
 		
 		JMenuItem mntmListCita = new JMenuItem("Listar citas");
+		mntmListCita.setForeground(Color.BLACK);
+		mntmListCita.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListCita.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarCitas list = new ListarCitas();
@@ -185,9 +202,13 @@ public class Principal extends JFrame {
 		mnCita.add(mntmListCita);
 		
 		mnConsulta = new JMenu("Consultas");
+		mnConsulta.setForeground(Color.BLACK);
+		mnConsulta.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnConsulta);
 		
 		JMenuItem mntmRegConsult = new JMenuItem("Registrar consultas");
+		mntmRegConsult.setForeground(Color.BLACK);
+		mntmRegConsult.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmRegConsult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				HistorialConsulta hist = new HistorialConsulta(miDoc,null,null);
@@ -198,6 +219,8 @@ public class Principal extends JFrame {
 		mnConsulta.add(mntmRegConsult);
 		
 		JMenuItem mntmListConsulta = new JMenuItem("Listar consultas");
+		mntmListConsulta.setForeground(Color.BLACK);
+		mntmListConsulta.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListConsulta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -206,9 +229,13 @@ public class Principal extends JFrame {
 		mnConsulta.add(mntmListConsulta);
 		
 		mnEnfermedad = new JMenu("Enfermedades");
+		mnEnfermedad.setForeground(Color.BLACK);
+		mnEnfermedad.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnEnfermedad);
 		
 		mntmRegEnferm = new JMenuItem("Registrar enfermedades");
+		mntmRegEnferm.setForeground(Color.BLACK);
+		mntmRegEnferm.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmRegEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegEnfermedad reg = new RegEnfermedad(null, miAdmin);
@@ -219,6 +246,8 @@ public class Principal extends JFrame {
 		mnEnfermedad.add(mntmRegEnferm);
 		
 		JMenuItem mntmListEnferm = new JMenuItem("Listar enfermedades");
+		mntmListEnferm.setForeground(Color.BLACK);
+		mntmListEnferm.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListEnferm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarEnfermedad list = new ListarEnfermedad();
@@ -229,9 +258,13 @@ public class Principal extends JFrame {
 		mnEnfermedad.add(mntmListEnferm);
 		
 		mnVacuna = new JMenu("Vacunas");
+		mnVacuna.setForeground(Color.BLACK);
+		mnVacuna.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		menuBar.add(mnVacuna);
 		
 		mntmRegVacu = new JMenuItem("Registrar vacuna");
+		mntmRegVacu.setForeground(Color.BLACK);
+		mntmRegVacu.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmRegVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				RegVacuna reg = new RegVacuna(null, miAdmin);
@@ -242,6 +275,8 @@ public class Principal extends JFrame {
 		mnVacuna.add(mntmRegVacu);
 		
 		JMenuItem mntmListVacu = new JMenuItem("Listar vacuna");
+		mntmListVacu.setForeground(Color.BLACK);
+		mntmListVacu.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmListVacu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -253,11 +288,15 @@ public class Principal extends JFrame {
 		mnVacuna.add(mntmListVacu);
 		
 		mnAdministracion = new JMenu("Administraci\u00F3n");
+		mnAdministracion.setForeground(Color.BLACK);
+		mnAdministracion.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mnAdministracion.setEnabled(false);
 		
 		menuBar.add(mnAdministracion);
 		
 		JMenuItem mntmRegUser = new JMenuItem("Registrar Usuario");
+		mntmRegUser.setForeground(Color.BLACK);
+		mntmRegUser.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmRegUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			RegUsuario reg = new RegUsuario(null);
@@ -268,6 +307,8 @@ public class Principal extends JFrame {
 		mnAdministracion.add(mntmRegUser);
 		
 		JMenuItem mntmListUser = new JMenuItem("Listar Usuario");
+		mntmListUser.setForeground(Color.BLACK);
+		mntmListUser.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mnAdministracion.add(mntmListUser);
 		mntmListUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -280,6 +321,8 @@ public class Principal extends JFrame {
 			}
 		});
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Realizar respaldo");
+		mntmNewMenuItem_1.setForeground(Color.BLACK);
+		mntmNewMenuItem_1.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -326,19 +369,8 @@ public class Principal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		btnCerrarSesion = new JButton("Cerrar ses\u00F3n");
-		btnCerrarSesion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ClinicaSONS.setLoginUserAdmin(null);
-				ClinicaSONS.setLoginUserDoc(null);
-				ClinicaSONS.setLoginUserSecre(null);
-				Login loginScreen = new Login();
-				loginScreen.setVisible(true);
-				dispose();
-				
-			}
-		});
-		contentPane.add(btnCerrarSesion, BorderLayout.SOUTH);
+		panelReloj = new JPanel();
+		contentPane.add(panelReloj, BorderLayout.SOUTH);
 		
 		detectarUsuarios();
 	
@@ -379,7 +411,6 @@ public class Principal extends JFrame {
 		
 		else {
 			JOptionPane.showMessageDialog(null, "El sistema se deshabilitará, inicie sesión", "Error: usuario no existente", JOptionPane.ERROR_MESSAGE);
-			btnCerrarSesion.setText("Inicar Sesion");
 			mnAdministracion.setEnabled(false);
 			mnConsulta.setEnabled(false);
 			mnDoctor.setEnabled(false);

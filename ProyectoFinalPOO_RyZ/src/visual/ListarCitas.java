@@ -65,7 +65,7 @@ public class ListarCitas extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarCitas() {
-	
+		miDoc = ClinicaSONS.getLoginUserDoc();
 		setBounds(100, 100, 910, 455);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -208,6 +208,10 @@ public class ListarCitas extends JDialog {
 				buttonPane.add(btnEliminar);
 				btnCancelar.setActionCommand("Cancel");
 				buttonPane.add(btnCancelar);
+			}
+			if(miDoc != null) {
+				btnEliminar.setVisible(false);
+				btnModificar.setVisible(false);
 			}
 		}
 

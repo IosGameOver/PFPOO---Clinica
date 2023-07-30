@@ -46,15 +46,20 @@ public class ListarVacunas extends JDialog {
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	/**
 	 * Create the dialog.
 	 */
 	public ListarVacunas() {
-		
+		miAdmin = ClinicaSONS.getLoginUserAdmin();
 		setBounds(100, 100, 710, 370);
 		setLocationRelativeTo(null);
+		setResizable(false);
+		initComponents();
+	}
+
+	private void initComponents() {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -74,16 +79,16 @@ public class ListarVacunas extends JDialog {
 						table.addMouseListener(new MouseAdapter() {
 							@Override
 							public void mouseClicked(MouseEvent e) {
-							
+
 								int index = table.getSelectedRow();
 								if (index >=0) {
-									
+
 									btnModificar.setEnabled(true);
 									btnEliminar.setEnabled(true);
 									selected = ClinicaSONS.getInstance().buscarVacunaPorCodigo(table.getValueAt(index, 0).toString());
-							
+
 								}
-								
+
 							}
 						});
 					}
@@ -111,11 +116,9 @@ public class ListarVacunas extends JDialog {
 				btnModificar.setEnabled(false);
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					RegVacuna actualizar = new RegVacuna(selected,miAdmin);
-					actualizar.setModal(true);
-					actualizar.setVisible(true);
-														
-					
+						RegVacuna actualizar = new RegVacuna(selected,miAdmin);
+						actualizar.setModal(true);
+						actualizar.setVisible(true);
 					}
 				});
 				buttonPane.add(btnModificar);
@@ -124,31 +127,36 @@ public class ListarVacunas extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					if (selected!=null) {
-						int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Vacuna:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
-						if (option == JOptionPane.OK_OPTION) {
-							ClinicaSONS.getInstance().eliminarVacuna(selected);
-							btnModificar.setEnabled(false);
-							btnEliminar.setEnabled(false);
-							llenarTabla();
+						if (selected!=null) {
+							int option = JOptionPane.showConfirmDialog(null, "¿Está seguro(a) de que desea eliminar la Vacuna:  " + selected.getCodigo(), "Confirmación", JOptionPane.OK_CANCEL_OPTION);
+							if (option == JOptionPane.OK_OPTION) {
+								ClinicaSONS.getInstance().eliminarVacuna(selected);
+								btnModificar.setEnabled(false);
+								btnEliminar.setEnabled(false);
+								llenarTabla();
+							}
+
 						}
-						
-					}
-					
-					
-					
+
+
+
 					}
 				});
 				btnEliminar.setEnabled(false);
 				btnEliminar.setActionCommand("OK");
 				buttonPane.add(btnEliminar);
 				getRootPane().setDefaultButton(btnEliminar);
+
+				if(miAdmin != null) {
+					btnEliminar.setVisible(false);
+					btnModificar.setVisible(false);
+				}
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-					dispose();
+						dispose();
 					}
 				});
 				cancelButton.setActionCommand("Cancel");
@@ -157,7 +165,8 @@ public class ListarVacunas extends JDialog {
 		}
 		llenarTabla();
 	}
-	
+
+
 	public static void llenarTabla(){
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
@@ -166,7 +175,7 @@ public class ListarVacunas extends JDialog {
 			row[1] = aux.getNombre();
 			row[2] = aux.getLaboratorio();
 			row[3] = aux.getDescripcion();
-			
+
 			model.addRow(row);
 		}
 	}

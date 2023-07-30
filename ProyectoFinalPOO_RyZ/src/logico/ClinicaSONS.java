@@ -627,7 +627,28 @@ public class ClinicaSONS implements Serializable{
 		public void eliminarUsuario(Usuario selected) {
 			misUsuarios.remove(selected);
 		}
-	
+		
+		public int buscarIndexPacienteByCode(String codPac) {
+			int aux = -1;
+			boolean encontrado = false;
+			int i = 0;
+			while(i < misPersonas.size() && !encontrado) {
+				if (misPersonas.get(i).getCod().equalsIgnoreCase(codPac)) {
+					encontrado =true;
+					aux = i;						
+				}
+				i++;
+			}
+			return aux;
+		}
+
+		public void modificarPaciente(Paciente miPac) {
+			int index = buscarIndexPacienteByCode(miPac.getCod());
+			misPersonas.set(index, miPac);
+		}
+		public void eliminarPaciente(Paciente miPac) {
+			misPersonas.remove(miPac);
+		}
 	
 	
 	

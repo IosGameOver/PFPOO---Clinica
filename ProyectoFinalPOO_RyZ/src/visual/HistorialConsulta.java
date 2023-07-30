@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -437,6 +438,9 @@ public class HistorialConsulta extends JDialog {
 		JButton btnRegistrar = new JButton("Registrar");
 		if(miCons != null) {
 			btnRegistrar.setVisible(false);
+			for(int i = 0;i < panel.getComponentCount();i++){
+				panel.getComponent(i).setEnabled(false);
+			}
 		}
 		btnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		btnRegistrar.addActionListener(new ActionListener() {

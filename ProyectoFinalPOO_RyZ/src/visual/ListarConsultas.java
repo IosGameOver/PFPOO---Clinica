@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Consulta;
 import logico.Doctor;
@@ -63,7 +64,7 @@ public class ListarConsultas extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarConsultas() {
-		
+		miDoc = ClinicaSONS.getLoginUserDoc();
 		df = new SimpleDateFormat("dd/MM/yyyy");
 		setBounds(100, 100, 780, 400);
 		getContentPane().setLayout(new BorderLayout());
@@ -110,6 +111,7 @@ public class ListarConsultas extends JDialog {
 				panelGen.add(lblNewLabel);
 			}
 
+			
 			JComboBox comboBox = new JComboBox();
 			comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
