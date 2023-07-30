@@ -52,7 +52,6 @@ public class ListarVacunas extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListarVacunas() {
-		setTitle("Lista de Vacunas");
 		miAdmin = ClinicaSONS.getLoginUserAdmin();
 		setBounds(100, 100, 710, 370);
 		setLocationRelativeTo(null);

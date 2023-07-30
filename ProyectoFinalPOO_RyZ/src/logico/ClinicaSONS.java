@@ -216,6 +216,7 @@ public class ClinicaSONS implements Serializable{
 		return doctor;
 	}
 	 */
+	
 	//Confirmación de Login
 	public boolean confirmLoginAdmin(String username, String pass) {
 		int i = 0;

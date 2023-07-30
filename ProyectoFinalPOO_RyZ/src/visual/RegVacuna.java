@@ -35,10 +35,10 @@ public class RegVacuna extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	
+	/*
 	public static void main(String[] args) {
 		try {
-			RegVacuna dialog = new RegVacuna(null,null);
+			RegVacuna dialog = new RegVacuna();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -46,7 +46,7 @@ public class RegVacuna extends JDialog {
 		}
 	}
 
-	 
+	 */
 	/**
 	 * Create the dialog.
 	 */
@@ -164,20 +164,7 @@ public class RegVacuna extends JDialog {
 
 
 				});
-				
-				JButton btnVerLista = new JButton("Ver lista");
-				btnVerLista.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					
-					ListarVacunas list = new ListarVacunas();
-					list.setModal(true);
-					list.setVisible(true);
-					dispose();
-					
-					
-					}
-				});
-				buttonPane.add(btnVerLista);
+
 
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);

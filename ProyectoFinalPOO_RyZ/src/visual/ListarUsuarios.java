@@ -157,16 +157,6 @@ public class ListarUsuarios extends JDialog {
 					}
 					}
 				});
-				
-				JButton btnVaciar = new JButton("Vaciar");
-				btnVaciar.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						model.getDataVector().removeAllElements();
-						model.fireTableDataChanged(); 
-						
-					}
-				});
-				buttonPane.add(btnVaciar);
 				btnModificar.setEnabled(false);
 				btnModificar.setActionCommand("OK");
 				buttonPane.add(btnModificar);
@@ -256,4 +246,5 @@ public class ListarUsuarios extends JDialog {
 
 
 }
+
 

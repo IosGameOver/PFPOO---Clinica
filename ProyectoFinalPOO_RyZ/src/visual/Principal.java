@@ -357,8 +357,8 @@ public class Principal extends JFrame {
 
 	private void detectarUsuarios() {
 		
-		Administrador admin = ClinicaSONS.getLoginUserAdmin();
-		Secretario secre = ClinicaSONS.getLoginUserSecre();
+		Usuario admin = ClinicaSONS.getLoginUserAdmin();
+		Usuario secre = ClinicaSONS.getLoginUserSecre();
 		Doctor doc = ClinicaSONS.getLoginUserDoc();
 		
 		if (doc!=null||admin!=null||secre!=null) {
