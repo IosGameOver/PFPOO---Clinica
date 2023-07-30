@@ -34,6 +34,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.JLabel;
 
 public class Principal extends JFrame {
 
@@ -58,6 +59,7 @@ public class Principal extends JFrame {
 	private JMenuItem mntmListDoc;
 	private JMenuItem mntmListarPaciente;
 	private JPanel panelReloj;
+	private JPanel panel;
 	
 		/**
 	 * Launch the application.
@@ -80,9 +82,7 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 * @param doc 
 	 */
-	public Principal(/*Doctor doc, Administrador admin*/) {
-//		this.miAdmin = admin;
-//		this.miDoc = doc;
+	public Principal() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -119,6 +119,7 @@ public class Principal extends JFrame {
 		dim = getToolkit().getScreenSize();
         setSize(dim.width+20,dim.height-40);
         setResizable(false);
+        
 		
 		menuBar = new JMenuBar();
 		menuBar.setBackground(new Color(255, 255, 255));
@@ -371,6 +372,9 @@ public class Principal extends JFrame {
 		
 		panelReloj = new JPanel();
 		contentPane.add(panelReloj, BorderLayout.SOUTH);
+		
+		panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
 		
 		detectarUsuarios();
 	

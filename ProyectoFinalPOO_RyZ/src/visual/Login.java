@@ -164,7 +164,7 @@ public class Login extends JFrame {
 				lblOjoAbierto.setVisible(true);
 			}
 		});
-		lblOjoCer.setIcon(new ImageIcon("C:\\Users\\zully\\Downloads\\Dise\u00F1o sin t\u00EDtulo (10).png"));
+		lblOjoCer.setIcon(new ImageIcon(Login.class.getResource("/fotos/Ojo cerrado.png")));
 		lblOjoCer.setBounds(326, 332, 55, 37);
 		panel.add(lblOjoCer);
 		
@@ -180,7 +180,7 @@ public class Login extends JFrame {
 				lblOjoAbierto.setVisible(false);
 			}
 		});
-		lblOjoAbierto.setIcon(new ImageIcon("C:\\Users\\zully\\Downloads\\Dise\u00F1o sin t\u00EDtulo (11).png"));
+		lblOjoAbierto.setIcon(new ImageIcon(Login.class.getResource("/fotos/Ojo abierto.png")));
 		lblOjoAbierto.setBounds(326, 332, 55, 37);
 		lblOjoAbierto.setVisible(false);
 		panel.add(lblOjoAbierto);
@@ -206,7 +206,7 @@ public class Login extends JFrame {
 			}
 		});
 		txtPassword.setForeground(Color.GRAY);
-		txtPassword.setBounds(40, 341, 280, 21);
+		txtPassword.setBounds(40, 341, 294, 21);
 		panel.add(txtPassword);
 		txtPassword.setText("Ingrese su contraseña");
 		txtPassword.setBorder(null);
@@ -250,7 +250,7 @@ public class Login extends JFrame {
 		
 		txtUser.setForeground(Color.GRAY);
 		txtUser.setText("Ingrese su nombre de usuario");
-		txtUser.setBounds(40, 239, 280, 21);
+		txtUser.setBounds(40, 239, 341, 21);
 		panel.add(txtUser);
 		txtUser.setColumns(10);
 
@@ -289,7 +289,7 @@ public class Login extends JFrame {
 		
 		btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		JLabel Fondo = new JLabel("");
-		Fondo.setIcon(new ImageIcon("C:\\Users\\zully\\Downloads\\Dise\u00F1o sin t\u00EDtulo (3).png"));
+		Fondo.setIcon(new ImageIcon(Login.class.getResource("/fotos/FondoLogin.png")));
 		Fondo.setBounds(0, 0, 934, 505);
 		panel.add(Fondo);
 		
