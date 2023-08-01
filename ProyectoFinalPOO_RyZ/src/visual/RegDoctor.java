@@ -14,10 +14,12 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JDayChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
+import logico.Persona;
 import logico.Vacuna;
 
 import java.awt.Font;
@@ -36,6 +38,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
 import java.security.SecureRandom;
 import java.beans.PropertyChangeEvent;
+import java.awt.Color;
 
 public class RegDoctor extends JDialog {
 
@@ -59,7 +62,7 @@ public class RegDoctor extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-/*	
+	/*	
 	public static void main(String[] args) {
 		try {
 			RegDoctor dialog = new RegDoctor();
@@ -69,7 +72,7 @@ public class RegDoctor extends JDialog {
 			e.printStackTrace();
 		}
 	}
-*/
+	 */
 	/**
 	 * Create the dialog.
 	 * @param doctor 
@@ -83,7 +86,7 @@ public class RegDoctor extends JDialog {
 		}else {
 			setTitle("Modificar Doctor");
 		}
-		
+
 		setBounds(100, 100, 711, 500);
 		setResizable(false);
 		setLocationRelativeTo(null);
@@ -194,6 +197,8 @@ public class RegDoctor extends JDialog {
 		dtCalendario.setDateFormatString("d/MM/yyyy");
 		dtCalendario.setMaxSelectableDate(new Date());
 		dtCalendario.setBounds(95, 190, 234, 22);
+		JTextFieldDateEditor edit = (JTextFieldDateEditor) dtCalendario.getDateEditor();
+		edit.setEditable(false);
 
 		contentPanel.add(dtCalendario);
 		{
@@ -283,13 +288,15 @@ public class RegDoctor extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton BtnRegistrar = new JButton("Registrar");
+				BtnRegistrar.setBackground(Color.WHITE);
+				if(miDoctor != null) {
+					BtnRegistrar.setText("Modificar");
+				}
 				BtnRegistrar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				BtnRegistrar.addActionListener(new ActionListener() {
-					
-					
-					public void actionPerformed(ActionEvent e) {
-					
+				
 
+					public void actionPerformed(ActionEvent e) {
 						Doctor doctor = null;
 						String separador = Pattern.quote("@");
 						String correo = txtCorreo.getText();
@@ -309,44 +316,54 @@ public class RegDoctor extends JDialog {
 						String universidad = TxtAlmaMater.getText();
 						Date fechaNacimiento = dtCalendario.getDate();
 						if (miDoctor==null) {
-						if(correo.trim().isEmpty()||especialidad.trim().isEmpty()||sexo.trim().isEmpty()||estadoCvl.trim().isEmpty()||tpSangre.trim().isEmpty()
-								||universidad.trim().isEmpty()||telefono.trim().isEmpty()||cedula.trim().isEmpty()||codigo.trim().isEmpty()||nombre.trim().isEmpty()
-								||exequartur.trim().isEmpty()||direccion.trim().isEmpty()) {
-							JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
-						}else if(cmbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")||cmbEstCivil.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
-								||cmbSexo.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")||cmbTipoSangre.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")) {
-							JOptionPane.showMessageDialog(null, "Seleccione una opción válida", "¡Error!", JOptionPane.ERROR_MESSAGE);
-						}else if(contrasena.trim().length() < 8){	
-							JOptionPane.showMessageDialog(null, "La contraseña debe tener como mínimo 8 dígitos", "¡Error!", JOptionPane.ERROR_MESSAGE);
+							boolean resp = false;
+							for (int i = 0; i < correo.length(); i++){
+								char letra = correo.charAt(i);
+								if(letra == '@') {
+									resp = true;
+								}
+							}
+							if(!resp) {
+								JOptionPane.showMessageDialog(null, "Ingrese un correo válido", "¡Error!", JOptionPane.ERROR_MESSAGE);
+							}else {
+								if(correo.trim().isEmpty()||especialidad.trim().isEmpty()||sexo.trim().isEmpty()||estadoCvl.trim().isEmpty()||tpSangre.trim().isEmpty()
+										||universidad.trim().isEmpty()||telefono.trim().isEmpty()||cedula.trim().isEmpty()||codigo.trim().isEmpty()||nombre.trim().isEmpty()
+										||exequartur.trim().isEmpty()||direccion.trim().isEmpty()||fechaNacimiento == null) {
+									JOptionPane.showMessageDialog(null, "CAMPO OBLIGATORIO VACIO", "Ha occurrido un error", JOptionPane.ERROR_MESSAGE);
+								}else if(cmbEspecialidad.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")||cmbEstCivil.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")
+										||cmbSexo.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")||cmbTipoSangre.getSelectedItem().toString().equalsIgnoreCase("<Seleccione>")) {
+									JOptionPane.showMessageDialog(null, "Seleccione una opción válida", "¡Error!", JOptionPane.ERROR_MESSAGE);
+								}else if(contrasena.trim().length() < 8){	
+									JOptionPane.showMessageDialog(null, "La contraseña debe tener como mínimo 8 dígitos", "¡Error!", JOptionPane.ERROR_MESSAGE);
+								}else {
+									doctor = new Doctor(codigo, cedula, nombre, sexo, estadoCvl, telefono, fechaNacimiento, direccion, tpSangre, exequartur, universidad, especialidad,usuario,contrasena,correo);
+									ClinicaSONS.getInstance().insertarDoctor(doctor);
+									JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente\nUsuario: "+doctor.getUsuario()+"\nContraseña: "+doctor.getContrasena(), "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
+									clean();
+								}
+							}
 						}else {
-							doctor = new Doctor(codigo, cedula, nombre, sexo, estadoCvl, telefono, fechaNacimiento, direccion, tpSangre, exequartur, universidad, especialidad,usuario,contrasena,correo);
-							ClinicaSONS.getInstance().insertarDoctor(doctor);
-							JOptionPane.showMessageDialog(null, "Doctor registrado satisfactoriamente\nUsuario: "+doctor.getUsuario()+"\nContraseña: "+doctor.getContrasena(), "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
-							clean();
-					}
-						
-					}else {
-						
-						miDoctor.setAlmaMater(universidad);
-						miDoctor.setCedula(cedula);
-						miDoctor.setCod(codigo);
-						miDoctor.setContrasena(contrasena);
-						miDoctor.setCorreo(correo);
-						miDoctor.setNombre(nombre);
-						miDoctor.setDireccion(direccion);
-						miDoctor.setExeQuartur(exequartur);
-						miDoctor.setTelefono(telefono);
-						miDoctor.setTipoSangre(tpSangre);
-						miDoctor.setEspecialidad(especialidad);
-						miDoctor.setEstadoCivil(estadoCvl);
-						miDoctor.setFechaNacimiento(fechaNacimiento);
-						miDoctor.setSexo(sexo);
-						miDoctor.setUsuario(usuario);
-						
-						ClinicaSONS.getInstance().modificarDoctor(miDoctor);
-						dispose();
-						JOptionPane.showMessageDialog(null, "La modificación fue realizada con éxito", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
-						ListarDoctores.llenarDoctores();
+							miDoctor.setAlmaMater(universidad);
+							miDoctor.setCedula(cedula);
+							miDoctor.setCod(codigo);
+							miDoctor.setContrasena(contrasena);
+							miDoctor.setCorreo(correo);
+							miDoctor.setNombre(nombre);
+							miDoctor.setDireccion(direccion);
+							miDoctor.setExeQuartur(exequartur);
+							miDoctor.setTelefono(telefono);
+							miDoctor.setTipoSangre(tpSangre);
+							miDoctor.setEspecialidad(especialidad);
+							miDoctor.setEstadoCivil(estadoCvl);
+							miDoctor.setFechaNacimiento(fechaNacimiento);
+							miDoctor.setSexo(sexo);
+							miDoctor.setUsuario(usuario);
+
+							ClinicaSONS.getInstance().modificarDoctor(miDoctor);
+							dispose();
+							JOptionPane.showMessageDialog(null, "La modificación fue realizada con éxito", "Operación exitosa", JOptionPane.INFORMATION_MESSAGE);
+							ListarDoctores.llenarDoctores();
+							
 						}
 
 
@@ -354,19 +371,6 @@ public class RegDoctor extends JDialog {
 
 
 				});
-				
-				JButton btnVerLista = new JButton("Ver lista");
-				btnVerLista.setFont(new Font("Sylfaen", Font.PLAIN, 14));
-				btnVerLista.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					
-						ListarDoctores lista = new ListarDoctores();
-						lista.setModal(true);
-						lista.setVisible(true);
-					
-					}
-				});
-				buttonPane.add(btnVerLista);
 
 				BtnRegistrar.setActionCommand("OK");
 				buttonPane.add(BtnRegistrar);
@@ -374,6 +378,7 @@ public class RegDoctor extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancelar");
+				cancelButton.setBackground(Color.WHITE);
 				cancelButton.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -392,7 +397,7 @@ public class RegDoctor extends JDialog {
 		if(miDoctor != null) {
 			txtCedula.setText(miDoctor.getCedula());
 			txtCedula.setEnabled(false);
-			dtCalendario.setEnabled(true);
+			dtCalendario.setEnabled(false);
 			txtCodigo.setText(miDoctor.getCod());
 			txtDireccion.setText(miDoctor.getDireccion());
 			txtExequartur.setText(miDoctor.getExeQuartur());
@@ -401,7 +406,7 @@ public class RegDoctor extends JDialog {
 			TxtAlmaMater.setText(miDoctor.getAlmaMater());
 			cmbEstCivil.setSelectedItem(miDoctor.getEstadoCivil());
 			cmbSexo.setSelectedItem(miDoctor.getSexo());
-			cmbTipoSangre.setSelectedItem(miDoctor);
+			cmbTipoSangre.setSelectedItem(miDoctor.getTipoSangre());
 			cmbEspecialidad.setSelectedItem(miDoctor.getEspecialidad());
 			dtCalendario.setDate(miDoctor.getFechaNacimiento());
 			txtCorreo.setText(miDoctor.getCorreo());

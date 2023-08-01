@@ -69,7 +69,7 @@ public class IndicarVacunas extends JDialog {
 
 	private void initComponents() {
 		if(miPac != null && miCons == null) {
-			setTitle("Historiald de vacunación de "+miPac.getNombre());
+			setTitle("Historial de vacunación de "+miPac.getNombre());
 		}
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

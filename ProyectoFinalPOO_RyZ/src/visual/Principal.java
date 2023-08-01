@@ -27,12 +27,17 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
@@ -56,17 +61,18 @@ public class Principal extends JFrame {
 	public JMenuItem mntmRegVacu;
 	public JMenuItem mntmProgCita;
 	private Administrador miAdmin = null;
-
 	private static Principal panelPrincipal = null;
 	private JMenuBar menuBar;
 	private JButton btnCerrarSesion;
-	
 	private JMenuItem mntmRegDoctor;
 	private JMenuItem mntmListDoc;
 	private JMenuItem mntmListarPaciente;
 	private JPanel panelReloj;
 	private JPanel panel;
-	
+	private JMenu mnNewMenu;
+	private DataInputStream EntradaSocket;
+	private DataOutputStream SalidaSocket;
+	static Socket sfd = null;
 		/**
 	 * Launch the application.
 	 */
@@ -95,7 +101,7 @@ public class Principal extends JFrame {
 				FileOutputStream clinica;
 				ObjectOutputStream clinicaWrite;
 				try {
-					clinica = new  FileOutputStream("empresa.dat");
+					clinica = new FileOutputStream("clinica.dat");
 					clinicaWrite = new ObjectOutputStream(clinica);
 					clinicaWrite.writeObject(ClinicaSONS.getInstance());
 				} catch (FileNotFoundException e1) {
@@ -317,6 +323,36 @@ public class Principal extends JFrame {
 		mntmListUser.setForeground(Color.BLACK);
 		mntmListUser.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mnAdministracion.add(mntmListUser);
+		
+		mnNewMenu = new JMenu("Respaldar");
+		mnNewMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					sfd = new Socket("127.0.0.1",7000);
+					EntradaSocket = new DataInputStream(new FileInputStream (new File ("clinica.dat")));
+					SalidaSocket = new DataOutputStream(sfd.getOutputStream());
+					int unByte;
+					
+					try {
+						while((unByte = EntradaSocket.read()) != -1) {
+							SalidaSocket.write(unByte);
+							SalidaSocket.flush();
+						}
+					} catch (IOException ioe) {
+						System.out.println("Error: "+ioe);
+					}
+				} catch (UnknownHostException uhe) {
+					System.out.println("No se puede acceder al servidor.");
+					System.exit(1);
+				}catch (IOException ioe) {
+					System.out.println("Comunicación rechazada.");
+					System.exit(1);
+				}
+			}
+		});
+		mnNewMenu.setForeground(Color.BLACK);
+		mnNewMenu.setFont(new Font("Sylfaen", Font.PLAIN, 16));
+		menuBar.add(mnNewMenu);
 		mntmListUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarUsuarios lista = new ListarUsuarios();

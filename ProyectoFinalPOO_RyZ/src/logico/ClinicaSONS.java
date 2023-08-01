@@ -29,8 +29,8 @@ public class ClinicaSONS implements Serializable{
 	private static Administrador loginUserAdmin;
 	private static Secretario loginUserSecre;
 	private static Doctor loginUserDoc;
-	
-	
+
+
 	/**
 	 * @param misEnfermedades
 	 * @param misCitas
@@ -100,7 +100,7 @@ public class ClinicaSONS implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
+
 	public static Secretario getLoginUserSecre() {
 		return loginUserSecre;
 	}
@@ -141,14 +141,14 @@ public class ClinicaSONS implements Serializable{
 		misEnfermedades.add(enfermedad);
 		codEnf++;
 	}
-	
+
 	public Doctor insertarDoctor(Doctor doctor) {
 		misPersonas.add(doctor);
-		
+
 		codDoctor++;
 		return doctor;
 	}
-	
+
 
 	public void insertarPersona(Persona persona) {
 		misPersonas.add(persona);
@@ -176,8 +176,8 @@ public class ClinicaSONS implements Serializable{
 		misUsuarios.add(usuario);
 	}
 
-	
-	
+
+
 	public ArrayList<String>  listaDoctores() {
 		ArrayList<String> doctors = new ArrayList<String>() ;
 
@@ -216,7 +216,7 @@ public class ClinicaSONS implements Serializable{
 		return doctor;
 	}
 	 */
-	
+
 	//Confirmación de Login
 	public boolean confirmLoginAdmin(String username, String pass) {
 		int i = 0;
@@ -232,30 +232,32 @@ public class ClinicaSONS implements Serializable{
 	} 
 
 	//Confirmación de Login
-		public boolean confirmLoginSecre(String username, String pass) {
-			int i = 0;
-			boolean login = false;
-			while(i < misUsuarios.size() && !login) {
-				if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)&&misUsuarios.get(i) instanceof Secretario) {
-					loginUserSecre = (Secretario)misUsuarios.get(i);
-					login = true;
-				}
-				i++;
+	public boolean confirmLoginSecre(String username, String pass) {
+		int i = 0;
+		boolean login = false;
+		while(i < misUsuarios.size() && !login) {
+			if (misUsuarios.get(i).getUserName().equals(username) && misUsuarios.get(i).getPass().equals(pass)&&misUsuarios.get(i) instanceof Secretario) {
+				loginUserSecre = (Secretario)misUsuarios.get(i);
+				login = true;
 			}
-			return login;
-		} 
-	
-	
+			i++;
+		}
+		return login;
+	} 
+
+
 	public boolean confirmLoginDoc(String username, String pass) {
 		int i = 0;
 		boolean login = false;
 
 		while(i < misPersonas.size() && !login) {
-			if(misPersonas.get(i) instanceof Doctor)
+			if(misPersonas.get(i) instanceof Doctor) {
 				if (((Doctor)misPersonas.get(i)).getUsuario().equals(username) && ((Doctor)misPersonas.get(i)).getContrasena().equals(pass)) {
 					loginUserDoc = (Doctor)misPersonas.get(i);
 					login = true;
 				}
+			}
+			i++;
 		}
 		return login;
 	} 
@@ -270,6 +272,7 @@ public class ClinicaSONS implements Serializable{
 				user = misUsuarios.get(i);
 				encontrado = true;
 			}
+			i++;
 		}
 		return user;
 	}	
@@ -492,13 +495,12 @@ public class ClinicaSONS implements Serializable{
 	public int buscarIndexDoctorPorCodigo(String codigo) {
 		int aux = -1;
 		boolean encontrado = false;
-		int i =0;
-		while(i<misPersonas.size() && !encontrado) {
+		int i = 0;
+		while(i < misPersonas.size() && !encontrado) {
 
-			if (misPersonas.get(i)instanceof Doctor&&misPersonas.get(i).getCod().equalsIgnoreCase(codigo)) {
+			if (misPersonas.get(i)instanceof Doctor && misPersonas.get(i).getCod().equalsIgnoreCase(codigo)) {
 				encontrado =true;
 				aux = i;
-
 			}
 			i++;
 		}
@@ -506,7 +508,6 @@ public class ClinicaSONS implements Serializable{
 	}
 
 	public void modificarDoctor(Doctor miDoctor) {
-
 		int index = buscarIndexDoctorPorCodigo(miDoctor.getCod());
 		misPersonas.set(index, miDoctor);
 	}
@@ -544,7 +545,7 @@ public class ClinicaSONS implements Serializable{
 
 		while(i < misUsuarios.size() && !encontrado) {
 			if(misUsuarios.get(i) instanceof Administrador && misUsuarios.get(i).getUserName().equalsIgnoreCase(usuario) 
-			&& misUsuarios.get(i).getPass().equalsIgnoreCase(password)) {
+					&& misUsuarios.get(i).getPass().equalsIgnoreCase(password)) {
 				admin = (Administrador)misUsuarios.get(i);
 				encontrado = true;
 			}
@@ -552,7 +553,7 @@ public class ClinicaSONS implements Serializable{
 		}
 		return admin;
 	}
-	
+
 	public Paciente buscarPacienteByConsulta(String codCons) {
 		Paciente pac = null;
 		boolean encontrado = false;
@@ -612,57 +613,57 @@ public class ClinicaSONS implements Serializable{
 		}
 		return cons;
 	}
-	
+
 	//Usuario Mod y Elim
-		public int buscarIndexUsuarioPorUsername(String username) {
-			int aux = -1;
-			boolean encontrado = false;
-			int i =0;
-			while(i<misUsuarios.size() && !encontrado) {
+	public int buscarIndexUsuarioPorUsername(String username) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i =0;
+		while(i<misUsuarios.size() && !encontrado) {
 
-				if (misUsuarios.get(i).getUserName().equalsIgnoreCase(username)) {
-					encontrado =true;
-					aux = i;						
-				}
-				i++;
+			if (misUsuarios.get(i).getUserName().equalsIgnoreCase(username)) {
+				encontrado =true;
+				aux = i;						
 			}
-			return aux;
+			i++;
 		}
+		return aux;
+	}
 
-		public void modificarUsuario(Usuario miUsuario) {
+	public void modificarUsuario(Usuario miUsuario) {
 
-			int index = buscarIndexUsuarioPorUsername(miUsuario.getUserName());
-			misUsuarios.set(index, miUsuario);
-		}
+		int index = buscarIndexUsuarioPorUsername(miUsuario.getUserName());
+		misUsuarios.set(index, miUsuario);
+	}
 
-		public void eliminarUsuario(Usuario selected) {
-			misUsuarios.remove(selected);
-		}
-		
-		public int buscarIndexPacienteByCode(String codPac) {
-			int aux = -1;
-			boolean encontrado = false;
-			int i = 0;
-			while(i < misPersonas.size() && !encontrado) {
-				if (misPersonas.get(i).getCod().equalsIgnoreCase(codPac)) {
-					encontrado =true;
-					aux = i;						
-				}
-				i++;
+	public void eliminarUsuario(Usuario selected) {
+		misUsuarios.remove(selected);
+	}
+
+	public int buscarIndexPacienteByCode(String codPac) {
+		int aux = -1;
+		boolean encontrado = false;
+		int i = 0;
+		while(i < misPersonas.size() && !encontrado) {
+			if (misPersonas.get(i).getCod().equalsIgnoreCase(codPac)) {
+				encontrado =true;
+				aux = i;						
 			}
-			return aux;
+			i++;
 		}
+		return aux;
+	}
 
-		public void modificarPaciente(Paciente miPac) {
-			int index = buscarIndexPacienteByCode(miPac.getCod());
-			misPersonas.set(index, miPac);
-		}
-		public void eliminarPaciente(Paciente miPac) {
-			misPersonas.remove(miPac);
-		}
-	
-	
-	
-	
-	
+	public void modificarPaciente(Paciente miPac) {
+		int index = buscarIndexPacienteByCode(miPac.getCod());
+		misPersonas.set(index, miPac);
+	}
+	public void eliminarPaciente(Paciente miPac) {
+		misPersonas.remove(miPac);
+	}
+
+
+
+
+
 }

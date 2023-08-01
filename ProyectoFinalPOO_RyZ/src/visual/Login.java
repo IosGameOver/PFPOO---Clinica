@@ -73,7 +73,7 @@ public class Login extends JFrame {
 				ObjectInputStream clinicaRead;
 				ObjectOutputStream clinicaWrite;
 				try {
-					clinicaViene = new FileInputStream ("empresa.dat");
+					clinicaViene = new FileInputStream ("clinica.dat");
 					clinicaRead = new ObjectInputStream(clinicaViene);
 					ClinicaSONS temp = (ClinicaSONS)clinicaRead.readObject();
 					ClinicaSONS.setClinica(temp);
@@ -81,14 +81,10 @@ public class Login extends JFrame {
 					clinicaRead.close();
 				} catch (FileNotFoundException e) {
 					try {
-						clinicaVa = new  FileOutputStream("empresa.dat");
+						clinicaVa = new  FileOutputStream("clinica.dat");
 						clinicaWrite = new ObjectOutputStream(clinicaVa);
-						Administrador adm = new Administrador("Elmaca","non");
-						Secretario sec = new Secretario("Secre", "Secre");
-						Doctor doc = new Doctor("69", null, null, null, null, null, null, null, null, null, null, null, "BB", "C", null);
-						ClinicaSONS.getInstance().insertarUsuario(adm);
-						ClinicaSONS.getInstance().insertarUsuario(sec);
-						ClinicaSONS.getInstance().insertarDoctor(doc);
+						Administrador admin = new Administrador("Admin","12345");
+						ClinicaSONS.getInstance().insertarUsuario(admin);
 						clinicaWrite.writeObject(ClinicaSONS.getInstance());
 						clinicaVa.close();
 						clinicaWrite.close();
@@ -98,13 +94,11 @@ public class Login extends JFrame {
 						e1.printStackTrace();
 					}
 				} catch (IOException e) {
-
-
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+				
 				try {
 					Login frame = new Login();
 					frame.setVisible(true);
@@ -143,7 +137,7 @@ public class Login extends JFrame {
 		panel.setBounds(new Rectangle(0, 0, 0, 250));
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setBounds(40, 274, 341, 2);
@@ -153,7 +147,7 @@ public class Login extends JFrame {
 		separator_1.setForeground(Color.BLACK);
 		separator_1.setBounds(40, 367, 341, 2);
 		panel.add(separator_1);
-		
+
 		lblOjoCer = new JLabel("");
 		lblOjoCer.addMouseListener(new MouseAdapter() {
 			@Override
@@ -168,7 +162,6 @@ public class Login extends JFrame {
 		lblOjoCer.setIcon(new ImageIcon(Login.class.getResource("/fotos/Ojo cerrado.png")));
 		lblOjoCer.setBounds(326, 332, 55, 37);
 		panel.add(lblOjoCer);
-		
 
 		lblOjoAbierto = new JLabel("");
 		lblOjoAbierto.addMouseListener(new MouseAdapter() {
@@ -185,33 +178,33 @@ public class Login extends JFrame {
 		lblOjoAbierto.setBounds(326, 332, 55, 37);
 		lblOjoAbierto.setVisible(false);
 		panel.add(lblOjoAbierto);
-		
+
 		label = new JLabel("Contraseña:");
 		label.setFont(new Font("Sylfaen", Font.BOLD, 16));
 		label.setBounds(40, 313, 91, 15);
 		panel.add(label);
-		
+
 		lblNewLabel_1 = new JLabel("Usuario:");
 		lblNewLabel_1.setFont(new Font("Sylfaen", Font.BOLD, 16));
 		lblNewLabel_1.setBounds(40, 220, 73, 15);
 		panel.add(lblNewLabel_1);
-		
+
 		txtPassword = new JPasswordField();
 		txtPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				String con = new String(txtPassword.getPassword());
 				if(con.equalsIgnoreCase("Ingrese su contraseña")) {
-					txtPassword.setText("non");
+					txtPassword.setText("");
 				}
 			}
 		});
 		txtPassword.setForeground(Color.GRAY);
 		txtPassword.setBounds(40, 341, 294, 21);
 		panel.add(txtPassword);
-		txtPassword.setText("Ingrese su contraseña");
+		txtPassword.setText("12345");
 		txtPassword.setBorder(null);
-		
+
 		txtContVisible = new JTextField();
 		txtContVisible.setForeground(Color.GRAY);
 		txtContVisible.addMouseListener(new MouseAdapter() {
@@ -228,13 +221,13 @@ public class Login extends JFrame {
 		txtContVisible.setColumns(10);
 		txtContVisible.setBorder(null);
 		txtContVisible.setVisible(false);
-		
+
 		txtUser = new JTextField();
 		txtUser.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(txtUser.getText().equalsIgnoreCase("Ingrese su nombre de usuario")) {
-					txtUser.setText("");
+					txtUser.setText("Admin");
 				}
 			}
 		});
@@ -242,36 +235,39 @@ public class Login extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(txtUser.getText().equalsIgnoreCase("Ingrese su nombre de usuario")) {
-					txtUser.setText("Elmaca");
+					txtUser.setText("Admin");
 				}
 			}
 		});
 		txtUser.setBorder(null);
 		txtUser.setFont(new Font("Sylfaen", Font.PLAIN, 15));
-		
+
 		txtUser.setForeground(Color.GRAY);
 		txtUser.setText("Ingrese su nombre de usuario");
 		txtUser.setBounds(40, 248, 341, 21);
 		panel.add(txtUser);
 		txtUser.setColumns(10);
 
-		
+
 
 		btnIngresar = new JButton("Iniciar Sesi\u00F3n");
 		btnIngresar.setBackground(Color.WHITE);
 		btnIngresar.setFont(new Font("Sylfaen", Font.BOLD, 15));
-		btnIngresar.setBounds(40, 431, 341, 29);
+		btnIngresar.setBounds(40, 419, 341, 29);
 		panel.add(btnIngresar);
 		btnIngresar.setForeground(Color.BLACK);
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String usuario = txtUser.getText();
 				char[] arrayC = txtPassword.getPassword();
-				String password = new String(arrayC);
-
+				String password = null;
+				if(txtPassword.isVisible()) {
+					password = new String(arrayC);
+				}else{
+					password = txtContVisible.getText();
+				}
+				System.out.println(password);
 				if (ClinicaSONS.getInstance().confirmLoginAdmin(usuario, password)||ClinicaSONS.getInstance().confirmLoginSecre(usuario, password)||ClinicaSONS.getInstance().confirmLoginDoc(usuario, password)) {
-				//	Principal main = new Principal();
-				//	main.setVisible(true);
 					try {
 						dispose();
 						Principal frame = new Principal();
@@ -279,30 +275,24 @@ public class Login extends JFrame {
 					} catch (Exception exception) {
 						exception.printStackTrace();
 					}
-
 				}else {
 					JOptionPane.showMessageDialog(null, "Usuario o constraseña incorrecto(s)","Ha ocurrido un error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
+
+
 		});
 		lblNewLabel = new JLabel("INICIO DE SESI\u00D3N");
 		lblNewLabel.setFont(new Font("Sylfaen", Font.BOLD, 30));
 		lblNewLabel.setBounds(64, 140, 285, 37);
 		panel.add(lblNewLabel);
-		
+
 		btnIngresar.setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 		JLabel Fondo = new JLabel("");
 		Fondo.setIcon(new ImageIcon(Login.class.getResource("/fotos/FondoLogin.png")));
 		Fondo.setBounds(0, 0, 934, 505);
 		panel.add(Fondo);
-				
-		
-		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(0).getUserName());
-		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(0).getPass());
-		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(1).getUserName());
-		System.out.println(ClinicaSONS.getInstance().getMisUsuarios().get(1).getPass());
-		System.out.println(((Doctor)ClinicaSONS.getInstance().getMisPersonas().get(0)).getUsuario());
-		System.out.println(((Doctor)ClinicaSONS.getInstance().getMisPersonas().get(0)).getContrasena());
-		System.out.println(ClinicaSONS.getInstance().getMisPersonas());
+
+
 	}
 }

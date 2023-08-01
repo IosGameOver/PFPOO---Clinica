@@ -24,14 +24,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class ListarPacientes extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable tableDoc;
 	private Doctor miDoc = null;
-	private DefaultTableModel model;
-	private Object[] row = null;
+	private static DefaultTableModel model;
+	private static Object[] row = null;
 	private JButton btnEliminar;
 	private JButton btnHistorialVacuna;
 	private JButton btnVerHistorialMed;
@@ -65,18 +66,18 @@ public class ListarPacientes extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(12, 13, 820, 299);
 		contentPanel.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane, BorderLayout.CENTER);
 		{
 			tableDoc = new JTable();
-			
+
 			tableDoc.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
@@ -103,11 +104,12 @@ public class ListarPacientes extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				btnVerHistorialMed = new JButton("Ver historial m\u00E9dico");
+				btnVerHistorialMed.setBackground(Color.WHITE);
 				btnVerHistorialMed.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						HistorialMedico hist = new HistorialMedico(null, selected);
-						hist.setEnabled(false);
-						hist.setVisible(false);
+						HistorialMedico hist = new HistorialMedico(selected);
+						hist.setModal(true);
+						hist.setVisible(true);
 						btnEliminar.setEnabled(false);
 						btnHistorialVacuna.setEnabled(false);
 						btnVerHistorialMed.setEnabled(false);
@@ -119,6 +121,7 @@ public class ListarPacientes extends JDialog {
 			}
 			{
 				btnHistorialVacuna = new JButton("Ver historial de Vacunaci\u00F3n");
+				btnHistorialVacuna.setBackground(Color.WHITE);
 				btnHistorialVacuna.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						IndicarVacunas ind = new IndicarVacunas(selected, null);
@@ -135,6 +138,7 @@ public class ListarPacientes extends JDialog {
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
+				btnEliminar.setBackground(Color.WHITE);
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						int option = JOptionPane.showConfirmDialog(null, "Está seguro(a) que desea eliminar el paciente con código: "+selected.getCod(),"Confirmación",JOptionPane.OK_CANCEL_OPTION);
@@ -145,7 +149,7 @@ public class ListarPacientes extends JDialog {
 							btnVerHistorialMed.setEnabled(false);
 							llenarTabla();
 						}
-						
+
 					}
 				});
 				btnEliminar.setEnabled(false);
@@ -156,6 +160,7 @@ public class ListarPacientes extends JDialog {
 			}
 			{
 				JButton btnCancelar = new JButton("Cancelar");
+				btnCancelar.setBackground(Color.WHITE);
 				btnCancelar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnCancelar.setActionCommand("Cancelar");
 				buttonPane.add(btnCancelar);
@@ -163,36 +168,25 @@ public class ListarPacientes extends JDialog {
 		}
 		llenarTabla();
 	}
-	
-	public void llenarTabla() {
+
+	public static void llenarTabla() {
 		model.setRowCount(0);
 		row = new Object[model.getColumnCount()];
-		if(miDoc != null) {
-			for (Paciente aux : miDoc.getMisPacientes()) {
-					row[0] = aux.getCod();
-					row[1] = aux.getCedula();
-					row[2] = aux.getNombre();
-					row[3] = aux.getTelefono();
-					row[4] = aux.getSexo();
-					row[5] = ClinicaSONS.getInstance().calcularEdad(aux.getFechaNacimiento(), new Date());
-					
-					model.addRow(row);
+
+		for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if(aux instanceof Paciente) {
+				row[0] = aux.getCod();
+				row[1] = aux.getCedula();
+				row[2] = aux.getNombre();
+				row[3] = aux.getTelefono();
+				row[4] = aux.getSexo();
+				row[5] = ClinicaSONS.getInstance().calcularEdad(aux.getFechaNacimiento(), new Date());
+
+				model.addRow(row);
 			}
-		}else {
-			for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
-				if(aux instanceof Paciente) {
-					row[0] = aux.getCod();
-					row[1] = aux.getCedula();
-					row[2] = aux.getNombre();
-					row[3] = aux.getTelefono();
-					row[4] = aux.getSexo();
-					row[5] = ClinicaSONS.getInstance().calcularEdad(aux.getFechaNacimiento(), new Date());
-					
-					model.addRow(row);
-				}
-			}
+
 		}
-		
+
 	}
-	
+
 }

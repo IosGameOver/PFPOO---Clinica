@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 import logico.ClinicaSONS;
 import logico.Consulta;
@@ -91,7 +92,7 @@ public class HistorialMedico extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			HistorialMedico dialog = new HistorialMedico(null,null);
+			HistorialMedico dialog = new HistorialMedico(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -103,8 +104,8 @@ public class HistorialMedico extends JDialog {
 	 * Create the dialog.
 	 * @param pac 
 	 */
-	public HistorialMedico(Doctor doc,Paciente pac) {
-		this.miDoc  = doc;
+	public HistorialMedico(Paciente pac) {
+		this.miDoc = ClinicaSONS.getLoginUserDoc();
 		this.miPac = pac;
 		setBounds(100, 100, 1090, 1030);
 		setLocationRelativeTo(null);
@@ -179,9 +180,11 @@ public class HistorialMedico extends JDialog {
 			}
 			{
 				dtNacimiento = new JDateChooser();
-				dtNacimiento.setDateFormatString("d/MM/ yyyy");
+				dtNacimiento.setDateFormatString("d/MM/yyyy");
 				dtNacimiento.setBackground(Color.WHITE);
 				dtNacimiento.setBounds(784, 48, 254, 22);
+				JTextFieldDateEditor edit = (JTextFieldDateEditor) dtNacimiento.getDateEditor();
+				edit.setEditable(false);
 				panel.add(dtNacimiento);
 			}
 			{
@@ -539,7 +542,7 @@ public class HistorialMedico extends JDialog {
 				columnModel.getColumn(0).setPreferredWidth(60);
 				columnModel.getColumn(1).setPreferredWidth(213);
 				columnModel.getColumn(2).setPreferredWidth(213);
-				tablaConsultas.setRowHeight(60);
+				tablaConsultas.setRowHeight(20);
 				scrollPane.setViewportView(tablaConsultas);
 			}
 			{
@@ -627,12 +630,12 @@ public class HistorialMedico extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
-				if(miPac != null && miDoc == null) {
+				if(miPac != null) {
 					btnRegistrar.setText("Modificar");
 				}
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if(miPac != null && miDoc == null) {
+						if(miPac != null) {
 							miPac.getMiHistorial().setNumRecord(txtCodHist.getText());
 							miPac.setCedula(txtCed.getText());
 							miPac.setNombre(txtNombre.getText());
@@ -651,6 +654,8 @@ public class HistorialMedico extends JDialog {
 							miPac.setFechaNacimiento(dtNacimiento.getDate());
 							ClinicaSONS.getInstance().modificarPaciente(miPac);
 							JOptionPane.showMessageDialog(null,  "La modificación fue realizada con éxito", "¡Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
+							ListarPacientes.llenarTabla();
+							HistorialConsulta.cargarPaciente(miPac);
 							dispose();
 						}else {
 							String codHist = txtCodHist.getText();
@@ -703,13 +708,9 @@ public class HistorialMedico extends JDialog {
 								Historial miHist = new Historial(codHis);
 								ClinicaSONS.getInstance().insertarHistorial(miHist);
 								Paciente pac = new Paciente(codPac, ced, nom, sexo, estCiv, tel, fNac, dir, tpSangre, cantHijos, fuma, alc, caf, drog, tieAle, ale, tieCir, cir, tieTrans, trans, tieTrau, trau, antPer, antFam, miHist, antFis);
-								ClinicaSONS.getInstance().insertarPersona(pac);
-								miDoc.agregarPaciente(pac);
-								JOptionPane.showMessageDialog(null, "Paciente agregado con éxito", "¡Operación exitosa!",JOptionPane.INFORMATION_MESSAGE);
-								HistorialConsulta histC = new HistorialConsulta(miDoc,pac,null);
-								histC.setModal(true);
-								histC.setVisible(true);
-								dispose();
+								HistorialConsulta.cargarPaciente(pac);
+								txtCodHist.setText("H-"+ClinicaSONS.codHist);
+								txtCodPac.setText("P-"+ClinicaSONS.codPac);
 							}
 						}
 					}
@@ -722,6 +723,11 @@ public class HistorialMedico extends JDialog {
 			}
 			{
 				btnCancelar = new JButton("Cancelar");
+				btnCancelar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 				btnCancelar.setBackground(Color.WHITE);
 				btnCancelar.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 				btnCancelar.setActionCommand("Cancel");
@@ -738,9 +744,9 @@ public class HistorialMedico extends JDialog {
 		rowConsulta = new Object[modelConsulta.getColumnCount()];
 		if(miPac != null) {
 			for (Consulta aux : miPac.getMiHistorial().getmisDatosImportantes()) {
-				rowConsulta[1] = aux.getCod();
-				rowConsulta[2] = aux.getMotivo();
-				rowConsulta[3] = aux.getDiagnostico();
+				rowConsulta[0] = aux.getCod();
+				rowConsulta[1] = aux.getMotivo();
+				rowConsulta[2] = aux.getDiagnostico();
 				
 				modelConsulta.addRow(rowConsulta);
 			}
@@ -752,25 +758,76 @@ public class HistorialMedico extends JDialog {
 		rowVacuna = new Object[modelVacuna.getColumnCount()];
 		if(miPac != null) {
 			for (Vacuna aux : miPac.getMisVacunas()) {
-				rowVacuna[1] = aux.getCodigo();
-				rowVacuna[2] = aux.getNombre();
-				rowVacuna[3] = aux.getDescripcion();
+				rowVacuna[0] = aux.getCodigo();
+				rowVacuna[1] = aux.getNombre();
+				rowVacuna[2] = aux.getDescripcion();
 				
 				modelVacuna.addRow(rowVacuna);
 			}
 		}
 	}
+	/*private final JPanel contentPanel = new JPanel();
+	private JTextField txtCodPac;
+	private JTextField txtCed;
+	private JTextField txtTel;
+	private JTextField txtAntPers;
+	private JTextField txtAntFam;
+	private JTextField txtAntFis;
+	private JTable tablaConsultas;
+	private DefaultTableModel modelConsulta;
+	private DefaultTableModel modelVacuna;
+	private Object[] rowConsulta = null;
+	private Object[] rowVacuna = null;
+	private JTextField txtCodHist;
+	private JTable tablaVacunas;
+	private JButton btnCancelar;
+	private JComboBox cmbEstCivil;
+	private JComboBox cmbSexo;
+	private JTextField txtNombre;
+	private JComboBox cmbTpSangre;
+	private JSpinner spnCantHijos;
+	private JComboBox cmbFuma;
+	private JComboBox cmbAlcohol;
+	private JComboBox cmbCafe;
+	private JComboBox cmbDrogas;
+	private JDateChooser dtNacimiento;
+	private Paciente miPac = null;
+	private JTextField txtDir;
+	private JTextField txtCirugias;
+	private JTextField txtAlergia;
+	private JTextField txtTrauma;
+	private JTextField txtTransf;
+	private JComboBox cmbTieneAlergia;
+	private JComboBox cmbTieneCir;
+	private JComboBox cmbTieneTrau;
+	private JComboBox cmbTieneTransf;
+	private Doctor miDoc = null;
+	private Consulta selectedCons = null;
+	private Vacuna selectedVac = null;
+	private JButton btnVerVacuna;
+	private JButton btnVerCon;*/		
+	
 	
 	public void cargarDatos() {
 		if(miPac != null) {
 			txtCodHist.setText(miPac.getMiHistorial().getNumRecord());
 			txtCed.setText(miPac.getCedula());
+			txtCed.setEditable(false);
 			txtNombre.setText(miPac.getNombre());
 			txtTel.setText(miPac.getTelefono());
 			txtAntPers.setText(miPac.getAntecedentesPersonales());
 			txtAntFam.setText(miPac.getAntecedentesFamiliares());
 			txtAntFis.setText(miPac.getAntecedentesFisiologicos());
 			txtDir.setText(miPac.getDireccion());
+			txtAlergia.setText(miPac.getAlergias());
+			txtTransf.setText(miPac.getTransfusiones());
+			txtTrauma.setText(miPac.getTraumatismo());
+			txtCirugias.setText(miPac.getCirugias());
+			spnCantHijos.setValue(miPac.getCantHijos());
+			cmbTieneAlergia.setSelectedItem(miPac.getTieneAlergias());
+			cmbTieneCir.setSelectedItem(miPac.getTieneCirugias());
+			cmbTieneTransf.setSelectedItem(miPac.getTieneTransfusion());
+			cmbTieneTrau.setSelectedItem(miPac.getTieneTraumatismo());
 			cmbEstCivil.setSelectedItem(miPac.getEstadoCivil());
 			cmbSexo.setSelectedItem(miPac.getSexo());
 			cmbTpSangre.setSelectedItem(miPac.getTipoSangre());
