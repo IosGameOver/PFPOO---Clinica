@@ -201,21 +201,7 @@ public class ClinicaSONS implements Serializable{
 		}
 		return doc;
 	}
-	/*
-	  public Doctor buscarDoctorPorContrasennaExistente(String claveDoctor) {
-		Doctor doctor = null; 
-		boolean encontrado = false;
-
-		for (Persona persona : misPersonas) {
-			if (persona instanceof Doctor && ((Doctor) persona).getUsuario().equalsIgnoreCase(claveDoctor)) {
-				doctor =(Doctor) persona;
-				encontrado = true;
-
-			}
-		}
-		return doctor;
-	}
-	 */
+	
 
 	//Confirmación de Login
 	public boolean confirmLoginAdmin(String username, String pass) {
