@@ -119,7 +119,7 @@ public class ListarEnfermedad extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegEnfermedad actualizar = new RegEnfermedad(selected,null);
+						RegEnfermedad actualizar = new RegEnfermedad(selected,miAdmin);
 						actualizar.setModal(true);
 						actualizar.setVisible(true);
 					}
@@ -153,7 +153,7 @@ public class ListarEnfermedad extends JDialog {
 				getRootPane().setDefaultButton(btnEliminar);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Cancelar");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 

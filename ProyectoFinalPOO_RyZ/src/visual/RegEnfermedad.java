@@ -58,17 +58,17 @@ public class RegEnfermedad extends JDialog{
 	/**
 	 * Launch the application.
 	 */
-/*
+
 	public static void main(String[] args) {
 		try {
-			RegEnfermedad dialog = new RegEnfermedad(Enfermedad selected);
+			RegEnfermedad dialog = new RegEnfermedad(null, null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-*/
+
 	/**
 	 * Create the dialog.
 	 * @param selected 
@@ -368,6 +368,7 @@ public class RegEnfermedad extends JDialog{
 				miEnfermedad.setCodigo(txtCodigo.getText());
 				miEnfermedad.setDescripcion(txtDescripcion.getText());
 				miEnfermedad.setNombre(txtNombre.getText());
+		//		miEnfermedad.setSintomas((ArrayList<String>) Arrays.asList(txtSin1.getText(),txtSin2.getText()));
 				miEnfermedad.setSintomas((ArrayList<String>) Arrays.asList(txtSin1.getText(),txtSin2.getText(),txtSin3.getText(),txtSin3.getText(),txtSin4.getText(),txtSin5.getText(),txtSin6.getText(),txtSin7.getText(),txtSin8.getText(),txtSin9.getText()));
 				
 				ClinicaSONS.getInstance().modificarEnfermedad(miEnfermedad);
@@ -418,16 +419,37 @@ public class RegEnfermedad extends JDialog{
 			txtCodigo.setText(miEnfermedad.getCodigo());
 			txtDescripcion.setText(miEnfermedad.getDescripcion());
 			txtNombre.setText(miEnfermedad.getNombre());
-			txtSin1.setText(miEnfermedad.getSintomas().get(0));
-			txtSin2.setText(miEnfermedad.getSintomas().get(1));
-			txtSin3.setText(miEnfermedad.getSintomas().get(2));
-			txtSin4.setText(miEnfermedad.getSintomas().get(3));
-			txtSin5.setText(miEnfermedad.getSintomas().get(4));
-			txtSin6.setText(miEnfermedad.getSintomas().get(5));
-			txtSin7.setText(miEnfermedad.getSintomas().get(6));
-			txtSin8.setText(miEnfermedad.getSintomas().get(7));
-			txtSin9.setText(miEnfermedad.getSintomas().get(8));
+		
+			if (!miEnfermedad.getSintomas().get(0).isEmpty()) {
+				txtSin1.setText(miEnfermedad.getSintomas().get(0));
+				}
+			if (!miEnfermedad.getSintomas().get(1).isEmpty()) {
+				txtSin2.setText(miEnfermedad.getSintomas().get(1));
+
+				}
+			if (!miEnfermedad.getSintomas().get(2).isEmpty()) {
+				txtSin3.setText(miEnfermedad.getSintomas().get(2));
+				}
+			if (!miEnfermedad.getSintomas().get(3).isEmpty()) {
+				txtSin4.setText(miEnfermedad.getSintomas().get(3));
+				}
+			if (!miEnfermedad.getSintomas().get(4).isEmpty()) {
+				txtSin5.setText(miEnfermedad.getSintomas().get(4));
+				}
 			
+	/*		if (!miEnfermedad.getSintomas().get(5).isEmpty()) {
+				txtSin6.setText(miEnfermedad.getSintomas().get(5));
+				}
+			if (!miEnfermedad.getSintomas().get(6).isEmpty()) {
+				txtSin7.setText(miEnfermedad.getSintomas().get(6));
+				}
+			if (!miEnfermedad.getSintomas().get(7).isEmpty()) {
+				txtSin8.setText(miEnfermedad.getSintomas().get(7));
+				}
+			if (!miEnfermedad.getSintomas().get(8).isEmpty()&&miEnfermedad.getSintomas().get(8)!=null) {
+				txtSin9.setText(miEnfermedad.getSintomas().get(8));
+				}*/
+						
 		}
 	}
 	

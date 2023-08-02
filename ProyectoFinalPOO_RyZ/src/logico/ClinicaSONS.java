@@ -389,6 +389,7 @@ public class ClinicaSONS implements Serializable{
 		for (Persona aux : misPersonas) {
 			if (aux instanceof Paciente) {
 				if (((Paciente) aux).getMisVacunas().equals(vacuna)) {
+					
 					cant++;
 				}
 			}
@@ -396,7 +397,66 @@ public class ClinicaSONS implements Serializable{
 		}
 		return cant;
 	}
+	
+	
+	public int cantidadDePacientesConEnfermedad(String miEnfermedad) {
+		int cant = 0;
+		int i= 0;
+		int cantidadAntigua = 0;
+		Paciente paciente = null;
 
+		for (Persona aux : misPersonas) {
+			if (aux instanceof Paciente) {
+				while (i<((Paciente)aux).getMisConsultas().size()) {
+					if (((Paciente)aux).getMisConsultas().get(i).getEnfermedad().getNombre().equalsIgnoreCase(miEnfermedad)&&pacienteNoRepetido(((Paciente)aux))) {
+						cant++;
+					
+					}
+						
+					i++;
+					
+				}
+			}
+
+		}
+		
+		return cant;
+	}
+
+	
+	public boolean pacienteNoRepetido(Paciente aux) {
+		Paciente paciente = null;
+		boolean noRepetido = true;
+		while (noRepetido) {
+				if(paciente!=aux) {
+					paciente = aux;
+					}else {
+						noRepetido = false;
+					} 
+			
+		} 		
+			
+	return noRepetido;
+	}
+
+	public int cantidadDeDoctoresPorEspecialidad(String especialidad) {
+		
+		int cant = 0;
+		Doctor Doctor = null;
+
+		for (Persona aux : misPersonas) {
+			if (aux instanceof Doctor) {
+				if (((Doctor) aux).getEspecialidad().equalsIgnoreCase(especialidad)) {
+					
+					cant++;
+				}
+			}
+
+		}
+		return cant;
+	}
+	
+	
 	public Historial buscarHistorialByCod(String numRecord) {
 		Historial hist = null;
 		boolean  encontrado = false;

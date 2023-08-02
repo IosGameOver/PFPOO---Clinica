@@ -328,7 +328,7 @@ public class Principal extends JFrame {
 		mnNewMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					sfd = new Socket("127.0.0.1",7000);
+					sfd = new Socket("localhost",8000);
 					EntradaSocket = new DataInputStream(new FileInputStream (new File ("clinica.dat")));
 					SalidaSocket = new DataOutputStream(sfd.getOutputStream());
 					int unByte;

@@ -11,7 +11,7 @@ import javax.swing.border.EtchedBorder;
 import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Doctor;
-
+import logico.Enfermedad;
 import logico.Secretario;
 import logico.Usuario;
 
@@ -293,6 +293,9 @@ public class Login extends JFrame {
 		Fondo.setBounds(0, 0, 934, 505);
 		panel.add(Fondo);
 
-
+		for (Enfermedad enf : ClinicaSONS.getInstance().getMisEnfermedades()) {
+			System.out.println(ClinicaSONS.getInstance().getMisEnfermedades());
+		}	
 	}
+
 }
