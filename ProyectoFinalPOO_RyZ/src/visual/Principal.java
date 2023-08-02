@@ -8,11 +8,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-/*import org.jfree.chart.*;
+import org.jfree.chart.*;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;*/
+import org.jfree.data.general.DefaultPieDataset;
 
 import logico.Administrador;
 import logico.ClinicaSONS;
@@ -32,15 +32,7 @@ import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -333,37 +325,28 @@ public class Principal extends JFrame {
 		mnRespaldar = new JMenu("Respaldar");
 		mnRespaldar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try
-				{
-					sfd = new Socket("127.0.0.1",8000);
-					EntradaSocket = new DataInputStream(new FileInputStream (new File ("Clinica_respaldo.dat")));
+				try {
+					sfd = new Socket("localhost",8000);
+					EntradaSocket = new DataInputStream(new FileInputStream (new File ("clinica.dat")));
 					SalidaSocket = new DataOutputStream(sfd.getOutputStream());
 					int unByte;
-					try
-					{
-						while ((unByte = EntradaSocket.read()) != -1) {
+					
+					try {
+						while((unByte = EntradaSocket.read()) != -1) {
 							SalidaSocket.write(unByte);
 							SalidaSocket.flush();
 						}
-						
-					}
-					catch (IOException ioe)
-					{
+					} catch (IOException ioe) {
 						System.out.println("Error: "+ioe);
 					}
-				}
-				catch (UnknownHostException uhe)
-				{
+				} catch (UnknownHostException uhe) {
 					System.out.println("No se puede acceder al servidor.");
 					System.exit(1);
-				}
-				catch (IOException ioe)
-				{
+				}catch (IOException ioe) {
 					System.out.println("Comunicación rechazada.");
 					System.exit(1);
 				}
 			}
-		
 		});
 		mnRespaldar.setForeground(Color.BLACK);
 		mnRespaldar.setFont(new Font("Sylfaen", Font.PLAIN, 16));
@@ -401,7 +384,91 @@ public class Principal extends JFrame {
 		});
 		contentPane.add(btnCerrarSesion, BorderLayout.SOUTH);
 		
+		 // Fuente de Datos - Gráfica de vacunas por cantidad de personas
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if (aux instanceof Paciente) {
+				
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Covid-19"), "Covid-19" , "Covid-19");
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Viruela"), "Viruela" , "Viruela");
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Influeza"), "Influeza" , "Influeza");
+				
+			
+			
+			}
+		}
+        
+         
+        // Creando el Grafico
+        JFreeChart chart = ChartFactory.createBarChart3D
+        ("Cantidad de Vacunas por Pacientes","Vacunas", "Pacientes Vacunados", dataset, PlotOrientation.VERTICAL, true,true, false);
+        chart.setBackgroundPaint(null);
+        chart.getTitle().setPaint(Color.black); 
+        CategoryPlot p = chart.getCategoryPlot(); 
+        p.setRangeGridlinePaint(Color.red); 
+        // Mostrar Grafico
+        ChartPanel chartPanel = new ChartPanel(chart);
+        panel.add(chartPanel);
+        
+        
+     // Fuente de Datos - Gráfica de cantidad de personas enfermas
+        DefaultCategoryDataset dataEnfer = new DefaultCategoryDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+ 			if (aux instanceof Paciente) {
+ 				
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Resfriado"),("Resfriado común"),("Resfriado común"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Influenza"),("Influenza (gripe)"),("Influenza"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Sinusitis"),("Sinusitis (infección de los senos paranasales)"),("Sinusitis"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Bronquitis aguda"),("Bronquitis aguda (resfriado de pecho)"),("Bronquitis aguda"));
+ 			
+ 			
+ 			}
+ 		}
+        
+        
+        // Creando el Grafico
+        JFreeChart chartEnfer = ChartFactory.createBarChart3D("Cantidad de Pacientes Enfermos","Enfermedades", "Pacientes Enfermedades", dataset, PlotOrientation.VERTICAL, true,true, false);
+        chartEnfer.setBackgroundPaint(null);
+        chartEnfer.getTitle().setPaint(Color.black); 
+        CategoryPlot pEn = chartEnfer.getCategoryPlot(); 
+        pEn.setRangeGridlinePaint(Color.blue); 
+        // Mostrar Grafico
+        ChartPanel chartPanelEnfer = new ChartPanel(chartEnfer);
+        panel.add(chartPanelEnfer);
+ 	
+         
+        
+        
+	
+		//Cantidad de doctores por especialidad.
+        
+        DefaultPieDataset dataDoc = new DefaultPieDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if (aux instanceof Doctor) {
+				
+				dataDoc.setValue("Oftalmología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Oftalmología"));
+				dataDoc.setValue("Neumología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Neumología"));
+				dataDoc.setValue("Urología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Urología"));
+				dataDoc.setValue("Cardiología Clínica",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Cardiología Clínica"));
+				dataDoc.setValue("Pediatría",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Pediatría"));
+				dataDoc.setValue("Gastroenterología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Gastroenterología"));
+								
+			}
+		} 
 		
+        //Creando el Grafico
+        JFreeChart chartDoc = ChartFactory.createPieChart("Proporción de Doctores y su especialidades", dataDoc, true, true,false);
+ 
+        // Crear el Panel del Grafico con ChartPanel
+        chartDoc.setBackgroundPaint(null);
+       
+        
+        ChartPanel chartPanelDoc = new ChartPanel(chartDoc);
+        panel.add(chartPanelDoc);
+    
+        
+
+	
 		
 		
 		
@@ -427,7 +494,7 @@ public class Principal extends JFrame {
 				mntmProgCita.setEnabled(false);
 				mntmRegVacu.setEnabled(false);
 				mntmRegDoctor.setEnabled(false);
-				JOptionPane.showMessageDialog(null, "Doctor reconocido, bienvenido Doctor.", "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Doctor reconocido, bienvenido Doctor: " +doc.getNombre(), "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
 				
 			}if (secre!=null) {
 				mnAdministracion.setEnabled(false);

@@ -31,14 +31,7 @@ public class ClinicaSONS implements Serializable{
 	private static Doctor loginUserDoc;
 
 
-	/**
-	 * @param misEnfermedades
-	 * @param misCitas
-	 * @param misConsultas
-	 * @param misVacunas
-	 * @param misHistoriales
-	 * @param misPersonas
-	 */
+	
 	private ClinicaSONS() {
 		super();
 		this.misEnfermedades = new ArrayList<Enfermedad>();
@@ -388,9 +381,7 @@ public class ClinicaSONS implements Serializable{
 	public int cantidadDePacientesConEnfermedad(String miEnfermedad) {
 		int cant = 0;
 		int i= 0;
-		int cantidadAntigua = 0;
 		Paciente paciente = null;
-
 		for (Persona aux : misPersonas) {
 			if (aux instanceof Paciente) {
 				while (i<((Paciente)aux).getMisConsultas().size()) {
@@ -398,7 +389,7 @@ public class ClinicaSONS implements Serializable{
 						cant++;
 					
 					}
-						
+										
 					i++;
 					
 				}

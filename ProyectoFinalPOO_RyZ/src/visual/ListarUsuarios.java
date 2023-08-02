@@ -37,10 +37,7 @@ public class ListarUsuarios extends JDialog {
 	private JTable table;
 	private DefaultTableModel model;
 	private Object[] row;
-	
-
 	private Usuario selected = null;
-	private Doctor selectedD = null;
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JScrollPane scrollPane;
@@ -130,9 +127,7 @@ public class ListarUsuarios extends JDialog {
 				btnModificar.setEnabled(true);
 				btnEliminar.setEnabled(true);
 				selected = ClinicaSONS.getInstance().buscarUsuarioPorUser(table.getValueAt(index, 0).toString());
-	//Añadido
-				selectedD = ClinicaSONS.getInstance().buscarDoctorPorUsuario(table.getValueAt(index, 0).toString());
-			}
+		}
 		
 			}
 		});
