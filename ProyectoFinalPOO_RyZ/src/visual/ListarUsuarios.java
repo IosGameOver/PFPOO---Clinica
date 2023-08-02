@@ -40,7 +40,7 @@ public class ListarUsuarios extends JDialog {
 	
 
 	private Usuario selected = null;
-//	private Doctor selected = null;
+	private Doctor selectedD = null;
 	private JButton btnModificar;
 	private JButton btnEliminar;
 	private JScrollPane scrollPane;
@@ -130,6 +130,8 @@ public class ListarUsuarios extends JDialog {
 				btnModificar.setEnabled(true);
 				btnEliminar.setEnabled(true);
 				selected = ClinicaSONS.getInstance().buscarUsuarioPorUser(table.getValueAt(index, 0).toString());
+	//Añadido
+				selectedD = ClinicaSONS.getInstance().buscarDoctorPorUsuario(table.getValueAt(index, 0).toString());
 			}
 		
 			}
@@ -203,7 +205,7 @@ public class ListarUsuarios extends JDialog {
 		
 		llenarTabla("Todos");
 		
-		
+	
 	}
 
 	
@@ -221,6 +223,7 @@ public class ListarUsuarios extends JDialog {
 				}
 					model.addRow(row);
 			} 
+	
 		}else if(tipo.equalsIgnoreCase("Administrador/a")) {
 			for (Usuario  aux: ClinicaSONS.getInstance().getMisUsuarios()) {
 				if(aux instanceof Administrador) {

@@ -14,7 +14,8 @@ public class Servidor extends Thread {
 	public static void main(String[] args) {
 		ServerSocket sfd = null;
 		try {
-			sfd = new ServerSocket(8000);
+			sfd = new ServerSocket(65001);
+			
 		} catch (IOException ioe) {
 			System.out.println("Comunicación rechazada. "+ioe);
 			System.exit(1);

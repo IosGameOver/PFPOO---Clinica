@@ -8,10 +8,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import org.jfree.chart.*;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 import logico.Administrador;
 import logico.ClinicaSONS;
-import logico.Doctor;
+import logico.*;
 
 
 
@@ -69,7 +74,7 @@ public class Principal extends JFrame {
 	private JMenuItem mntmListarPaciente;
 	private JPanel panelReloj;
 	private JPanel panel;
-	private JMenu mnNewMenu;
+	private JMenu mnRespaldar;
 	private DataInputStream EntradaSocket;
 	private DataOutputStream SalidaSocket;
 	static Socket sfd = null;
@@ -90,6 +95,7 @@ public class Principal extends JFrame {
 		});
 	}
 
+	
 	/**
 	 * Create the frame.
 	 * @param doc 
@@ -324,8 +330,8 @@ public class Principal extends JFrame {
 		mntmListUser.setFont(new Font("Sylfaen", Font.PLAIN, 16));
 		mnAdministracion.add(mntmListUser);
 		
-		mnNewMenu = new JMenu("Respaldar");
-		mnNewMenu.addActionListener(new ActionListener() {
+		mnRespaldar = new JMenu("Respaldar");
+		mnRespaldar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					sfd = new Socket("localhost",8000);
@@ -350,9 +356,9 @@ public class Principal extends JFrame {
 				}
 			}
 		});
-		mnNewMenu.setForeground(Color.BLACK);
-		mnNewMenu.setFont(new Font("Sylfaen", Font.PLAIN, 16));
-		menuBar.add(mnNewMenu);
+		mnRespaldar.setForeground(Color.BLACK);
+		mnRespaldar.setFont(new Font("Sylfaen", Font.PLAIN, 16));
+		menuBar.add(mnRespaldar);
 		mntmListUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListarUsuarios lista = new ListarUsuarios();
@@ -376,16 +382,103 @@ public class Principal extends JFrame {
 		btnCerrarSesion = new JButton("Cerrar ses\u00F3n");
 		btnCerrarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ClinicaSONS.setLoginUserAdmin(null);
-				ClinicaSONS.setLoginUserDoc(null);
-				ClinicaSONS.setLoginUserSecre(null);
+				
+				dispose();
+				
 				Login loginScreen = new Login();
 				loginScreen.setVisible(true);
-				dispose();
 				
 			}
 		});
 		contentPane.add(btnCerrarSesion, BorderLayout.SOUTH);
+		
+		 // Fuente de Datos - Gráfica de vacunas por cantidad de personas
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if (aux instanceof Paciente) {
+				
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Covid-19"), "Covid-19" , "Covid-19");
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Viruela"), "Viruela" , "Viruela");
+				dataset.setValue(ClinicaSONS.getInstance().cantidadDePacientesPorVacuna("Influeza"), "Influeza" , "Influeza");
+				
+			
+			
+			}
+		}
+        
+         
+        // Creando el Grafico
+        JFreeChart chart = ChartFactory.createBarChart3D
+        ("Cantidad de Vacunas por Pacientes","Vacunas", "Pacientes Vacunados", dataset, PlotOrientation.VERTICAL, true,true, false);
+        chart.setBackgroundPaint(null);
+        chart.getTitle().setPaint(Color.black); 
+        CategoryPlot p = chart.getCategoryPlot(); 
+        p.setRangeGridlinePaint(Color.red); 
+        // Mostrar Grafico
+        ChartPanel chartPanel = new ChartPanel(chart);
+        panel.add(chartPanel);
+        
+        
+     // Fuente de Datos - Gráfica de cantidad de personas enfermas
+        DefaultCategoryDataset dataEnfer = new DefaultCategoryDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+ 			if (aux instanceof Paciente) {
+ 				
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Resfriado"),("Resfriado común"),("Resfriado común"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Influenza"),("Influenza (gripe)"),("Influenza"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Sinusitis"),("Sinusitis (infección de los senos paranasales)"),("Sinusitis"));
+ 				dataEnfer.setValue(ClinicaSONS.getInstance().cantidadDePacientesConEnfermedad("Bronquitis aguda"),("Bronquitis aguda (resfriado de pecho)"),("Bronquitis aguda"));
+ 			
+ 			
+ 			}
+ 		}
+        
+        
+        // Creando el Grafico
+        JFreeChart chartEnfer = ChartFactory.createBarChart3D("Cantidad de Pacientes Enfermos","Enfermedades", "Pacientes Enfermedades", dataset, PlotOrientation.VERTICAL, true,true, false);
+        chartEnfer.setBackgroundPaint(null);
+        chartEnfer.getTitle().setPaint(Color.black); 
+        CategoryPlot pEn = chartEnfer.getCategoryPlot(); 
+        pEn.setRangeGridlinePaint(Color.blue); 
+        // Mostrar Grafico
+        ChartPanel chartPanelEnfer = new ChartPanel(chartEnfer);
+        panel.add(chartPanelEnfer);
+ 	
+         
+        
+        
+	
+		//Cantidad de doctores por especialidad.
+        
+        DefaultPieDataset dataDoc = new DefaultPieDataset();
+        for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if (aux instanceof Doctor) {
+				
+				dataDoc.setValue("Oftalmología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Oftalmología"));
+				dataDoc.setValue("Neumología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Neumología"));
+				dataDoc.setValue("Urología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Urología"));
+				dataDoc.setValue("Cardiología Clínica",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Cardiología Clínica"));
+				dataDoc.setValue("Pediatría",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Pediatría"));
+				dataDoc.setValue("Gastroenterología",ClinicaSONS.getInstance().cantidadDeDoctoresPorEspecialidad("Gastroenterología"));
+								
+			}
+		} 
+		
+        //Creando el Grafico
+        JFreeChart chartDoc = ChartFactory.createPieChart("Proporción de Doctores y su especialidades", dataDoc, true, true,false);
+ 
+        // Crear el Panel del Grafico con ChartPanel
+        chartDoc.setBackgroundPaint(null);
+       
+        
+        ChartPanel chartPanelDoc = new ChartPanel(chartDoc);
+        panel.add(chartPanelDoc);
+    
+        
+
+	
+		
+		
 		
 		detectarUsuarios();
 	

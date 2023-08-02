@@ -119,9 +119,12 @@ public class ListarEnfermedad extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegEnfermedad actualizar = new RegEnfermedad(selected,miAdmin);
-						actualizar.setModal(true);
-						actualizar.setVisible(true);
+						if (selected!=null) {
+							RegEnfermedad actualizar = new RegEnfermedad(selected,miAdmin);
+							actualizar.setModal(true);
+							actualizar.setVisible(true);
+						}
+						
 					}
 				});
 				btnModificar.setEnabled(false);

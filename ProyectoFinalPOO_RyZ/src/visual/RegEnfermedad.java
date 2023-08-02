@@ -26,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegEnfermedad extends JDialog{
 
@@ -126,6 +128,23 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(lblNewLabel_1);
 		
 		txtDescripcion = new JTextField();
+		
+		txtDescripcion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent tab) {
+				txtSin1.setText("");
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				txtSin1.setText("");
+			}
+		});
+		
+		
+		
+
+			
+			
 		txtDescripcion.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		txtDescripcion.setBounds(17, 80, 502, 99);
 		contentPanel.add(txtDescripcion);
@@ -136,31 +155,61 @@ public class RegEnfermedad extends JDialog{
 		lblNewLabel_2.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		contentPanel.add(lblNewLabel_2);
 		
+		
+		
+		
+		
+		
+		
 		txtSin1 = new JTextField();
+	
+	
 		txtSin1.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin2.setEditable(true);
 				if(txtSin1.getText().trim().isEmpty()) {
+		
 					txtSin2.setEditable(false);
 				}
 			}
 		});
-		
+	/*	if(txtSin1.getText().trim().isEmpty()) {
+			txtSin2.setText("N/A");
+			txtSin3.setText("N/A");
+			txtSin4.setText("N/A");
+			txtSin5.setText("N/A");
+			txtSin6.setText("N/A");
+			txtSin7.setText("N/A");
+			txtSin8.setText("N/A");					
+			txtSin2.setEditable(false);
+		}*/
+
 		txtSin1.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		txtSin1.setBounds(33, 215, 135, 22);
 		contentPanel.add(txtSin1);
 		txtSin1.setColumns(10);
 		
 		txtSin7 = new JTextField();
+		txtSin7.setText("N/A");
+		
 		txtSin7.setEditable(false);
 		txtSin7.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin8.setEditable(true);
 				if(txtSin7.getText().trim().isEmpty()) {
+					txtSin7.setText("-");
 					txtSin8.setEditable(false);
 				}
+			}
+		});
+		txtSin7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin7.setText("");
 			}
 		});
 		txtSin7.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -169,14 +218,24 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin7);
 		
 		txtSin4 = new JTextField();
+		txtSin4.setText("N/A");
+		
 		txtSin4.setEditable(false);
 		txtSin4.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+			
 				txtSin5.setEditable(true);
 				if(txtSin4.getText().trim().isEmpty()) {
+					txtSin4.setText("-");
 					txtSin5.setEditable(false);
 				}
+			}
+		});
+		txtSin4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin4.setText("");
 			}
 		});
 		txtSin4.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -185,14 +244,25 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin4);
 		
 		txtSin8 = new JTextField();
+		txtSin8.setText("N/A");
+		
 		txtSin8.setEditable(false);
 		txtSin8.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin9.setEditable(true);
 				if(txtSin8.getText().trim().isEmpty()) {
+					txtSin8.setText("-");
 					txtSin9.setEditable(false);
+					txtSin9.setText("-");
 				}
+			}
+		});
+		txtSin8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin8.setText("");
 			}
 		});
 		txtSin8.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -201,14 +271,24 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin8);
 		
 		txtSin5 = new JTextField();
+		txtSin5.setText("N/A");
+	
 		txtSin5.setEditable(false);
 		txtSin5.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin6.setEditable(true);
 				if(txtSin5.getText().trim().isEmpty()) {
+					txtSin5.setText("-");
 					txtSin6.setEditable(false);
 				}
+			}
+		});
+		txtSin5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin5.setText("");
 			}
 		});
 		txtSin5.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -217,12 +297,23 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin5);
 		
 		txtSin2 = new JTextField();
+		
+		txtSin2.setText("N/A");
+	
+		txtSin2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin2.setText("");
+			}
+		});
 		txtSin2.setEditable(false);
 		txtSin2.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+			
 				txtSin3.setEditable(true);
 				if(txtSin2.getText().trim().isEmpty()) {
+					txtSin2.setText("-");
 					txtSin3.setEditable(false);
 				}
 			}
@@ -233,6 +324,17 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin2);
 		
 		txtSin9 = new JTextField();
+		txtSin9.setText("N/A");
+		
+			
+		txtSin9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin9.setText("");
+			}
+		});
+		
+		
 		txtSin9.setEditable(false);
 		txtSin9.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		txtSin9.setColumns(10);
@@ -240,14 +342,25 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin9);
 		
 		txtSin6 = new JTextField();
+		txtSin6.setText("N/A");
+	
 		txtSin6.setEditable(false);
 		txtSin6.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin7.setEditable(true);
 				if(txtSin6.getText().trim().isEmpty()) {
+					txtSin6.setText("-");
 					txtSin7.setEditable(false);
 				}
+			}
+		});
+		
+		txtSin6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin6.setText("");
 			}
 		});
 		txtSin6.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -256,14 +369,24 @@ public class RegEnfermedad extends JDialog{
 		contentPanel.add(txtSin6);
 		
 		txtSin3 = new JTextField();
+		txtSin3.setText("N/A");
+		
 		txtSin3.setEditable(false);
 		txtSin3.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				
 				txtSin4.setEditable(true);
 				if(txtSin3.getText().trim().isEmpty()) {
+					txtSin3.setText("-");
 					txtSin4.setEditable(false);
 				}
+			}
+		});
+		txtSin3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				txtSin3.setText("");
 			}
 		});
 		txtSin3.setFont(new Font("Sylfaen", Font.PLAIN, 14));
@@ -359,6 +482,7 @@ public class RegEnfermedad extends JDialog{
 								}
 							}
 							
+							
 							for (String aux : enfermedad.getSintomas()) {
 								System.out.println(aux);
 							}
@@ -368,7 +492,6 @@ public class RegEnfermedad extends JDialog{
 				miEnfermedad.setCodigo(txtCodigo.getText());
 				miEnfermedad.setDescripcion(txtDescripcion.getText());
 				miEnfermedad.setNombre(txtNombre.getText());
-		//		miEnfermedad.setSintomas((ArrayList<String>) Arrays.asList(txtSin1.getText(),txtSin2.getText()));
 				miEnfermedad.setSintomas((ArrayList<String>) Arrays.asList(txtSin1.getText(),txtSin2.getText(),txtSin3.getText(),txtSin3.getText(),txtSin4.getText(),txtSin5.getText(),txtSin6.getText(),txtSin7.getText(),txtSin8.getText(),txtSin9.getText()));
 				
 				ClinicaSONS.getInstance().modificarEnfermedad(miEnfermedad);
@@ -437,7 +560,7 @@ public class RegEnfermedad extends JDialog{
 				txtSin5.setText(miEnfermedad.getSintomas().get(4));
 				}
 			
-	/*		if (!miEnfermedad.getSintomas().get(5).isEmpty()) {
+			if (!miEnfermedad.getSintomas().get(5).isEmpty()) {
 				txtSin6.setText(miEnfermedad.getSintomas().get(5));
 				}
 			if (!miEnfermedad.getSintomas().get(6).isEmpty()) {
@@ -446,9 +569,9 @@ public class RegEnfermedad extends JDialog{
 			if (!miEnfermedad.getSintomas().get(7).isEmpty()) {
 				txtSin8.setText(miEnfermedad.getSintomas().get(7));
 				}
-			if (!miEnfermedad.getSintomas().get(8).isEmpty()&&miEnfermedad.getSintomas().get(8)!=null) {
+			if (!miEnfermedad.getSintomas().get(8).isEmpty()) {
 				txtSin9.setText(miEnfermedad.getSintomas().get(8));
-				}*/
+				}
 						
 		}
 	}
@@ -457,15 +580,15 @@ public class RegEnfermedad extends JDialog{
 		txtCodigo.setText("E-"+ClinicaSONS.codEnf);
 		txtDescripcion.setText("");
 		txtNombre.setText("");
-		txtSin1.setText("");
-		txtSin2.setText("");
-		txtSin3.setText("");
-		txtSin4.setText("");
-		txtSin5.setText("");
-		txtSin6.setText("");
-		txtSin7.setText("");
-		txtSin8.setText("");
-		txtSin9.setText("");
+		txtSin1.setText("N/A");
+		txtSin2.setText("N/A");
+		txtSin3.setText("N/A");
+		txtSin4.setText("N/A");
+		txtSin5.setText("N/A");
+		txtSin6.setText("N/A");
+		txtSin7.setText("N/A");
+		txtSin8.setText("N/A");
+		txtSin9.setText("N/A");
 		txtSin2.setEditable(false);
 		txtSin3.setEditable(false);
 		txtSin4.setEditable(false);
