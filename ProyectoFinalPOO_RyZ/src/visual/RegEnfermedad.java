@@ -175,17 +175,7 @@ public class RegEnfermedad extends JDialog{
 				}
 			}
 		});
-	/*	if(txtSin1.getText().trim().isEmpty()) {
-			txtSin2.setText("N/A");
-			txtSin3.setText("N/A");
-			txtSin4.setText("N/A");
-			txtSin5.setText("N/A");
-			txtSin6.setText("N/A");
-			txtSin7.setText("N/A");
-			txtSin8.setText("N/A");					
-			txtSin2.setEditable(false);
-		}*/
-
+	
 		txtSin1.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 		txtSin1.setBounds(33, 215, 135, 22);
 		contentPanel.add(txtSin1);

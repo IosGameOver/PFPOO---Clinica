@@ -117,7 +117,6 @@ public class ListarDoctores extends JDialog {
 				panel_1.setLayout(new BorderLayout(0, 0));
 				{
 					JScrollPane scrollPane = new JScrollPane();
-					scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 					panel_1.add(scrollPane, BorderLayout.CENTER);
 					{
 						table = new JTable();
@@ -138,17 +137,20 @@ public class ListarDoctores extends JDialog {
 							});
 						}
 						model = new DefaultTableModel();
-						String[] headers = {"Código","Cédula","Exequatur","Nombre", "Especialidad","Teléfono"};
+						String[] headers = {"Código","Cédula","Exequatur","Nombre", "Especialidad","Teléfono","Usuario","Contraseña"};
 						model.setColumnIdentifiers(headers);
 						table.setModel(model);
 						TableColumnModel columnModel = table.getColumnModel();
 						table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-						columnModel.getColumn(0).setPreferredWidth(80);
-						columnModel.getColumn(1).setPreferredWidth(150);
-						columnModel.getColumn(2).setPreferredWidth(150);
-						columnModel.getColumn(3).setPreferredWidth(165);
-						columnModel.getColumn(4).setPreferredWidth(168);
-						columnModel.getColumn(5).setPreferredWidth(150);
+						columnModel.getColumn(0).setPreferredWidth(50);
+						columnModel.getColumn(1).setPreferredWidth(120);
+						columnModel.getColumn(2).setPreferredWidth(100);
+						columnModel.getColumn(3).setPreferredWidth(120);
+						columnModel.getColumn(4).setPreferredWidth(130);
+						columnModel.getColumn(5).setPreferredWidth(100);
+						columnModel.getColumn(6).setPreferredWidth(100);
+						columnModel.getColumn(7).setPreferredWidth(168);
+						
 						
 						scrollPane.setViewportView(table);
 					}
@@ -242,6 +244,8 @@ public class ListarDoctores extends JDialog {
 				row[3] = aux.getNombre();
 				row[4] = ((Doctor) aux).getEspecialidad();
 				row[5] = aux.getTelefono();
+				row[6] = ((Doctor) aux).getUsuario();
+				row[7] = ((Doctor) aux).getContrasena();
 				model.addRow(row);
 			}
 		}
@@ -260,7 +264,9 @@ public class ListarDoctores extends JDialog {
 					row[3] = aux.getNombre();
 					row[4] = ((Doctor) aux).getEspecialidad();
 					row[5] = aux.getTelefono();
-
+					row[6] = ((Doctor) aux).getUsuario();
+					row[7] = ((Doctor) aux).getContrasena();
+					
 					model.addRow(row);
 				}
 			}
