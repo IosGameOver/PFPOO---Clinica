@@ -70,6 +70,9 @@ public class Principal extends JFrame {
 	private DataInputStream EntradaSocket;
 	private DataOutputStream SalidaSocket;
 	static Socket sfd = null;
+	private ChartPanel chartPanel;
+	private ChartPanel chartPanelEnfer;
+	private ChartPanel chartPanelDoc;
 		/**
 	 * Launch the application.
 	 */
@@ -407,8 +410,9 @@ public class Principal extends JFrame {
         CategoryPlot p = chart.getCategoryPlot(); 
         p.setRangeGridlinePaint(Color.red); 
         // Mostrar Grafico
-        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel = new ChartPanel(chart);
         panel.add(chartPanel);
+        chartPanel.setVisible(false);
         
         
      // Fuente de Datos - Gráfica de cantidad de personas enfermas
@@ -433,9 +437,9 @@ public class Principal extends JFrame {
         CategoryPlot pEn = chartEnfer.getCategoryPlot(); 
         pEn.setRangeGridlinePaint(Color.blue); 
         // Mostrar Grafico
-        ChartPanel chartPanelEnfer = new ChartPanel(chartEnfer);
+        chartPanelEnfer = new ChartPanel(chartEnfer);
         panel.add(chartPanelEnfer);
- 	
+        chartPanelEnfer.setVisible(false);
          
         
         
@@ -463,9 +467,9 @@ public class Principal extends JFrame {
         chartDoc.setBackgroundPaint(null);
        
         
-        ChartPanel chartPanelDoc = new ChartPanel(chartDoc);
+        chartPanelDoc = new ChartPanel(chartDoc);
         panel.add(chartPanelDoc);
-    
+        chartPanelDoc.setVisible(false);
         
 
 	
@@ -486,17 +490,21 @@ public class Principal extends JFrame {
 			
 			if (admin!=null) {
 				mnAdministracion.setEnabled(true);
-				JOptionPane.showMessageDialog(null, "ALL HAIL ADMMMIN", "AHORA, TÚ....ERES ADMIN", JOptionPane.INFORMATION_MESSAGE);
+				chartPanel.setVisible(true);
+				chartPanelDoc.setVisible(true);
+				chartPanelEnfer.setVisible(true);
+				JOptionPane.showMessageDialog(null, "Admin reconcido", "Sistema desbloqueado", JOptionPane.INFORMATION_MESSAGE);
 				
-			}if (doc!=null) {
+			}else if (doc!=null) {
 				mnAdministracion.setEnabled(false);
 				mntmRegEnferm.setEnabled(false);
 				mntmProgCita.setEnabled(false);
 				mntmRegVacu.setEnabled(false);
 				mntmRegDoctor.setEnabled(false);
-				JOptionPane.showMessageDialog(null, "Doctor reconocido, bienvenido Doctor: " +doc.getNombre(), "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Usuario reconocido, bienvenido Doctor/a: " +doc.getNombre(), "USUARIO RESTRINGIDO", JOptionPane.PLAIN_MESSAGE);
+			
 				
-			}if (secre!=null) {
+			}else if (secre!=null) {
 				mnAdministracion.setEnabled(false);
 				mnConsulta.setEnabled(false);
 				mnDoctor.setEnabled(false);
@@ -519,6 +527,7 @@ public class Principal extends JFrame {
 			mnVacuna.setEnabled(false);
 			mnEnfermedad.setEnabled(false);
 			mnCita.setEnabled(false);
+			mnRespaldar.setEnabled(false);
 		}
 	}
 
