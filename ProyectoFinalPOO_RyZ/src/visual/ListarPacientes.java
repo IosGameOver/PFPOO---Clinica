@@ -124,7 +124,7 @@ public class ListarPacientes extends JDialog {
 				btnHistorialVacuna.setBackground(Color.WHITE);
 				btnHistorialVacuna.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						IndicarVacunas ind = new IndicarVacunas(selected, null);
+						IndicarVacunas ind = new IndicarVacunas(selected);
 						ind.setModal(true);
 						ind.setVisible(true);
 						btnEliminar.setEnabled(false);

@@ -16,6 +16,8 @@ import logico.Doctor;
 import logico.Paciente;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -36,8 +38,8 @@ public class IndicarAnalisis extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private Dimension dim;
 	private JTextField txtFecha;
-	private JTextField txtNombre;
-	private JTextField txtEdad;
+	private static JTextField txtNombre;
+	private static JTextField txtEdad;
 	private JPanel panelIndi;
 	private Paciente miPac = null;
 	private Consulta miCons = null;
@@ -49,7 +51,7 @@ public class IndicarAnalisis extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			IndicarAnalisis dialog = new IndicarAnalisis(null, null);
+			IndicarAnalisis dialog = new IndicarAnalisis( null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -59,18 +61,18 @@ public class IndicarAnalisis extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public IndicarAnalisis(Paciente pac, Consulta cons) {
+	public IndicarAnalisis(Consulta cons) {
 		df = new SimpleDateFormat("dd/MM/yyyy");
 		this.miDoc = ClinicaSONS.getLoginUserDoc();
-		this.miPac = pac;
 		this.miCons = cons;
 		dim = getToolkit().getScreenSize();
 		setSize(1100, 1015);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		if(miCons != null) {
+		if(miCons == null) {
 			setTitle("Indicar análisis");
-		}else {
+		}else{
+			
 			setTitle("Ver análisis indicados");
 		}
 		initComponents();
@@ -129,7 +131,6 @@ public class IndicarAnalisis extends JDialog {
 			txtNombre.setEditable(false);
 			txtNombre.setColumns(10);
 			txtNombre.setBounds(441, 137, 250, 22);
-			txtEdad.setText(miPac.getNombre());
 			contentPanel.add(txtNombre);
 		}
 		{
@@ -145,8 +146,7 @@ public class IndicarAnalisis extends JDialog {
 			txtEdad.setEditable(false);
 			txtEdad.setColumns(10);
 
-			int edad = ClinicaSONS.getInstance().calcularEdad(miPac.getFechaNacimiento(), new Date());
-			txtEdad.setText(String.valueOf(edad)+" años");
+			
 			txtEdad.setBounds(822, 137, 250, 22);
 			contentPanel.add(txtEdad);
 		}
@@ -827,7 +827,10 @@ public class IndicarAnalisis extends JDialog {
 		textField_1.setHorizontalAlignment(SwingConstants.CENTER);
 		textField_1.setBounds(784, 864, 288, 22);
 		contentPanel.add(textField_1);
-		textField_1.setText(miDoc.getNombre());
+		if(miDoc != null) {
+			textField_1.setText(miDoc.getNombre());
+		}
+		
 		textField_1.setColumns(10);
 		
 		JLabel lblDoctor = new JLabel("Doctor");
@@ -843,6 +846,9 @@ public class IndicarAnalisis extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton btnRegistrar = new JButton("Registrar");
+				if(miCons != null) {
+					btnRegistrar.setVisible(false);
+				}
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						for(int i = 0;i < panelIndi.getComponentCount();i++){
@@ -851,14 +857,14 @@ public class IndicarAnalisis extends JDialog {
 								HistorialConsulta.guardarAnalisis(check.getLabel());
 							}
 						}
+						JOptionPane.showMessageDialog(null, "Los analisis fueron agregados", "¡Operación exitosa!",JOptionPane.INFORMATION_MESSAGE);
+						dispose();
 					}
+				
 				});
 				btnRegistrar.setBackground(Color.WHITE);
 				btnRegistrar.setActionCommand("OK");
 				buttonPane.add(btnRegistrar);
-				if(miCons != null) {
-					btnRegistrar.setVisible(false);
-				}
 				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
@@ -883,5 +889,14 @@ public class IndicarAnalisis extends JDialog {
 				check.setEnabled(false);
 			}
 		}
+	}
+	
+	public static void setNombre(String nom) {
+		txtNombre.setText(nom);
+	}
+	
+	public static void setEdad(Date fn) {
+		int edad = ClinicaSONS.getInstance().calcularEdad(fn, new Date());
+		txtEdad.setText(String.valueOf(edad)+" años");
 	}
 }

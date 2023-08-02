@@ -14,6 +14,7 @@ import logico.Administrador;
 import logico.ClinicaSONS;
 import logico.Consulta;
 import logico.Doctor;
+import logico.Paciente;
 import logico.Persona;
 
 import javax.swing.JLabel;
@@ -94,7 +95,7 @@ public class ListarConsultas extends JDialog {
 			});
 			tableDoc.setFont(new Font("Sylfaen", Font.PLAIN, 14));
 			modelDoc = new DefaultTableModel();
-			String[] headers = {" Código "," Paciente ", "  Fecha  ","  Doctor  "};
+			String[] headers = {" Código "," Paciente ","  Fecha  ","  Doctor  "};
 			modelDoc.setColumnIdentifiers(headers);
 			tableDoc.setModel(modelDoc);
 			scrollPane_1.setViewportView(tableDoc);
@@ -140,6 +141,16 @@ public class ListarConsultas extends JDialog {
 			panel_1.add(scrollPane, BorderLayout.CENTER);
 
 			tableGen = new JTable();
+			tableGen.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int index = tableGen.getSelectedRow();
+					if(index >= 0){
+						btnVer.setEnabled(true);
+						selected = ClinicaSONS.getInstance().buscarConsultaByCod((tableGen.getValueAt(index, 0).toString()));
+					}
+				}
+			});
 			model = new DefaultTableModel();
 			model.setColumnIdentifiers(headers);
 			tableGen.setModel(model);
@@ -155,7 +166,9 @@ public class ListarConsultas extends JDialog {
 				btnVer = new JButton("Ver");
 				btnVer.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						HistorialConsulta hist = new HistorialConsulta(null, null,selected);
+						HistorialConsulta hist = new HistorialConsulta(null, null, selected);
+						hist.setModal(true);
+						hist.setVisible(true);
 					}
 				});
 				btnVer.setEnabled(false);
@@ -186,22 +199,39 @@ public class ListarConsultas extends JDialog {
 		row = new Object[model.getColumnCount()];
 		if(nom.equalsIgnoreCase("Todos")) {
 			for (Consulta aux : ClinicaSONS.getInstance().getMisConsultas()) {
+				Paciente pac = ClinicaSONS.getInstance().buscarPacienteByCedula(aux.getCedPac());
 				row[0] = aux.getCod();
-				row[1] = ClinicaSONS.getInstance().buscarPacienteByConsulta(aux.getCod());
-				row[2] = df.format(aux.getFecha());
-				row[3] = ClinicaSONS.getInstance().buscarDoctorByConsulta(aux.getCod());
+				row[1] = df.format(aux.getFecha());
+				
 				model.addRow(row);
 			}
 		}else {
 			Doctor doc = ClinicaSONS.getInstance().buscarDoctorPorNombre(nom);
 			for (Consulta aux : doc.getMisConsultas()) {
 				row[0] = aux.getCod();
-				row[1] = ClinicaSONS.getInstance().buscarPacienteByConsulta(aux.getCod());
-				row[2] = df.format(aux.getFecha());
-				row[3] = ClinicaSONS.getInstance().buscarDoctorByConsulta(aux.getCod());
+				row[1] = df.format(aux.getFecha());
 				model.addRow(row);
 			}
 		}
+	}
+	
+	public void llenarTabla() {
+		modelDoc.setRowCount(0);
+		rowDoc = new Object[modelDoc.getColumnCount()];
+		if(miDoc != null) {
+			for (Consulta aux : miDoc.getMisConsultas()) {
+				rowDoc[0] = aux.getCod();
+				rowDoc[1] = df.format(aux.getFecha());
+	 			modelDoc.addRow(rowDoc);
+			}
+		}else {
+			for (Consulta aux : ClinicaSONS.getInstance().getMisConsultas()) {
+				rowDoc[0] = aux.getCod();
+				rowDoc[1] = df.format(aux.getFecha());
+	 			modelDoc.addRow(rowDoc);
+			}
+		}
+		
 	}
 
 	public void llenarTablaDoc() {
@@ -209,10 +239,8 @@ public class ListarConsultas extends JDialog {
 		rowDoc = new Object[modelDoc.getColumnCount()];
 		for (Consulta aux : miDoc.getMisConsultas()) {
 			rowDoc[0] = aux.getCod();
-			rowDoc[1] = ClinicaSONS.getInstance().buscarPacienteByConsulta(aux.getCod());
-			rowDoc[2] = df.format(aux.getFecha());
-			rowDoc[3] = ClinicaSONS.getInstance().buscarDoctorByConsulta(aux.getCod());
-			modelDoc.addRow(rowDoc);
+			rowDoc[1] = df.format(aux.getFecha());
+ 			modelDoc.addRow(rowDoc);
 		}
 	}
 }

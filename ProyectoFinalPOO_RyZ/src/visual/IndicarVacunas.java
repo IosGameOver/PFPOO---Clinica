@@ -40,12 +40,13 @@ public class IndicarVacunas extends JDialog {
 	private Object[] row = null;
 	private SimpleDateFormat df;
 	private Consulta miCons = null;
+	private JTable table_1;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			IndicarVacunas dialog = new IndicarVacunas(null,null);
+			IndicarVacunas dialog = new IndicarVacunas(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -57,8 +58,7 @@ public class IndicarVacunas extends JDialog {
 	 * Create the dialog.
 	 * @param miCons 
 	 */
-	public IndicarVacunas(Paciente pac, Consulta miCons) {
-		this.miCons = miCons;
+	public IndicarVacunas(Paciente pac) {
 		this.miPac = pac;
 		df = new SimpleDateFormat("dd/MM/yyyy");
 		setBounds(100, 100, 775, 360);
@@ -68,7 +68,7 @@ public class IndicarVacunas extends JDialog {
 	}
 
 	private void initComponents() {
-		if(miPac != null && miCons == null) {
+		if(miPac != null) {
 			setTitle("Historial de vacunación de "+miPac.getNombre());
 		}
 		getContentPane().setLayout(new BorderLayout());
@@ -135,7 +135,7 @@ public class IndicarVacunas extends JDialog {
 						JOptionPane.showMessageDialog(null, "Seleccione una vacuna válida", "Ha ocurrido un error",JOptionPane.ERROR_MESSAGE);
 					}else{
 						Vacuna vacuna = ClinicaSONS.getInstance().buscarVacunaPorNombre(cmbVacunas.getSelectedItem().toString());
-						miPac.insertarVacuna(vacuna);
+						HistorialConsulta.guardarVacuna(vacuna);
 						llenarTabla();
 					}
 				}
@@ -144,7 +144,18 @@ public class IndicarVacunas extends JDialog {
 			btnIndicar.setBounds(312, 32, 143, 25);
 			panel.add(btnIndicar);
 			
-			if(miPac != null && miCons == null) {
+			JPanel panel_1 = new JPanel();
+			panel_1.setBounds(12, 65, 712, 179);
+			panel.add(panel_1);
+			panel_1.setLayout(new BorderLayout(0, 0));
+			
+			JScrollPane scrollPane = new JScrollPane();
+			panel_1.add(scrollPane, BorderLayout.CENTER);
+			
+			table_1 = new JTable();
+			scrollPane.setViewportView(table_1);
+			
+			if(miPac != null) {
 				btnIndicar.setVisible(false);
 				cmbVacunas.setVisible(false);
 				lblNewLabel.setVisible(false);

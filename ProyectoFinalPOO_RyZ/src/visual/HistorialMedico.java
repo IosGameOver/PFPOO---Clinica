@@ -185,6 +185,7 @@ public class HistorialMedico extends JDialog {
 				dtNacimiento.setBounds(784, 48, 254, 22);
 				JTextFieldDateEditor edit = (JTextFieldDateEditor) dtNacimiento.getDateEditor();
 				edit.setEditable(false);
+				dtNacimiento.setMaxSelectableDate(new Date());
 				panel.add(dtNacimiento);
 			}
 			{
@@ -655,7 +656,6 @@ public class HistorialMedico extends JDialog {
 							ClinicaSONS.getInstance().modificarPaciente(miPac);
 							JOptionPane.showMessageDialog(null,  "La modificación fue realizada con éxito", "¡Operación exitosa!", JOptionPane.INFORMATION_MESSAGE);
 							ListarPacientes.llenarTabla();
-							HistorialConsulta.cargarPaciente(miPac);
 							dispose();
 						}else {
 							String codHist = txtCodHist.getText();
@@ -708,9 +708,11 @@ public class HistorialMedico extends JDialog {
 								Historial miHist = new Historial(codHis);
 								ClinicaSONS.getInstance().insertarHistorial(miHist);
 								Paciente pac = new Paciente(codPac, ced, nom, sexo, estCiv, tel, fNac, dir, tpSangre, cantHijos, fuma, alc, caf, drog, tieAle, ale, tieCir, cir, tieTrans, trans, tieTrau, trau, antPer, antFam, miHist, antFis);
-								HistorialConsulta.cargarPaciente(pac);
-								txtCodHist.setText("H-"+ClinicaSONS.codHist);
-								txtCodPac.setText("P-"+ClinicaSONS.codPac);
+								JOptionPane.showMessageDialog(null, "El paciente se ha registrado", "Operación exitosa",JOptionPane.INFORMATION_MESSAGE);
+								HistorialConsulta hist = new HistorialConsulta(miDoc, pac, null);
+								HistorialConsulta.btnBuscar.setText("Ver historial medico");
+								codigos();
+								dispose();
 							}
 						}
 					}
@@ -737,6 +739,7 @@ public class HistorialMedico extends JDialog {
 		cargarDatos();
 		llenarTablaConsultas();
 		llenarTablaVacunas();
+		cargarPaciente();
 	}
 	
 	public void llenarTablaConsultas() {
@@ -766,47 +769,21 @@ public class HistorialMedico extends JDialog {
 			}
 		}
 	}
-	/*private final JPanel contentPanel = new JPanel();
-	private JTextField txtCodPac;
-	private JTextField txtCed;
-	private JTextField txtTel;
-	private JTextField txtAntPers;
-	private JTextField txtAntFam;
-	private JTextField txtAntFis;
-	private JTable tablaConsultas;
-	private DefaultTableModel modelConsulta;
-	private DefaultTableModel modelVacuna;
-	private Object[] rowConsulta = null;
-	private Object[] rowVacuna = null;
-	private JTextField txtCodHist;
-	private JTable tablaVacunas;
-	private JButton btnCancelar;
-	private JComboBox cmbEstCivil;
-	private JComboBox cmbSexo;
-	private JTextField txtNombre;
-	private JComboBox cmbTpSangre;
-	private JSpinner spnCantHijos;
-	private JComboBox cmbFuma;
-	private JComboBox cmbAlcohol;
-	private JComboBox cmbCafe;
-	private JComboBox cmbDrogas;
-	private JDateChooser dtNacimiento;
-	private Paciente miPac = null;
-	private JTextField txtDir;
-	private JTextField txtCirugias;
-	private JTextField txtAlergia;
-	private JTextField txtTrauma;
-	private JTextField txtTransf;
-	private JComboBox cmbTieneAlergia;
-	private JComboBox cmbTieneCir;
-	private JComboBox cmbTieneTrau;
-	private JComboBox cmbTieneTransf;
-	private Doctor miDoc = null;
-	private Consulta selectedCons = null;
-	private Vacuna selectedVac = null;
-	private JButton btnVerVacuna;
-	private JButton btnVerCon;*/		
-	
+
+	public void codigos() {
+		int cont = 1;
+		int cant = 1;
+		for (Persona aux : ClinicaSONS.getInstance().getMisPersonas()) {
+			if(aux instanceof Paciente) {
+				cont++;
+			}
+		}
+		txtCodPac.setText("P-"+cont);
+		for (Historial aux : ClinicaSONS.getInstance().getMisHistoriales()) {
+			cant++;
+		}
+		txtCodHist.setText("H-"+cont);
+	}
 	
 	public void cargarDatos() {
 		if(miPac != null) {
@@ -838,4 +815,19 @@ public class HistorialMedico extends JDialog {
 			dtNacimiento.setDate(miPac.getFechaNacimiento());
 		}
 	}
+	
+	public void cargarPaciente() {
+		if(miPac != null) {
+			txtCed.setText(miPac.getCedula());
+			txtCed.setEditable(false);
+			txtNombre.setText(miPac.getNombre());
+			txtTel.setText(miPac.getTelefono());
+			cmbEstCivil.setSelectedItem(miPac.getEstadoCivil());
+			cmbSexo.setSelectedItem(miPac.getSexo());
+			cmbTpSangre.setSelectedItem(miPac.getTipoSangre());
+			dtNacimiento.setDate(miPac.getFechaNacimiento());
+			txtDir.setText(miPac.getDireccion());
+		}
+	}
+	
 }

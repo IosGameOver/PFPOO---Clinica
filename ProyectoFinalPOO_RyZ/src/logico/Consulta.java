@@ -20,6 +20,8 @@ public class Consulta implements Serializable{
 	private ArrayList<String> analisis;
 	private Enfermedad enfermedad;
 	private Date fecha;
+	private String cedPac; 
+	private String nomDoctor; 
 
 	public Consulta(String cod, String motivo, float ta, float fc, float fr, float temp, float peso, String diagnostico,String indicaciones, Date fecha) {
 		super();
@@ -35,6 +37,8 @@ public class Consulta implements Serializable{
 		this.analisis = new ArrayList<>();
 		this.enfermedad = null;
 		this.fecha = fecha;
+		this.cedPac = null;
+		this.nomDoctor = null;
 	}
 	
 	public void insertarAnalisis(String aux) {
@@ -117,5 +121,23 @@ public class Consulta implements Serializable{
 
 	public void setFc(float fc) {
 		this.fc = fc;
-	}	
+	}
+
+	public String getCedPac() {
+		return cedPac;
+	}
+
+	public void setCedPac(String cedPac) {
+		this.cedPac = cedPac;
+	}
+
+	public String getNomDoctor() {
+		return nomDoctor;
+	}
+
+	public void setNomDoctor(String nomDoctor) {
+		this.nomDoctor = nomDoctor;
+	}
+
+
 }
